@@ -14,7 +14,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 	return (
 		<html lang="en" className="">
 			<body className={`${roboto.className} bg-g-200 h-full min-h-screen p-4 gap-4 flex`}>
-				<Navbar />
 				{children}
 			</body>
 		</html>

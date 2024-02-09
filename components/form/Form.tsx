@@ -28,10 +28,6 @@ const Form: FC<FormTestProps> = ({ modalState, closeModal, dispatch }) => {
 		setFormData({ ...formData, ...fieldsToUpdate });
 	};
 
-	useEffect(() => {
-		updateForm({ dateAdded: new Date() });
-	}, []);
-
 	const handleKey = (event: any) => {
 		if (event.key == 'ArrowDown' || event.key == 'ArrowRight') forwards();
 		if (event.key == 'ArrowUp' || event.key == 'ArrowLeft') backwards();
@@ -47,7 +43,12 @@ const Form: FC<FormTestProps> = ({ modalState, closeModal, dispatch }) => {
 		<Finishing key={3} {...formData} updateForm={updateForm} />,
 	]);
 
+	useEffect(() => {
+		updateForm({ dateAdded: new Date() });
+	}, [])
+
 	const handleSubmit = (e: any) => {
+
 		e.preventDefault();
 		goToStep(0);
 
@@ -56,12 +57,14 @@ const Form: FC<FormTestProps> = ({ modalState, closeModal, dispatch }) => {
 		dispatch({ type: 'added', payload: formData });
 
 		setFormData(initialValues);
-		updateForm({ id: v4() });
+		updateForm({ id: v4(), dateAdded: new Date() });
 
 		closeModal();
 	};
 
+	
 	return (
+		
 		<>
 			<Modal
 				visible={modalState}

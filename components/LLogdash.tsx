@@ -34,25 +34,120 @@ const Logdash: FC<LogdashProps> = ({}) => {
 	const [currentFilter, setCurrentFilter] = useState(0);
 	const filter = ['Recent', 'Team', 'Match'];
 
-	useEffect(() => {
-		switch (currentFilter) {
+	// so, i want sort by each team. I should loop over the logs. Add to array of team if part of team, else, create
+	const listTeams = () => {
+		var final: Array<number> = []
+		localData.map((val: FormItems) => {
+			if (final.length == 0) {final = [val.team] } else {
+				if (final.some((ele: number) => (ele == val.team)) == false) {
+					final = [
+						...final,
+						val.team
+					]
+				}
+			}
+	
+		
+		})
+		return final
+	}
+
+	const listLogsWithTeam = (team: number) => {
+		var final: Array<FormItems> = []
+		localData.map((log: FormItems) => {
+			if (log.team == team) final = [...final, log]
+		})
+		return final
+	}
+
+	const listMatches = () => {
+		var final: Array<number> = []
+		localData.map((val: FormItems) => {
+			if (final.length == 0) {final = [val.match] } else {
+				if (final.some((ele: number) => (ele == val.match)) == false) {
+					final = [
+						...final,
+						val.match
+					]
+				}
+			}
+	
+		
+		})
+		return final
+	}
+
+	
+	const listLogsWithMatch = (match: number) => {
+		var final: Array<FormItems> = []
+		localData.map((log: FormItems) => {
+			if (log.match == match) final = [...final, log]
+		})
+		return final
+	}
+
+	const Normal = () => {
+		setFilteredData(
+			filteredData.sort((a, b) => {
+				if (new Date(a.dateAdded).getTime() > new Date(b.dateAdded).getTime()) return -1;
+				else if (new Date(a.dateAdded).getTime() < new Date(b.dateAdded).getTime()) return 1;
+				return 0;
+			})
+		);
+		return (
+			filteredData.map((val: FormItems, i: number) => {
+				return <LogView key={i} data={val} />;
+			})
+		)
+	}
+	const [averageScore, setAverageScore] = useState(0);
+
+	const filterSwitch = (prop: number) => {
+		switch (prop) {
 			case 0:
-				setFilteredData(
-					filteredData.sort((a, b) => {
-						if (new Date(a.dateAdded).getTime() > new Date(b.dateAdded).getTime()) return -1;
-						else if (new Date(a.dateAdded).getTime() < new Date(b.dateAdded).getTime()) return 1;
-						return 0;
-					})
-				);
+				return (<Normal/>)
 				break;
 			case 1:
-				setFilteredData(localData);
+				return (
+					listTeams().map((team: number) => {
+						return (
+							<div className='bg-t-100 flex flex-col gap-2 p-2 rounded'>
+								<div className='p-2'>
+								<Paragraph size="xs" className="font-medium text-b-100 dark:text-[#3A2C27] text-left">
+									Team <span className="text-r-100 px-1">{team}</span>
+								</Paragraph>
+								</div>
+								{listLogsWithTeam(team).map((log: FormItems, i: number) => {
+									return <LogView key={i} data={log} className='bg-t-300'/>
+								})}
+							</div>
+						)
+					})
+				)
 				break;
+			case 2:
+				return (
+					listMatches().map((match: number) => {
+						
+						return (
+							<div className='bg-t-100 flex flex-col gap-2 p-2 rounded'>
+								<div className='p-2'>
+									<Paragraph size="xs" className="font-medium text-b-100 dark:text-[#3A2C27] text-left">
+										Match <span className="text-r-100 px-1">{match}</span>
+									</Paragraph>
+									{averageScore}
+								</div>
+								{listLogsWithMatch(match).map((log: FormItems, i: number) => {
+									return <LogView key={i} data={log} className='bg-t-300'/>
+								})}
+							</div>
+						)
+					})
+				)
 			default:
-				return;
+				return <div></div>
 		}
-		console.log(filteredData);
-	}, [currentFilter]);
+	}
 
 	return (
 		<>
@@ -90,9 +185,11 @@ const Logdash: FC<LogdashProps> = ({}) => {
 				</div>
 				<div className="bg-g-100 rounded p-2 flex flex-col gap-2">
 					{isRendered
-						? filteredData.map((val: FormItems, i: number) => {
-								return <LogView key={i} data={val} />;
-						  })
+						?
+						<>
+						{filterSwitch(currentFilter)}
+						</>
+						
 						: null}
 				</div>
 			</div>
