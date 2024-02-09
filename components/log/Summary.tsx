@@ -37,10 +37,10 @@ const Summary: FC<SummaryProps> = ({ data }) => {
 
 	return (
 		<div className='flex gap-2 flex-wrap'>
-			{thing.map((val: any) => {
+			{thing.map((val: any, i: number) => {
 				
 				return (
-					<div className="bg-t-100 min-w-72 rounded">
+					<div key={i} className="bg-t-100 min-w-72 rounded">
 						<Paragraph size="sm" className="text-t-100 font-medium bg-b-100 p-2 rounded-t">
 							{val.title}
 						</Paragraph>
