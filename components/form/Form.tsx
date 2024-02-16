@@ -70,15 +70,15 @@ const Form: FC<FormTestProps> = ({ modalState, closeModal, dispatch }) => {
 				visible={modalState}
 				closeModal={closeModal}
 				clickOut={true}
-				className="bg-slate-300 sm:bg-slate-200 flex flex-col sm:flex-row p-0 relative border-0 max-w-4xl sm:h-5/6 h-full w-full sm:w-11/12"
+				className="bg-g-100 sm:bg-g-100 flex flex-col sm:flex-row p-0 relative border-0 max-w-4xl sm:h-5/6 h-full w-full sm:w-11/12"
 			>
-				<div className="bg-indigo-700 w-full rounded-t sm:rounded h-40 sm:h-full absolute z-0 left-0 top-0 visible sm:invisible"></div>
+				<div className="bg-t-100 w-full rounded-t sm:rounded h-40 sm:h-full absolute z-0 left-0 top-0 visible sm:invisible"></div>
 				<div
 					tabIndex={0}
 					onKeyUp={handleKey}
 					className="flex flex-col sm:flex-row p-4 h-full overflow-scroll w-full max-h-fit"
 				>
-					<div className="flex flex-row pb-2 sm:flex-col sm:justify-normal justify-center mr-0 sm:mr-6 px-4 py-4 relative bg-indigo-700 rounded">
+					<div className="flex flex-row pb-2 sm:flex-col sm:justify-normal justify-center mr-0 sm:mr-6 px-4 py-4 relative bg-t-100 rounded">
 						{MultiFormSteps.map((step, i) => {
 							return (
 								<button key={i} onClick={() => goToStep(i)} className="flex p-4 z-10">

@@ -9,6 +9,7 @@ import Paragraph from './ui/Paragraph';
 import Form from './form/Form';
 import useForm from '@/lib/useForm';
 import LogView from '@/components/log/LogView';
+import getProp from '@/lib/getProp';
 
 interface LogdashProps {}
 
@@ -130,15 +131,16 @@ const Logdash: FC<LogdashProps> = ({}) => {
 					listMatches().map((match: number, i: number) => {
 						
 						return (
-							<div key={i} className='bg-t-100 flex flex-col gap-2 p-2 rounded'>
+							<div key={i} className='bg-t-300 flex flex-col gap-2 p-2 rounded'>
 								<div className='p-2'>
 									<Paragraph size="xs" className="font-medium text-b-100 dark:text-[#3A2C27] text-left">
 										Match <span className="text-r-100 px-1">{match}</span>
 									</Paragraph>
 									{averageScore}
+									
 								</div>
 								{listLogsWithMatch(match).map((log: FormItems, i: number) => {
-									return <LogView key={i} data={log} className='bg-t-300'/>
+									return <LogView key={i} data={log} className='bg-t-200'/>
 								})}
 							</div>
 						)
@@ -154,7 +156,7 @@ const Logdash: FC<LogdashProps> = ({}) => {
 			<Form dispatch={localDispatch} modalState={formState} closeModal={setClose} />
 			<div className=" rounded-md bg-g-100 border-2 border-t-100 max-w-5xl min-w-fit w-full">
 				<div className="bg-r-200 border-b-2 border-t-100 rounded-t p-2 flex justify-between flex-col sm:flex-row gap-2">
-					<div className="flex gap-2">
+					<div className="flex gap-2 justify-center">
 						<Button onClick={() => setOpen()}>
 							<Plus className="w-4 h-4 mr-1" /> New Log
 						</Button>
@@ -168,7 +170,7 @@ const Logdash: FC<LogdashProps> = ({}) => {
 						</div>
 					</div>
 
-					<div>
+					<div className='justify-center flex'>
 						{filter.map((val: any, i: number) => {
 							return (
 								<Button
@@ -183,7 +185,7 @@ const Logdash: FC<LogdashProps> = ({}) => {
 						})}
 					</div>
 				</div>
-				<div className="bg-g-100 rounded p-2 flex flex-col gap-2">
+				<div className=" rounded p-2 flex flex-col gap-2">
 					{isRendered
 						?
 						<>

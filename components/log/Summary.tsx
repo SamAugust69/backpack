@@ -33,7 +33,7 @@ const Summary: FC<SummaryProps> = ({ data }) => {
 			}
 		}
 	];
-	var total = 0;
+	var total = 0; // dont usestate this. I want it to be different for each instance.
 
 	return (
 		<div className='flex gap-2 flex-wrap'>
@@ -52,9 +52,9 @@ const Summary: FC<SummaryProps> = ({ data }) => {
 								total += points
 								
 								return (
-										<div key={i} className="flex justify-between bg-t-300 rounded font-medium text-b-100 items-center p-2">
+										<div key={i} className="flex justify-between bg-t-200 rounded font-medium text-b-100 items-center p-2">
 											<Paragraph size={'sm'} className="">
-												<span className={`${val[1][0] == true ? "" : "pr-2"} text-r-100`}>{val[1][0]}</span>
+												<span className={`${val[1][0] < 0 ? "" : "pr-2"} text-r-100`}>{val[1][0]}</span>
 												{val[0]}
 											</Paragraph>
 											<Paragraph size={'sm'}>{points > 0 ?  "+ " + points + "pt" : null}</Paragraph>
@@ -63,7 +63,7 @@ const Summary: FC<SummaryProps> = ({ data }) => {
 								);
 								
 							})}
-							{total}
+							<Paragraph className='text-b-100 font-medium' size={"sm"}>Total{total}</Paragraph>
 						</div>
 					</div>
 				);

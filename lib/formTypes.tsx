@@ -1,7 +1,7 @@
 import { v4 } from 'uuid';
 
 // objective data, take data and
-export type FormItems = {
+export type FormItems  = {
 	id: string;
 	completed: boolean;
 	match: number;
