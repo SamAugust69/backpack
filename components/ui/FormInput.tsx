@@ -6,22 +6,25 @@ import { FC } from 'react';
 import Paragraph from './Paragraph';
 import useMultiForm from '@/lib/useMultiForm';
 
-const InputVariants = cva('peer flex bg-slate-200 disabled:pointer-events-none outline-none rounded-none', {
-	variants: {
-		variant: {
-			default: '',
-			purple_ish: 'bg-indigo-100',
-			purpler: 'bg-indigo-200',
+const InputVariants = cva(
+	'peer flex disabled:pointer-events-none outline-none rounded-none border-2 border-t-100 rounded',
+	{
+		variants: {
+			variant: {
+				default: 'bg-transparent',
+				purple_ish: 'bg-indigo-100',
+				purpler: 'bg-indigo-200',
+			},
+			size: {
+				default: 'h-10 px-1 w-full',
+			},
 		},
-		size: {
-			default: 'h-8 px-1 w-full',
+		defaultVariants: {
+			size: 'default',
+			variant: 'default',
 		},
-	},
-	defaultVariants: {
-		size: 'default',
-		variant: 'default',
-	},
-});
+	}
+);
 
 interface InputProps extends HTMLAttributes<HTMLInputElement>, VariantProps<typeof InputVariants> {
 	disabled?: boolean;
@@ -43,12 +46,7 @@ const TextInput: FC<InputProps> = ({
 }) => {
 	return (
 		<div
-			className={cn(
-				`${
-					visible === false ? 'hidden' : 'block'
-				} mx-3 my-4 relative bg-gradient-to-r from-slate-400 to-slate-300 dark:from-slate-400 dark:to-slate-500 pb-0.5 `,
-				className
-			)}
+			className={cn(`${visible === false ? 'hidden' : 'block'} my-4 relative bg-gradient-to-r 500 pb-0.5 `, className)}
 		>
 			<input
 				required
@@ -57,7 +55,7 @@ const TextInput: FC<InputProps> = ({
 				onClick={(e: any) => e.stopPropagation()}
 				{...props}
 			/>
-			<span className=" absolute top-0 left-0 peer-focus:text-xs peer-focus:text-slate-500 dark:peer-focus:text-slate-200 peer-focus:-top-2.5 peer-valid:text-xs peer-valid:text-slate-500 dark:peer-valid:text-slate-200 peer-valid:-top-2.5 transition-all peer-placeholder-shown:text-xs peer-placeholder-shown:text-slate-500 dark:peer-placeholder-shown:text-slate-200 peer-placeholder-shown:-top-2.5">
+			<span className=" absolute top-0 left-0 peer-focus:text-xs peer-focus:text-slate-500 peer-focus:-top-2 peer-valid:text-xs peer-valid:text-slate-500 peer-valid:-top-2 transition-all peer-placeholder-shown:text-xs peer-placeholder-shown:text-slate-500 peer-placeholder-shown:-top-2 peer-placeholder-shown:bg-g-200 px-2">
 				{title}
 			</span>
 		</div>

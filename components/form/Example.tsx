@@ -9,47 +9,47 @@ type stepItems = FormItems & {
 
 const Example = ({ updateForm }: stepItems) => {
 	const formInputs: Array<FormInputType> = [
-        {
-            type: "toggle",
-            title: "Toggle",
-            description: "Toggle Example",
-            toggled: true,
-            children: [
-                {
-                    type: "toggle",
-                    title: "Child Checkbox Example",
-                    description: "This toggle is false",
-                    toggled: false,
-                    checkbox: true
-                },
-                {
-                    type: "toggle",
-                    title: "Child Checkbox Example",
-                    description: "This toggle is true",
-                    toggled: true,
-                    checkbox: true
-                }
-            ]
-        },
-        {
-            type: "text",
-            title: "Textbox",
-            placeholder: "Example"
-
-        },
-        {
-            type: "number",
-            title: "Textbox",
-            placeholder: "Example"
-        },
 		{
-			type: "carousel",
-		}
+			type: 'toggle',
+			title: 'Toggle',
+			description: 'Toggle Example',
+			toggled: true,
+			children: [
+				{
+					type: 'toggle',
+					title: 'Child Checkbox Example',
+					description: 'This toggle is false',
+					toggled: false,
+					checkbox: true,
+				},
+				{
+					type: 'toggle',
+					title: 'Child Checkbox Example',
+					description: 'This toggle is true',
+					toggled: true,
+					checkbox: true,
+				},
+			],
+		},
+		{
+			type: 'text',
+			title: 'Textbox',
+			placeholder: 'Example',
+		},
+		{
+			type: 'number',
+			title: 'Textbox',
+			placeholder: 'Example',
+		},
+		{
+			type: 'carousel',
+		},
 	];
 	return (
 		<div>
-			<Heading size={'xs'}>Example Page</Heading>
-			<Paragraph>Form Reference</Paragraph>
+			<Heading size={'uberSmall'} className="text-t-100">
+				Example Page
+			</Heading>
 			<div className="py-2">
 				{formInputs.map((input: any, i) => {
 					return (

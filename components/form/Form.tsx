@@ -45,10 +45,9 @@ const Form: FC<FormTestProps> = ({ modalState, closeModal, dispatch }) => {
 
 	useEffect(() => {
 		updateForm({ dateAdded: new Date() });
-	}, [])
+	}, []);
 
 	const handleSubmit = (e: any) => {
-
 		e.preventDefault();
 		goToStep(0);
 
@@ -62,9 +61,7 @@ const Form: FC<FormTestProps> = ({ modalState, closeModal, dispatch }) => {
 		closeModal();
 	};
 
-	
 	return (
-		
 		<>
 			<Modal
 				visible={modalState}
@@ -72,28 +69,28 @@ const Form: FC<FormTestProps> = ({ modalState, closeModal, dispatch }) => {
 				clickOut={true}
 				className="bg-g-100 sm:bg-g-100 flex flex-col sm:flex-row p-0 relative border-0 max-w-4xl sm:h-5/6 h-full w-full sm:w-11/12"
 			>
-				<div className="bg-t-100 w-full rounded-t sm:rounded h-40 sm:h-full absolute z-0 left-0 top-0 visible sm:invisible"></div>
+				<div className="bg-g-200 border-b-2 border-t-100 w-full rounded-t sm:rounded h-40 sm:h-full absolute z-0 left-0 top-0 visible sm:invisible"></div>
 				<div
 					tabIndex={0}
 					onKeyUp={handleKey}
 					className="flex flex-col sm:flex-row p-4 h-full overflow-scroll w-full max-h-fit"
 				>
-					<div className="flex flex-row pb-2 sm:flex-col sm:justify-normal justify-center mr-0 sm:mr-6 px-4 py-4 relative bg-t-100 rounded">
+					<div className="flex flex-row pb-2 sm:flex-col sm:justify-normal justify-center mr-0 sm:mr-6 px-4 py-4 relative bg-g-200 sm:border-2 border-0 border-t-100 rounded">
 						{MultiFormSteps.map((step, i) => {
 							return (
 								<button key={i} onClick={() => goToStep(i)} className="flex p-4 z-10">
 									<div
 										className={`rounded-full border-2 w-10 h-10 flex items-center justify-center font-semibold text-center transition-colors ${
 											currentStepNumber == i
-												? 'text-slate-300 border-indigo-400 bg-indigo-950'
+												? 'text-t-100 border-r-200 bg-r-600'
 												: 'text-slate-400 bg-slate-400/25 border-slate-400'
 										}`}
 									>
 										<p className="w-full">{i + 1}</p>
 									</div>
 									<div className="flex-col pl-3 hidden sm:flex w-44">
-										<p className="text-left font-semibold leading-tight text-sm text-slate-400">Step {i + 1}</p>
-										<p className="text-left font-semibold leading-tight uppercase text-slate-300 tracking-wide">{step}</p>
+										<p className="text-left font-semibold leading-tight text-sm text-t-300">Step {i + 1}</p>
+										<p className="text-left font-semibold leading-tight uppercase text-t-100 tracking-wide">{step}</p>
 									</div>
 								</button>
 							);
@@ -101,7 +98,7 @@ const Form: FC<FormTestProps> = ({ modalState, closeModal, dispatch }) => {
 						{/* <div className="bg-indigo-700 box-border w-full rounded h-full absolute z-0 left-0"></div> */}
 					</div>
 					<div className="flex-col justify-between flex w-full">
-						<form className="bg-slate-200 rounded p-4 z-10 shadow-lg sm:shadow-none items-center w-full overflow-scroll">
+						<form className="bg-g-200 border-2 border-t-100 rounded p-4 z-10 shadow-lg sm:shadow-none items-center w-full overflow-scroll px-4">
 							{currentStep}
 						</form>
 						{/* form nav w/large screen */}
