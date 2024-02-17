@@ -111,7 +111,7 @@ const Logdash: FC<LogdashProps> = ({}) => {
 			case 1:
 				return (
 					<>
-					<Button>Pull Teams</Button>
+					<Button onClick={() => {}}>Pull Teams</Button>
 					{
 						listTeams().map((team: number, i: number) => {
 							return (

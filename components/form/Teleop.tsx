@@ -52,7 +52,7 @@ const Teleop = ({ updateForm, teleop }: stepItems) => {
 			children: [
 				{
 					type: 'toggle',
-					onClick: () => updateForm({ teleop: { ...teleop, hangInHarmony: !teleop.hangInHarmony } }),
+					onClick: (e: any) => {e.stopPropigation; updateForm({ teleop: { ...teleop, hangInHarmony: !teleop.hangInHarmony }})},
 					toggled: teleop.hangInHarmony,
 					title: 'Hung On Chain?',
 					description: 'Did they hang?',
