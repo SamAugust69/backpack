@@ -31,9 +31,21 @@ const Teleop = ({ updateForm, teleop }: stepItems) => {
 	const formInputs: Array<FormInputType> = [
 		{
 			type: 'number',
-			title: 'How much?',
+			title: 'Amp Score?',
 			placeholder: teleop.ampScore.toString(),
 			onChange: (e: any) => updateForm({ teleop: { ...teleop, ampScore: e.target.value } }),
+		},
+		{
+			type: "number",
+			title: "Amplification Amount",
+			placeholder: teleop.ampActivatedAmount.toString(),
+			onChange: (e: any) => updateForm({ teleop: { ...teleop, ampActivatedAmount: e.target.value } }),
+		},
+		{
+			type: "number",
+			title: "Amplified Speaker Score",
+			placeholder: teleop.amplifiedSpeakerScore.toString(),
+			onChange: (e: any) => updateForm({ teleop: { ...teleop, amplifiedSpeakerScore: e.target.value } }),
 		},
 
 		{
