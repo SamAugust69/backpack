@@ -102,7 +102,7 @@ const Form: FC<FormTestProps> = ({ modalState, closeModal, dispatch }) => {
 							{currentStep}
 						</form>
 						{/* form nav w/large screen */}
-						<div className="bg-slate-200 hidden justify-between p-4 rounded-b sm:flex">
+						<div className="bg-g-200 border-2 border-t-100 hidden justify-between p-4 rounded-b sm:flex">
 							<Button
 								variant="link"
 								className={`font-semibold text-slate-400 h-full ${isFirstStep ? 'invisible' : 'visible'}`}
@@ -117,15 +117,15 @@ const Form: FC<FormTestProps> = ({ modalState, closeModal, dispatch }) => {
 					</div>
 				</div>
 				{/* form nav w/small screen */}
-				<div className="sm:hidden bg-slate-200 flex justify-between p-4 rounded-b">
+				<div className="sm:hidden bg-g-200 flex border-t-2 border-t-200 justify-between p-4 rounded-b">
 					<Button
 						variant="link"
-						className={`font-semibold text-slate-400 h-full ${isFirstStep ? 'invisible' : 'visible'}`}
+						className={`font-semibold text-t-100 h-full ${isFirstStep ? 'invisible' : 'visible'}`}
 						onClick={backwards}
 					>
 						Go Back
 					</Button>
-					<Button className="text-slate-100 bg-indigo-950 h-full" onClick={isLastStep ? handleSubmit : forwards}>
+					<Button className="text-t-100 bg-b-100 h-full" onClick={isLastStep ? handleSubmit : forwards}>
 						{isLastStep ? 'Submit' : 'Next Step'}
 					</Button>
 				</div>

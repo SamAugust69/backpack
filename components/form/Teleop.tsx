@@ -41,18 +41,19 @@ const Teleop = ({ updateForm, teleop }: stepItems) => {
 			placeholder: teleop.ampActivatedAmount.toString(),
 			onChange: (e: any) => updateForm({ teleop: { ...teleop, ampActivatedAmount: e.target.value } }),
 		},
-		{
-			type: "number",
-			title: "Amplified Speaker Score",
-			placeholder: teleop.amplifiedSpeakerScore.toString(),
-			onChange: (e: any) => updateForm({ teleop: { ...teleop, amplifiedSpeakerScore: e.target.value } }),
-		},
 
+		
 		{
 			type: 'Scored Speaker',
 			title: 'Speaker Score',
 			placeholder: teleop.speakerScore.toString(),
 			onChange: (e: any) => updateForm({ teleop: { ...teleop, speakerScore: e.target.value } }),
+		},
+		{
+			type: "number",
+			title: "Amplified Speaker Score",
+			placeholder: teleop.amplifiedSpeakerScore.toString(),
+			onChange: (e: any) => updateForm({ teleop: { ...teleop, amplifiedSpeakerScore: e.target.value } }),
 		},
 
 		{
