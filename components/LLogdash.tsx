@@ -110,20 +110,26 @@ const Logdash: FC<LogdashProps> = ({}) => {
 				break;
 			case 1:
 				return (
-					listTeams().map((team: number, i: number) => {
-						return (
-							<div key={i} className='bg-t-100 flex flex-col gap-2 p-2 rounded'>
-								<div className='p-2'>
-								<Paragraph size="xs" className="font-medium text-b-100 dark:text-[#3A2C27] text-left">
-									Team <span className="text-r-100 px-1">{team}</span>
-								</Paragraph>
+					<>
+					<Button>Pull Teams</Button>
+					{
+						listTeams().map((team: number, i: number) => {
+							return (
+								<div key={i} className='bg-t-100 flex flex-col gap-2 p-2 rounded'>
+									<div className='p-2'>
+									<Paragraph size="xs" className="font-medium text-b-100 dark:text-[#3A2C27] text-left">
+										Team <span className="text-r-100 px-1">{team}</span>
+									</Paragraph>
+									</div>
+									{listLogsWithTeam(team).map((log: FormItems, i: number) => {
+										return <LogView key={i} data={log} className='bg-t-300'/>
+									})}
 								</div>
-								{listLogsWithTeam(team).map((log: FormItems, i: number) => {
-									return <LogView key={i} data={log} className='bg-t-300'/>
-								})}
-							</div>
-						)
-					})
+							)
+						})
+					}
+					</>
+					
 				)
 				break;
 			case 2:
