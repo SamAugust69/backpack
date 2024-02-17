@@ -110,7 +110,7 @@ const Form: FC<FormTestProps> = ({ modalState, closeModal, dispatch }) => {
 							>
 								Go Back
 							</Button>
-							<Button className="text-slate-100 bg-indigo-950 h-full" onClick={isLastStep ? handleSubmit : forwards}>
+							<Button className="text-t-100 bg-b-100 h-full" onClick={isLastStep ? handleSubmit : forwards}>
 								{isLastStep ? 'Submit' : 'Next Step'}
 							</Button>
 						</div>
