@@ -47,10 +47,10 @@ const Example = ({ updateForm }: stepItems) => {
 	];
 	return (
 		<div>
-			<Heading size={'uberSmall'} className="text-t-100">
+			<Heading size={'uberSmall'} className="text-t-100 my-1">
 				Example Page
 			</Heading>
-			<div className="py-2">
+			<div className="py-2 flex flex-col gap-2">
 				{formInputs.map((input: any, i) => {
 					return (
 						<FormInput key={i} {...input}>

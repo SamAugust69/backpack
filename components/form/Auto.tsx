@@ -37,7 +37,6 @@ const Auto = ({ updateForm, auto }: stepItems) => {
 			children: [
 				{
 					type: 'number',
-					variant: 'purpler',
 					onChange: (e: any) => {
 						e.stopPropagation();
 						updateForm({
@@ -49,7 +48,6 @@ const Auto = ({ updateForm, auto }: stepItems) => {
 				},
 				{
 					type: 'number',
-					variant: 'purpler',
 					onChange: (e: any) =>
 						updateForm({
 							auto: { ...auto, ampScore: Number.isNaN(parseInt(e.target.value)) ? 0 : parseInt(e.target.value) },
@@ -63,9 +61,10 @@ const Auto = ({ updateForm, auto }: stepItems) => {
 	];
 	return (
 		<div>
-			<Heading size={'xs'}>Auto</Heading>
-			<Paragraph>Howd your robot preform during auto?</Paragraph>
-			<div className="py-2">
+			<Heading size={'uberSmall'} className="text-t-100 my-1">
+				Auto
+			</Heading>
+			<div className="py-2 flex flex-col gap-2">
 				{formInputs.map((input: any, i) => {
 					return (
 						<>

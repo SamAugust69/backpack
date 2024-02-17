@@ -33,14 +33,14 @@ const Form: FC<FormTestProps> = ({ modalState, closeModal, dispatch }) => {
 		if (event.key == 'ArrowUp' || event.key == 'ArrowLeft') backwards();
 	};
 
-	const MultiFormSteps = ['Example', 'Beginning', 'Auto', 'Teleop', 'Finishing-Up'];
+	const MultiFormSteps = [ 'Beginning', 'Auto', 'Teleop', ];
 
 	const { currentStep, forwards, backwards, goToStep, currentStepNumber, isFirstStep, isLastStep } = useMultiForm([
-		<Example key={-1} {...formData} updateForm={updateForm} />,
+		//<Example key={-1} {...formData} updateForm={updateForm} />,
 		<Beginning key={0} {...formData} updateForm={updateForm} />,
 		<Auto key={1} {...formData} updateForm={updateForm} />,
 		<Teleop key={2} {...formData} updateForm={updateForm} />,
-		<Finishing key={3} {...formData} updateForm={updateForm} />,
+		//<Finishing key={3} {...formData} updateForm={updateForm} />,
 	]);
 
 	useEffect(() => {

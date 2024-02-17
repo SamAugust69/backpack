@@ -52,19 +52,27 @@ const Teleop = ({ updateForm, teleop }: stepItems) => {
 			children: [
 				{
 					type: 'toggle',
-					onClick: (e: any) => {e.stopPropigation; updateForm({ teleop: { ...teleop, hangInHarmony: !teleop.hangInHarmony }})},
+					onClick: (e: any) => {e.stopPropagation(); updateForm({ teleop: { ...teleop, hangInHarmony: !teleop.hangInHarmony }})},
 					toggled: teleop.hangInHarmony,
-					title: 'Hung On Chain?',
-					description: 'Did they hang?',
+					title: 'Harmonize?',
+					description: 'Did atleast two of them hang?',
 				},
+				{
+					type: "number",
+					onChange: (e: any) => {e.stopPropagation(); updateForm({ teleop: { ...teleop, trapScore: e.target.value}})},
+					title: "Trap Score",
+					description: "How many times did they score trap?",
+					placeholder: (teleop.trapScore).toString()
+				}
 			],
 		},
 	];
 	return (
 		<div>
-			<Heading size={'xs'}>Teleop</Heading>
-			<Paragraph>Howd your robot preform during teleop?🗣️</Paragraph>
-			<div className="py-2">
+			<Heading size={'uberSmall'} className="text-t-100 my-1">
+				Teleop
+			</Heading>
+			<div className="py-2 flex flex-col gap-2">
 				{formInputs.map((input: any, i) => {
 					return (
 						<FormInput key={i} {...input}>

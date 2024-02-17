@@ -31,9 +31,10 @@ const Beginning = ({ updateForm, team, match, scout }: stepItems) => {
 	];
 	return (
 		<div>
-			<Heading size={'xs'}>Scouting Info</Heading>
-			<Paragraph>Whore you scouting?</Paragraph>
-			<div className="py-2">
+			<Heading size={'uberSmall'} className="text-t-100 my-1">
+				Team Info
+			</Heading>
+			<div className="py-2 flex flex-col gap-2">
 				{formInputs.map((input: any, i) => {
 					return (
 						<FormInput key={i} {...input}>

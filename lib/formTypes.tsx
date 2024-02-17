@@ -28,6 +28,7 @@ export type FormItems  = {
 		hangOnChain: boolean;
 		hangInHarmony: boolean; // is big bulky, or bad at coordination
 		scoredTrap: boolean;
+		trapScore: number;
 
 		thrownNoteScore: boolean;
 		thrownNoteAmount: number;
@@ -59,6 +60,7 @@ export const initialValues: FormItems = {
 		hangOnChain: false,
 		hangInHarmony: false,
 		scoredTrap: false,
+		trapScore: 0,
 
 		thrownNoteScore: false,
 		thrownNoteAmount: 0,

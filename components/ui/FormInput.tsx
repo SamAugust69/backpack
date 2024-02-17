@@ -11,12 +11,12 @@ const InputVariants = cva(
 	{
 		variants: {
 			variant: {
-				default: 'bg-transparent',
-				purple_ish: 'bg-indigo-100',
-				purpler: 'bg-indigo-200',
+				default: 'bg-transparent text-t-100 placeholder-t-100',
+				purple_ish: '',
+				purpler: '',
 			},
 			size: {
-				default: 'h-10 px-1 w-full',
+				default: 'h-10 px-2 w-full',
 			},
 		},
 		defaultVariants: {
@@ -45,9 +45,7 @@ const TextInput: FC<InputProps> = ({
 	...props
 }) => {
 	return (
-		<div
-			className={cn(`${visible === false ? 'hidden' : 'block'} my-4 relative bg-gradient-to-r 500 pb-0.5 `, className)}
-		>
+		<div className={cn(`${visible === false ? 'hidden' : 'block'} relative bg-gradient-to-r 500 pb-0.5 `, className)}>
 			<input
 				required
 				disabled={disabled}
@@ -55,7 +53,7 @@ const TextInput: FC<InputProps> = ({
 				onClick={(e: any) => e.stopPropagation()}
 				{...props}
 			/>
-			<span className=" absolute top-0 left-0 peer-focus:text-xs peer-focus:text-slate-500 peer-focus:-top-2 peer-valid:text-xs peer-valid:text-slate-500 peer-valid:-top-2 transition-all peer-placeholder-shown:text-xs peer-placeholder-shown:text-slate-500 peer-placeholder-shown:-top-2 peer-placeholder-shown:bg-g-200 px-2">
+			<span className="text-t-100 disabled:pointer-events-none outline-none text-sm absolute top-0 left-2 peer-focus:text-xs peer-focus:bg-g-200 peer-focus:-top-2 peer-valid:text-xs peer-valid:bg-g-200 peer-valid:-top-2 transition-all peer-placeholder-shown:text-xs  peer-placeholder-shown:-top-2 peer-placeholder-shown:bg-g-200 px-1">
 				{title}
 			</span>
 		</div>
@@ -74,14 +72,7 @@ const NumberInput: FC<InputProps> = ({
 	...props
 }) => {
 	return (
-		<div
-			className={cn(
-				`${
-					visible === false ? 'hidden' : 'block'
-				} mx-3 my-4 relative bg-gradient-to-r from-slate-400 to-slate-300 dark:from-slate-400 dark:to-slate-500 pb-0.5`,
-				className
-			)}
-		>
+		<div className={cn(`${visible === false ? 'hidden' : 'block'}  relative  pb-0.5`, className)}>
 			<input
 				required
 				disabled={disabled}
@@ -90,7 +81,7 @@ const NumberInput: FC<InputProps> = ({
 				onClick={(e: any) => e.stopPropagation()}
 				{...props}
 			/>
-			<span className=" absolute top-0 left-0 peer-focus:text-xs peer-focus:text-slate-500 dark:peer-focus:text-slate-200 peer-focus:-top-2.5 peer-valid:text-xs peer-valid:text-slate-500 dark:peer-valid:text-slate-200 peer-valid:-top-2.5 transition-all peer-placeholder-shown:text-xs peer-placeholder-shown:text-slate-500 dark:peer-placeholder-shown:text-slate-200 peer-placeholder-shown:-top-2.5 ">
+			<span className="text-t-100 disabled:pointer-events-none outline-none text-sm absolute top-0 left-2 peer-focus:text-xs peer-focus:bg-g-200 peer-focus:-top-2 peer-valid:text-xs peer-valid:bg-g-200 peer-valid:-top-2 transition-all peer-placeholder-shown:text-xs  peer-placeholder-shown:-top-2 peer-placeholder-shown:bg-g-200 px-1">
 				{title}
 			</span>
 		</div>
@@ -123,33 +114,36 @@ const Toggle: FC<ToggleProps> = ({
 	return (
 		<div
 			className={cn(
-				`mx-3 border mb-2 ${
-					toggled ? `border-indigo-600 ${hoverColor ? hoverColor : 'bg-indigo-100'}` : 'border-slate-400'
+				`border-2 ${
+					toggled ? `border-t-100 bg-t-100/15` : 'border-slate-400'
 				} rounded p-2 transition-all cursor-pointer ${className}`
 			)}
 			{...props}
 		>
 			<div className="flex items-center justify-between">
 				{checkbox && (
-					<div className="rounded border-2 border-indigo-400 p-1 bg-indigo-300">
-						<Check className={`w-5 h-5 text-indigo-800 ${toggled ? 'scale-100' : 'scale-0'}`} />
+					<div className="rounded border-2 p-1 border-t-100 bg-t-100/5">
+						<Check className={`w-5 h-5 text-t-100 ${toggled ? 'scale-100' : 'scale-0'}`} />
 					</div>
 				)}
 				<div className="p-1">
-					<Paragraph className={`px-0 select-none text-slate-700 font-bold ${checkbox ? 'text-right' : 'text-left'} mb-0`}>
+					<Paragraph className={`px-0 select-none text-t-100 font-bold ${checkbox ? 'text-right' : 'text-left'} mb-0`}>
 						{title}
 					</Paragraph>
-					<Paragraph size={'sm'} className={`px-0 select-none leading-normal ${checkbox ? 'text-right' : 'text-left'} mb-0`}>
+					<Paragraph
+						size={'sm'}
+						className={`px-0 select-none text-t-200 leading-normal ${checkbox ? 'text-right' : 'text-left'} mb-0`}
+					>
 						{description}
 					</Paragraph>
 				</div>
 			</div>
 
 			{children !== undefined && toggled && (
-				<div className=" border-black py-2 px-1 my-2 bg-indigo-200 rounded">
+				<div className="p-3 my-1 bg-g-200 rounded flex gap-2 flex-col">
 					{children.map((input, i) => {
 						return (
-							<FormInput key={i} className="mx-1 border-0 mb-0" variant={'purpler'} hoverColor={'bg-indigo-200'} {...input}>
+							<FormInput key={i} className="mx-1 border-0 mb-0" {...input}>
 								{input.children}
 							</FormInput>
 						);
