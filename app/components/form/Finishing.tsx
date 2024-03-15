@@ -1,8 +1,8 @@
 import { FormItems } from '@/lib/formTypes';
 import FormInput from '@/ui/FormInput';
-import { Button } from '../ui/Button';
-import Heading from '../ui/Heading';
-import Paragraph from '../ui/Paragraph';
+import { Button } from '@/ui/Button';
+import Heading from '@/ui/Heading';
+import Paragraph from '@/ui/Paragraph';
 import { useState } from 'react';
 
 type stepItems = FormItems & {

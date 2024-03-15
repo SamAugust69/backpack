@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { FormItems } from '@/lib/formTypes';
 import FormInput from '@/ui/FormInput';
-import Heading from '../ui/Heading';
-import Paragraph from '../ui/Paragraph';
+import Heading from '@/ui/Heading';
+import Paragraph from '@/ui/Paragraph';
 
 type stepItems = FormItems & {
 	updateForm: (item: Partial<FormItems>) => void;
@@ -14,19 +14,19 @@ const Beginning = ({ updateForm, team, match, scout }: stepItems) => {
 			type: 'number',
 			onChange: (e: any) => updateForm({ match: Number.isNaN(parseInt(e.target.value)) ? 0 : parseInt(e.target.value) }),
 			title: 'Match',
-			placeholder: match.toString(),
+			value: match.toString(),
 		},
 		{
 			type: 'number',
 			onChange: (e: any) => updateForm({ team: Number.isNaN(parseInt(e.target.value)) ? 0 : parseInt(e.target.value) }),
 			title: 'Team',
-			placeholder: team.toString(),
+			value: team.toString(),
 		},
 		{
 			type: 'text',
 			onChange: (e: any) => updateForm({ scout: e.target.value }),
 			title: "Scouter's Name",
-			placeholder: scout,
+			value: scout,
 		},
 	];
 	return (

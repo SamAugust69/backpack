@@ -1,17 +1,17 @@
 import { FormInputType, FormItems } from '@/lib/formTypes';
 import FormInput from '@/ui/FormInput';
 import Heading from '@/ui/Heading';
-import Paragraph from '../ui/Paragraph';
+import Paragraph from '@/ui/Paragraph';
 
 type stepItems = FormItems & {
-	updateForm: (item: Partial<FormItems>) => void;
+	updateForm: (item: Partial<FormItems>) => Promise<void>;
 };
 
 // {
 // 	type: 'toggle',
 // 	toggled: ,
 // 	onClick: () => setTest(!test),
-// 	placeholder: 'text',
+// 	value: 'text',
 // },
 
 const Auto = ({ updateForm, auto }: stepItems) => {
@@ -24,7 +24,7 @@ const Auto = ({ updateForm, auto }: stepItems) => {
 				}),
 			toggled: auto.leftStartingZone,
 			title: 'Left Starting Zone',
-			description: 'Yeh',
+			description: "Did the robot leave the starting area?"
 		},
 		{
 			type: 'toggle',
@@ -38,13 +38,20 @@ const Auto = ({ updateForm, auto }: stepItems) => {
 				{
 					type: 'number',
 					onChange: (e: any) => {
-						e.stopPropagation();
 						updateForm({
 							auto: { ...auto, speakerScore: Number.isNaN(parseInt(e.target.value)) ? 0 : parseInt(e.target.value) },
 						});
 					},
-					title: 'Speaker Score',
-					placeholder: auto.ampScore.toString(),
+					title: 'Speaker Notes Scored',
+					value: auto.speakerScore.toString(),
+					incrementButtons: true,
+					increment: (setThing: Function) => {
+						updateForm({ auto: { ...auto, speakerScore: (auto.speakerScore + 1)}}).then(setThing(auto.speakerScore + 1))
+					},
+					decrease: (setThing: Function) => {
+						updateForm({ auto: { ...auto, speakerScore: (auto.speakerScore - 1)}}).then(setThing(auto.speakerScore - 1))
+					}
+					
 				},
 				{
 					type: 'number',
@@ -52,8 +59,15 @@ const Auto = ({ updateForm, auto }: stepItems) => {
 						updateForm({
 							auto: { ...auto, ampScore: Number.isNaN(parseInt(e.target.value)) ? 0 : parseInt(e.target.value) },
 						}),
-					title: 'Amp Score',
-					placeholder: auto.ampScore.toString(),
+					title: 'Amp notes Scored',
+					value: auto.ampScore.toString(),
+					incrementButtons: true,
+					increment: (setThing: Function) => {
+						updateForm({ auto: { ...auto, ampScore: (auto.ampScore + 1)}}).then(setThing(auto.ampScore + 1))
+					},
+					decrease: (setThing: Function) => {
+						updateForm({ auto: { ...auto, ampScore: (auto.ampScore - 1)}}).then(setThing(auto.ampScore - 1))
+					}
 				},
 			],
 			title: 'Scored',

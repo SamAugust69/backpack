@@ -11,6 +11,7 @@ export const buttonVariants = cva(
 				default: 'bg-b-100 text-t-100',
 				link: 'bg-transparent underline-offset-4 hover:underline text-slate-900 hover:bg-transparent',
 				hidden: 'bg-transparent',
+				options: "border-2 border-b-100 bg-t-200",
 				unstyled: '',
 			},
 			size: {
@@ -29,13 +30,12 @@ export const buttonVariants = cva(
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
 	isLoading?: boolean;
-	ref?: Ref<HTMLButtonElement>;
 }
 
-const Button: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
-	({ className, children, variant, isLoading, size, ...props }, ref) => {
+const Button: FC<ButtonProps> = (
+	({ className, children, variant, isLoading, size, ...props }) => {
 		return (
-			<button className={cn(buttonVariants({ variant, size, className }))} ref={ref} disabled={isLoading} {...props}>
+			<button className={cn(buttonVariants({ variant, size, className }))} disabled={isLoading} type={"button"} {...props}>
 				{isLoading ? <Loader2 className="animate-spin p-1" /> : null}
 				{children}
 			</button>

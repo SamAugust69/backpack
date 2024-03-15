@@ -1,7 +1,7 @@
 import { FormInputType, FormItems } from '@/lib/formTypes';
 import FormInput from '@/ui/FormInput';
-import Heading from '../ui/Heading';
-import Paragraph from '../ui/Paragraph';
+import Heading from '@/ui/Heading';
+import Paragraph from '@/ui/Paragraph';
 
 type stepItems = FormItems & {
 	updateForm: (item: Partial<FormItems>) => void;
@@ -50,7 +50,8 @@ const Example = ({ updateForm }: stepItems) => {
 			<Heading size={'uberSmall'} className="text-t-100 my-1">
 				Example Page
 			</Heading>
-			<div className="py-2 flex flex-col gap-2">
+			<div className="py-2 flex flex-col gap-2n">
+
 				{formInputs.map((input: any, i) => {
 					return (
 						<FormInput key={i} {...input}>
