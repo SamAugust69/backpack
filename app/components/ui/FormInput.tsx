@@ -91,7 +91,7 @@ const NumberInput: FC<InputProps> = ({
 
 	return (
 		<div className={cn(`${visible === false ? 'hidden' : 'block'} relative pb-0.5 flex`, className)}>
-			{incrementButtons ? <Button onClick={() => thing > 0 ? decrease?.(setThing) : 0} className='px-8 h-full rounded-l'>-</Button> : null}
+			{incrementButtons ? <Button onClick={() => thing > 0 ? decrease?.(setThing) : 0} className='px-8 h-full rounded-none rounded-l'>-</Button> : null}
 			<input
 				required
 				disabled={disabled}
@@ -104,7 +104,7 @@ const NumberInput: FC<InputProps> = ({
 			<span className={`text-t-100 disabled:pointer-events-none outline-none text-sm absolute top-0 ${incrementButtons ? "left-20" : "left-2"} peer-focus:text-xs peer-focus:bg-g-200 peer-focus:-top-2 peer-valid:text-xs peer-valid:bg-g-200 peer-valid:-top-2 transition-all peer-placeholder-shown:text-xs  peer-placeholder-shown:-top-2 peer-placeholder-shown:bg-g-200 px-1`}>
 				{title}
 			</span>
-			{incrementButtons ? <Button onClick={() => increment?.(setThing)} className='px-8 h-full rounded-r'>+</Button> : null}
+			{incrementButtons ? <Button onClick={() => increment?.(setThing)} className='px-8 h-full rounded-none rounded-r'>+</Button> : null}
 
 		</div>
 	);
@@ -161,7 +161,7 @@ const Toggle: FC<ToggleProps> = ({
 			</div>
 
 			{children !== undefined && toggled && (
-				<div className="px-3 py-4 bg-g-200 flex gap-2 flex-col border-t-2 border-t-200">
+				<div className="px-3 py-4 bg-g-200 flex gap-3 flex-col border-t-2 border-t-200">
 					{children.map((input, i) => {
 						return (
 							<FormInput key={i} className="mx-1 mb-0" {...input}>
@@ -185,7 +185,7 @@ const CarouselSelector: FC<CarouselProps> = ({ className }) => {
 const formInputSwitch = (type: string, children: any, title: any, props: any) => {
 	switch (type.toLowerCase()) {
 		case 'text':
-			return <TextInput title={title} {...props}>{children}</TextInput>;
+			return <TextInput title={title}  {...props}>{children}</TextInput>;
 		case 'toggle':
 			return <Toggle title={title} {...props}>{children}</Toggle>;
 		case 'number':

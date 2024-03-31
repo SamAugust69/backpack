@@ -1,5 +1,5 @@
 'use client';
-import { useReducer, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import './globals.css';
 import Dialog from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
@@ -9,6 +9,9 @@ import { unsavedReducer } from '@/lib/unsavedReducer';
 import { FormItems, initialValues } from '@/lib/formTypes';
 import LogView from './components/log/LogView';
 import AnimatedPage from './components/ui/AnimatedPage';
+import Paragraph from './components/ui/Paragraph';
+import schedule from "./schedual.json"
+import QRCode, { QRCodeSVG } from 'qrcode.react';
 
 const logA = {
 	id: '3a32c2dd-4dbc-471a-802d-166bfffd6b92',
@@ -61,8 +64,8 @@ export default function Home() {
 	});
 
 	// form stuff...... data..
-	const [formData, setFormData] = useState<FormItems>(structuredClone(initialValues));
-	const [localData, setLocalData] = useLocalStorage<Array<FormItems>>('local-data', []); // stores local match information from scout
+	const [initalFormValues, setInitalFormValues] = useState<Partial<FormItems>>();
+	const [localData, setLocalData] = useLocalStorage<Array<Partial<FormItems>>>('local-data', []); // stores local match information from scout
 	const [localDispatchState, localDispatch] = useReducer(unsavedReducer, localData);
 
 	const toDisplay: Array<any> = [
@@ -98,14 +101,99 @@ export default function Home() {
 		},
 	];
 
-	const openLog = () => {};
+	// sets local data state
+	useEffect(() => {
+		setLocalData(localDispatchState)
+	}, [localDispatchState])
+
+
+	const formStuff = {
+		modalState: formOpen,
+		closeModal: () => {setFormOpen(false); setCurMatch(curMatch + 1)},
+		dispatch: localDispatch,
+		initValue: initalFormValues
+	}
+
+	const openLog = (match: number, team: number) => {
+		console.log("opened")
+		setInitalFormValues({
+			match: match,
+			team: team
+		})
+		console.log({
+			match: match,
+			team: team
+		})
+		setFormOpen(!formOpen)
+	};
+
+	// so I want to take a schedual, how would I do this? can i export one from TBA?
+
+
+	const [curMatch, setCurMatch] = useState(7)
+	const [tabletNumber, setTabletNumber] = useState(2)
+
+	const shortenQRCode = (length: number) => {
+		let len = 0;
+		let stringifiedLogs = "["
+
+		localData.map((log: Partial<FormItems>) => {
+			let str = JSON.stringify(log)
+			if (len + str.length > length)
+				return stringifiedLogs
+			len += str.length
+			stringifiedLogs = stringifiedLogs + str + ","
+
+		})
+		console.log(len)
+		console.log(stringifiedLogs + "]")
+		return stringifiedLogs + "]"
+	}
+
+
 
 	return (
-		<div className="min-h-screen">
-			<Form modalState={formOpen} closeModal={() => setFormOpen(false)} dispatch={localDispatch} formValues={formData} />
+		<div className="min-h-screen p-12">
+			<Form {...formStuff} />
 			{/* <Dialog {...modalState}>Test</Dialog> */}
-			<AnimatedPage>test</AnimatedPage>
-			<AnimatedPage>test</AnimatedPage>
+			<AnimatedPage>
+				<div className='bg-g-100 border-2 border-t-100 rounded flex flex-col h-32 overflow-scroll snap-y'>
+					{schedule.Schedule.slice(curMatch - 2 > 0 ? curMatch - 2 : 0, curMatch + 1 < schedule.Schedule.length ? curMatch + 1 : schedule.Schedule.length).map((val) => {
+						return (
+							<div onClick={() => {curMatch == val.matchNumber ? openLog(val.matchNumber, val.teams[tabletNumber].teamNumber) : null}} className={`group group-hover bg-g-200 m-2 rounded flex snap-center ${curMatch == val.matchNumber ? " hover:cursor-pointer" : ""} transition-all`}>
+								<div className={` ${curMatch == val.matchNumber ? "bg-t-400" : "bg-b-100"} py-2 h-full px-4 rounded-l flex items-center justify-center `}>
+									{curMatch == val.matchNumber ? <Paragraph size={"xs"} className='group invisible w-0 group-hover:visible group-hover:w-full'>Create Log</Paragraph> : null}
+									<Paragraph size={"sm"}>{val.matchNumber}</Paragraph>
+								</div>
+								<div className='px-2 flex items-center justify-between w-full'>
+									<Paragraph size={"sm"}>{val.description}</Paragraph>
+									<div>
+										<Paragraph size={"sm"}>{val.teams[tabletNumber].teamNumber}</Paragraph>
+									</div>
+								</div>
+							</div>
+						)
+					})}
+				</div>
+				<Button onClick={() => setCurMatch(curMatch + 1)}></Button>
+			</AnimatedPage>
+			<AnimatedPage>
+				<Button onClick={() => setFormOpen(!formOpen)}>Open Log</Button>
+				<br />
+				{
+					
+					localData.map((val: Partial<FormItems>) => {
+						return (
+							<>
+								{JSON.stringify({...initialValues, ...val}.id) + JSON.stringify({...initialValues, ...val}).length + " " + JSON.stringify(val).length}
+								<br />
+							</>
+						)
+					})
+				}
+			</AnimatedPage>
+			<QRCodeSVG className={"w-96 h-96 m-10"} value={shortenQRCode(2000)}/>
+
 		</div>
 	);
 }

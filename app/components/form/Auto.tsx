@@ -78,14 +78,12 @@ const Auto = ({ updateForm, auto }: stepItems) => {
 			<Heading size={'uberSmall'} className="text-t-100 my-1">
 				Auto
 			</Heading>
-			<div className="py-2 flex flex-col gap-2">
+			<div className="py-2 flex flex-col gap-3">
 				{formInputs.map((input: any, i) => {
 					return (
-						<>
-							<FormInput key={i} {...input}>
-								{input.children}
-							</FormInput>
-						</>
+						<FormInput key={i} {...input}>
+							{input.children}
+						</FormInput>
 					);
 				})}
 			</div>

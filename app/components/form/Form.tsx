@@ -9,36 +9,46 @@ import { v4 as uuidv4 } from 'uuid';
 import Auto from '@/components/form/Auto';
 import useMultiForm from '@/lib/useMultiForm';
 import Teleop from '@/components/form/Teleop';
-import Finishing from '@/components/form/Finishing';
 import Beginning from './Beginning';
-import Example from './Example';
-import { REDUCER_ACTION_TYPE } from '@/lib/unsavedReducer';
 import Notes from './Notes';
 
 interface FormTestProps {
 	modalState: boolean;
 	dispatch: any;
 	closeModal: Function;
-	formValues: FormItems
+	initValue?: Partial<FormItems>
 }
+ 
+const Form: FC<FormTestProps> = ({ modalState, closeModal, dispatch, initValue }) => {
+	const [updatedFields, setUpdatedFields] = useState<Partial<FormItems>>({})
+	const [formData, setFormData] = useState({...initialValues, ...initValue, ...updatedFields});
 
-const Form: FC<FormTestProps> = ({ modalState, closeModal, dispatch, formValues }) => {
-	const [formData, setFormData] = useState(structuredClone(formValues));
-	const [submitted, setSubmitted] = useState(false);
+	useEffect(() => {
+		setFormData({...initialValues, ...initValue, ...updatedFields})
+		setUpdatedFields({...updatedFields, ...initValue})
+	}, [initValue])
+
+	useEffect(() => {
+		updateForm({ id: uuidv4().substring(0, 16) })
+	}, [])
 
 	const updateForm = async (fieldsToUpdate: Partial<FormItems>) => {
 		new Promise((resolve) => {
-			const updatedForm = { ...formData, ...fieldsToUpdate };
-			console.log({ ...fieldsToUpdate });
-			setFormData(updatedForm);
-			resolve({ ...formData, ...fieldsToUpdate });
+			setUpdatedFields({...updatedFields, ...fieldsToUpdate})
+			setFormData({...formData, ...fieldsToUpdate})
+			console.log({ ...updatedFields });
+			//setFormData(updatedForm);
+			resolve({...formData, ...fieldsToUpdate});
 		});
 	};
 
-	useEffect(() => {
-		updateForm({ id: uuidv4() });
-		setSubmitted(false);
-	}, [submitted]);
+	// useEffect(() => {
+	// 	if (submitted == true) {
+	// 		console.log("Submitted")
+	// 		updateForm({ id: uuidv4() });
+	// 		setSubmitted(false);
+	// 	}
+	// }, [submitted]);
 
 	const handleKey = (event: any) => {
 		if (event.key == 'ArrowDown' || event.key == 'ArrowRight') forwards();
@@ -50,7 +60,7 @@ const Form: FC<FormTestProps> = ({ modalState, closeModal, dispatch, formValues 
 	const { currentStep, forwards, backwards, goToStep, currentStepNumber, isFirstStep, isLastStep } = useMultiForm([
 		//<Example key={-1} {...formData} updateForm={updateForm} />,
 		<Beginning key={0} {...formData} updateForm={updateForm} />,
-		<Auto key={1} {...formData} updateForm={updateForm} />,
+		<Auto key={11} {...formData} updateForm={updateForm} />,
 		<Teleop key={2} {...formData} updateForm={updateForm} />,
 		<Notes key={3} {...formData} updateForm={updateForm} />,
 		//<Finishing key={3} {...formData} updateForm={updateForm} />,
@@ -60,11 +70,11 @@ const Form: FC<FormTestProps> = ({ modalState, closeModal, dispatch, formValues 
 		e.preventDefault();
 		goToStep(0);
 
-		console.log('submitted log', formData);
-		dispatch({ type: 'added', payload: formData });
-		setSubmitted(true);
+		console.log('submitted log', updatedFields);
+		dispatch({ type: 'added', payload: updatedFields });
 
 		closeModal();
+		setUpdatedFields({id: uuidv4().substring(0, 16)});
 		setFormData(structuredClone(initialValues));
 	};
 

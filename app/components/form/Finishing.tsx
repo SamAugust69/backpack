@@ -76,7 +76,7 @@ const Finishing = ({ updateForm, bot_preformed, match, team, scout, auto, teleop
 			<Heading size={'uberSmall'} className="text-t-100 my-1">
 				Finishing
 			</Heading>
-			<div className="py-2 flex flex-col gap-2">
+			<div className="py-2 flex flex-col gap-3">
 				{formInputs.map((input: any, i) => {
 					return (
 						<FormInput key={i} {...input}>

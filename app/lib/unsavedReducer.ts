@@ -11,14 +11,14 @@ const enum REDUCER_ACTION_TYPE {
 
 type ReducerAction = {
 	type: REDUCER_ACTION_TYPE | string;
-	payload: FormItems;
+	payload: Partial<FormItems>;
 };
 
 const unsavedReducer = (state: typeof initState, action: ReducerAction): typeof initState => {
 	switch (action.type) {
 		case "added":
 		case REDUCER_ACTION_TYPE.ADDED_LOG:
-			console.log('ADDED_LOG');
+			console.log('ADDED_LOG', action.payload, state);
 			return [...state, action.payload];
 		case "removed":
 		case REDUCER_ACTION_TYPE.REMOVED_LOG:

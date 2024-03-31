@@ -19,7 +19,6 @@ export type FormItems = {
 		ampScore: number;
 	};
 	teleop: {
-		ampActivatedAmount: number;
 		ampScore: number;
 
 		speakerScore: number;
@@ -28,7 +27,7 @@ export type FormItems = {
 		parkOnStage: boolean;
 		hangOnChain: boolean;
 		hangInHarmony: boolean; // is big bulky, or bad at coordination
-		scoredTrap: boolean;
+		trapScore: number;
 
 		thrownNoteScore: boolean;
 		thrownNoteAmount: number;
@@ -51,7 +50,6 @@ export const initialValues: FormItems = {
 		ampScore: 0,
 	},
 	teleop: {
-		ampActivatedAmount: 0,
 		ampScore: 0,
 
 		speakerScore: 0,
@@ -60,7 +58,7 @@ export const initialValues: FormItems = {
 		parkOnStage: false,
 		hangOnChain: false,
 		hangInHarmony: false,
-		scoredTrap: false,
+		trapScore: 0,
 
 		thrownNoteScore: false,
 		thrownNoteAmount: 0,

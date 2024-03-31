@@ -77,23 +77,7 @@ const Teleop = ({ updateForm, teleop }: stepItems) => {
 				updateForm({ teleop: { ...teleop, ampScore: teleop.ampScore - 1 } }).then(setThing(teleop.ampScore - 1));
 			},
 		},
-		{
-			type: 'number',
-			title: 'Amplification Amount',
-			value: teleop.ampActivatedAmount.toString(),
-			onChange: (e: any) => updateForm({ teleop: { ...teleop, ampActivatedAmount: parseInt(e.target.value) } }),
-			incrementButtons: true,
-			increment: (setThing: Function) => {
-				updateForm({ teleop: { ...teleop, ampActivatedAmount: teleop.ampActivatedAmount + 1 } }).then(
-					setThing(teleop.ampActivatedAmount + 1)
-				);
-			},
-			decrease: (setThing: Function) => {
-				updateForm({ teleop: { ...teleop, ampActivatedAmount: teleop.ampActivatedAmount - 1 } }).then(
-					setThing(teleop.ampActivatedAmount - 1)
-				);
-			},
-		},
+		
 
 		{
 			type: 'toggle',
@@ -125,14 +109,21 @@ const Teleop = ({ updateForm, teleop }: stepItems) => {
 					description: 'Did atleast two robots hang on the same chain?',
 				},
 				{
-					type: 'toggle',
-					onClick: (e: any) => {
-						e.stopPropagation();
-						updateForm({ teleop: { ...teleop, scoredTrap: !teleop.scoredTrap } });
+					type: 'number',
+					title: 'Trap Score',
+					value: teleop.trapScore.toString(),
+					onChange: (e: any) => updateForm({ teleop: { ...teleop, trapScore: parseInt(e.target.value) } }),
+					incrementButtons: true,
+					increment: (setThing: Function) => {
+						updateForm({ teleop: { ...teleop, trapScore: teleop.trapScore + 1 } }).then(
+							setThing(teleop.trapScore + 1)
+						);
 					},
-					toggled: teleop.scoredTrap,
-					title: 'Scored Trap',
-					description: 'Did they shoot a note into the trap successfully?',
+					decrease: (setThing: Function) => {
+						updateForm({ teleop: { ...teleop, trapScore: teleop.trapScore - 1 } }).then(
+							setThing(teleop.trapScore - 1)
+						);
+					},
 				},
 			],
 		},
@@ -142,7 +133,7 @@ const Teleop = ({ updateForm, teleop }: stepItems) => {
 			<Heading size={'uberSmall'} className="text-t-100 my-1">
 				Teleop
 			</Heading>
-			<div className="py-2 flex flex-col gap-2">
+			<div className="py-2 flex flex-col gap-3">
 				{formInputs.map((input: any, i) => {
 					return (
 						<FormInput key={i} {...input}>
