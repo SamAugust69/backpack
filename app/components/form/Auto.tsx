@@ -24,7 +24,7 @@ const Auto = ({ updateForm, auto }: stepItems) => {
 				}),
 			toggled: auto.leftStartingZone,
 			title: 'Left Starting Zone',
-			description: "Did the robot leave the starting area?"
+			description: 'Did the robot leave the starting area?',
 		},
 		{
 			type: 'toggle',
@@ -46,12 +46,11 @@ const Auto = ({ updateForm, auto }: stepItems) => {
 					value: auto.speakerScore.toString(),
 					incrementButtons: true,
 					increment: (setThing: Function) => {
-						updateForm({ auto: { ...auto, speakerScore: (auto.speakerScore + 1)}}).then(setThing(auto.speakerScore + 1))
+						updateForm({ auto: { ...auto, speakerScore: auto.speakerScore + 1 } }).then(setThing(auto.speakerScore + 1));
 					},
 					decrease: (setThing: Function) => {
-						updateForm({ auto: { ...auto, speakerScore: (auto.speakerScore - 1)}}).then(setThing(auto.speakerScore - 1))
-					}
-					
+						updateForm({ auto: { ...auto, speakerScore: auto.speakerScore - 1 } }).then(setThing(auto.speakerScore - 1));
+					},
 				},
 				{
 					type: 'number',
@@ -63,11 +62,11 @@ const Auto = ({ updateForm, auto }: stepItems) => {
 					value: auto.ampScore.toString(),
 					incrementButtons: true,
 					increment: (setThing: Function) => {
-						updateForm({ auto: { ...auto, ampScore: (auto.ampScore + 1)}}).then(setThing(auto.ampScore + 1))
+						updateForm({ auto: { ...auto, ampScore: auto.ampScore + 1 } }).then(setThing(auto.ampScore + 1));
 					},
 					decrease: (setThing: Function) => {
-						updateForm({ auto: { ...auto, ampScore: (auto.ampScore - 1)}}).then(setThing(auto.ampScore - 1))
-					}
+						updateForm({ auto: { ...auto, ampScore: auto.ampScore - 1 } }).then(setThing(auto.ampScore - 1));
+					},
 				},
 			],
 			title: 'Scored',

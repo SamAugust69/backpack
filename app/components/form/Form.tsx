@@ -16,29 +16,29 @@ interface FormTestProps {
 	modalState: boolean;
 	dispatch: any;
 	closeModal: Function;
-	initValue?: Partial<FormItems>
+	initValue?: Partial<FormItems>;
 }
- 
+
 const Form: FC<FormTestProps> = ({ modalState, closeModal, dispatch, initValue }) => {
-	const [updatedFields, setUpdatedFields] = useState<Partial<FormItems>>({})
-	const [formData, setFormData] = useState({...initialValues, ...initValue, ...updatedFields});
+	const [updatedFields, setUpdatedFields] = useState<Partial<FormItems>>({});
+	const [formData, setFormData] = useState({ ...initialValues, ...initValue, ...updatedFields });
 
 	useEffect(() => {
-		setFormData({...initialValues, ...initValue, ...updatedFields})
-		setUpdatedFields({...updatedFields, ...initValue})
-	}, [initValue])
+		setFormData({ ...initialValues, ...initValue, ...updatedFields });
+		setUpdatedFields({ ...updatedFields, ...initValue });
+	}, [initValue]);
 
 	useEffect(() => {
-		updateForm({ id: uuidv4().substring(0, 16) })
-	}, [])
+		updateForm({ id: uuidv4().substring(0, 13) });
+	}, []);
 
 	const updateForm = async (fieldsToUpdate: Partial<FormItems>) => {
 		new Promise((resolve) => {
-			setUpdatedFields({...updatedFields, ...fieldsToUpdate})
-			setFormData({...formData, ...fieldsToUpdate})
+			setUpdatedFields({ ...updatedFields, ...fieldsToUpdate });
+			setFormData({ ...formData, ...fieldsToUpdate });
 			console.log({ ...updatedFields });
 			//setFormData(updatedForm);
-			resolve({...formData, ...fieldsToUpdate});
+			resolve({ ...formData, ...fieldsToUpdate });
 		});
 	};
 
@@ -74,7 +74,7 @@ const Form: FC<FormTestProps> = ({ modalState, closeModal, dispatch, initValue }
 		dispatch({ type: 'added', payload: updatedFields });
 
 		closeModal();
-		setUpdatedFields({id: uuidv4().substring(0, 16)});
+		setUpdatedFields({ id: uuidv4().substring(0, 13) });
 		setFormData(structuredClone(initialValues));
 	};
 
