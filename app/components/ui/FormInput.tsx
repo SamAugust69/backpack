@@ -8,11 +8,11 @@ import useMultiForm from '@/lib/useMultiForm';
 import { Button } from './Button';
 
 const InputVariants = cva(
-	'peer flex disabled:pointer-events-none outline-none rounded-none border-2 border-t-100 rounded relative',
+	'peer flex disabled:pointer-events-none outline-none rounded-none border-2 border-t-950 rounded relative',
 	{
 		variants: {
 			variant: {
-				default: 'bg-transparent text-t-100 placeholder-t-100',
+				default: 'bg-transparent text-t-950 placeholder-t-700',
 				purple_ish: '',
 				purpler: '',
 			},
@@ -58,7 +58,7 @@ const TextInput: FC<InputProps> = ({
 				onClick={(e: any) => e.stopPropagation()}
 				{...props}
 			/>
-			<span className="text-t-100 disabled:pointer-events-none outline-none text-sm absolute top-0 left-2 peer-focus:text-xs peer-focus:bg-g-200 peer-focus:-top-2 peer-valid:text-xs peer-valid:bg-g-200 peer-valid:-top-2 transition-all peer-placeholder-shown:text-xs  peer-placeholder-shown:-top-2 peer-placeholder-shown:bg-g-200 px-1">
+			<span className="text-t-400 disabled:pointer-events-none outline-none text-sm absolute top-0 left-2 peer-focus:text-xs peer-focus:bg-g-200 peer-focus:-top-2 peer-valid:text-xs peer-valid:bg-g-200 peer-valid:-top-2 transition-all peer-placeholder-shown:text-xs  peer-placeholder-shown:-top-2 peer-placeholder-shown:bg-g-200 px-1">
 				{title}
 			</span>
 		</div>
@@ -80,32 +80,42 @@ const NumberInput: FC<InputProps> = ({
 	value,
 	...props
 }) => {
-
 	const [thing, setThing] = useState<number>(parseInt(value!.toString()) ?? 0);
 
 	useEffect(() => {
-		textbox.current.value = value
-	}, [value])
+		textbox.current.value = value;
+	}, [value]);
 
-	const textbox = useRef<any>(<div></div>)
+	const textbox = useRef<any>(<div></div>);
 
 	return (
 		<div className={cn(`${visible === false ? 'hidden' : 'block'} relative pb-0.5 flex`, className)}>
-			{incrementButtons ? <Button onClick={() => thing > 0 ? decrease?.(setThing) : 0} className='px-8 h-full rounded-none rounded-l'>-</Button> : null}
+			{incrementButtons ? (
+				<Button onClick={() => (thing > 0 ? decrease?.(setThing) : 0)} className="px-8 h-full rounded-none rounded-l">
+					-
+				</Button>
+			) : null}
 			<input
 				required
 				disabled={disabled}
 				pattern="[0-9]*"
-				className={cn(InputVariants({ size, variant }), `${incrementButtons ? "rounded-none" : ""}`)}
+				className={cn(InputVariants({ size, variant }), `${incrementButtons ? 'rounded-none' : ''}`)}
 				placeholder={thing.toString()}
 				{...props}
 				ref={textbox}
 			/>
-			<span className={`text-t-100 disabled:pointer-events-none outline-none text-sm absolute top-0 ${incrementButtons ? "left-20" : "left-2"} peer-focus:text-xs peer-focus:bg-g-200 peer-focus:-top-2 peer-valid:text-xs peer-valid:bg-g-200 peer-valid:-top-2 transition-all peer-placeholder-shown:text-xs  peer-placeholder-shown:-top-2 peer-placeholder-shown:bg-g-200 px-1`}>
+			<span
+				className={`text-t-100 disabled:pointer-events-none outline-none text-sm absolute top-0 ${
+					incrementButtons ? 'left-20' : 'left-2'
+				} peer-focus:text-xs peer-focus:bg-g-200 peer-focus:-top-2 peer-valid:text-xs peer-valid:bg-g-200 peer-valid:-top-2 transition-all peer-placeholder-shown:text-xs  peer-placeholder-shown:-top-2 peer-placeholder-shown:bg-g-200 px-1`}
+			>
 				{title}
 			</span>
-			{incrementButtons ? <Button onClick={() => increment?.(setThing)} className='px-8 h-full rounded-none rounded-r'>+</Button> : null}
-
+			{incrementButtons ? (
+				<Button onClick={() => increment?.(setThing)} className="px-8 h-full rounded-none rounded-r">
+					+
+				</Button>
+			) : null}
 		</div>
 	);
 };
@@ -185,15 +195,31 @@ const CarouselSelector: FC<CarouselProps> = ({ className }) => {
 const formInputSwitch = (type: string, children: any, title: any, props: any) => {
 	switch (type.toLowerCase()) {
 		case 'text':
-			return <TextInput title={title}  {...props}>{children}</TextInput>;
+			return (
+				<TextInput title={title} {...props}>
+					{children}
+				</TextInput>
+			);
 		case 'toggle':
-			return <Toggle title={title} {...props}>{children}</Toggle>;
+			return (
+				<Toggle title={title} {...props}>
+					{children}
+				</Toggle>
+			);
 		case 'number':
-			return <NumberInput title={title} {...props}>{children}</NumberInput>;
+			return (
+				<NumberInput title={title} {...props}>
+					{children}
+				</NumberInput>
+			);
 		case 'carousel':
 			return <CarouselSelector {...props}></CarouselSelector>;
-		case "message":
-			return <Paragraph className='self-center m-0 text-t-100' size={"xs"}>{title}</Paragraph>
+		case 'message':
+			return (
+				<Paragraph className="self-center m-0 text-t-100" size={'xs'}>
+					{title}
+				</Paragraph>
+			);
 		default:
 			return <TextInput {...props}>{children}</TextInput>;
 	}

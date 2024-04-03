@@ -10,8 +10,9 @@ import { FormItems, initialValues } from '@/lib/formTypes';
 import LogView from './components/log/LogView';
 import AnimatedPage from './components/ui/AnimatedPage';
 import Paragraph from './components/ui/Paragraph';
-import schedule from "./schedual.json"
+import schedule from './schedual.json';
 import QRCode, { QRCodeSVG } from 'qrcode.react';
+import { MotionConfig } from 'framer-motion';
 
 const logA = {
 	id: '3a32c2dd-4dbc-471a-802d-166bfffd6b92',
@@ -103,60 +104,59 @@ export default function Home() {
 
 	// sets local data state
 	useEffect(() => {
-		setLocalData(localDispatchState)
-	}, [localDispatchState])
-
+		setLocalData(localDispatchState);
+	}, [localDispatchState]);
 
 	const formStuff = {
 		modalState: formOpen,
-		closeModal: () => {setFormOpen(false); setCurMatch(curMatch + 1)},
+		closeModal: () => {
+			setFormOpen(false);
+			setCurMatch(curMatch + 1);
+		},
 		dispatch: localDispatch,
-		initValue: initalFormValues
-	}
+		initValue: initalFormValues,
+	};
 
 	const openLog = (match: number, team: number) => {
-		console.log("opened")
+		console.log('opened');
 		setInitalFormValues({
 			match: match,
-			team: team
-		})
+			team: team,
+		});
 		console.log({
 			match: match,
-			team: team
-		})
-		setFormOpen(!formOpen)
+			team: team,
+		});
+		setFormOpen(!formOpen);
 	};
 
 	// so I want to take a schedual, how would I do this? can i export one from TBA?
 
-
-	const [curMatch, setCurMatch] = useState(7)
-	const [tabletNumber, setTabletNumber] = useState(2)
+	const [curMatch, setCurMatch] = useState(7);
+	const [tabletNumber, setTabletNumber] = useState(2);
 
 	const shortenQRCode = (length: number) => {
 		let len = 0;
-		let stringifiedLogs = "["
+		let stringifiedLogs = '[';
 
 		localData.map((log: Partial<FormItems>) => {
-			let str = JSON.stringify(log)
-			if (len + str.length > length)
-				return stringifiedLogs
-			len += str.length
-			stringifiedLogs = stringifiedLogs + str + ","
+			let str = JSON.stringify(log);
+			if (len + str.length > length) return stringifiedLogs;
+			len += str.length;
+			stringifiedLogs = stringifiedLogs + str + ',';
+		});
+		console.log(len);
+		console.log(stringifiedLogs + ']');
+		return stringifiedLogs + ']';
+	};
 
-		})
-		console.log(len)
-		console.log(stringifiedLogs + "]")
-		return stringifiedLogs + "]"
-	}
-
-
+	const [expanded, setExpanded] = useState(false);
 
 	return (
-		<div className="min-h-screen p-12">
+		<div className="max-h-screen overflow-scroll p-12">
 			<Form {...formStuff} />
 			{/* <Dialog {...modalState}>Test</Dialog> */}
-			<AnimatedPage>
+			{/* <AnimatedPage>
 				<div className='bg-g-100 border-2 border-t-100 rounded flex flex-col h-32 overflow-scroll snap-y'>
 					{schedule.Schedule.slice(curMatch - 2 > 0 ? curMatch - 2 : 0, curMatch + 1 < schedule.Schedule.length ? curMatch + 1 : schedule.Schedule.length).map((val) => {
 						return (
@@ -176,8 +176,8 @@ export default function Home() {
 					})}
 				</div>
 				<Button onClick={() => setCurMatch(curMatch + 1)}></Button>
-			</AnimatedPage>
-			<AnimatedPage>
+			</AnimatedPage> */}
+			{/* <AnimatedPage>
 				<Button onClick={() => setFormOpen(!formOpen)}>Open Log</Button>
 				<br />
 				{
@@ -191,9 +191,26 @@ export default function Home() {
 						)
 					})
 				}
-			</AnimatedPage>
-			<QRCodeSVG className={"w-96 h-96 m-10"} value={shortenQRCode(2000)}/>
+			</AnimatedPage> */}
 
+			{/* <QRCodeSVG className={"w-96 h-96 m-10"} value={shortenQRCode(2000)}/> */}
+
+			<MotionConfig transition={{ duration: 0.75 }}>
+				<div className="flex flex-col border-2 bg-t-100 border-t-200 rounded-lg p-2 items-center gap-2">
+					<Paragraph className="text-center text-b-100 m-0">Test</Paragraph>
+					<Button onClick={() => setExpanded(!expanded)}>Expand</Button>
+					<AnimatedPage className={'p-2 bg-t-200 rounded-lg'}>
+						{expanded ? (
+							<p>
+								Lorem ipsum, dolor sit amet consectetur adipisicing elit. Et facilis a quos nisi illo, aliquid deserunt est
+								commodi placeat aut eligendi architecto omnis rem maxime enim quam voluptatibus reprehenderit laudantium.
+							</p>
+						) : (
+							<p>test</p>
+						)}
+					</AnimatedPage>
+				</div>
+			</MotionConfig>
 		</div>
 	);
 }

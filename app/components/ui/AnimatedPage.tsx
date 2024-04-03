@@ -1,16 +1,21 @@
-import { motion } from 'framer-motion';
-import React, { ReactNode } from 'react';
+import { MotionConfig, motion } from 'framer-motion';
+import React, { ReactNode, useState } from 'react';
+import useMeasure from 'react-use-measure';
 
-const animations = {
-	inital: { x: 1000, opacity: 0 },
-	animate: { x: 0, opacity: 1 },
-	exit: { x: -1000, opacity: 0 },
-};
+const AnimatedPage = ({ children, ...props }: any) => {
+	const [ref, { height }] = useMeasure();
 
-const AnimatedPage = ({ children }: any) => {
+	const animations = {
+		inital: { x: 1000, opacity: 0, height: 0 },
+		animate: { x: 0, opacity: 1 },
+		exit: { x: -1000, opacity: 0 },
+	};
+
 	return (
-		<motion.div variants={animations} initial="inital" animate="animate" exit="exit">
-			{children}
+		<motion.div animate={{ height }} className="overflow-hidden">
+			<div ref={ref} {...props}>
+				{children}
+			</div>
 		</motion.div>
 	);
 };
