@@ -31,7 +31,7 @@ export default function Page() {
 	};
 
 	const { currentStep, forwards, goToStep } = useMultiForm([
-		<Fade className="py-2 flex flex-col gap-4">
+		<Fade key={0} className="py-2 flex flex-col gap-4">
 			<Button
 				size={'xl'}
 				className="bg-t-300 rounded-md flex border-2 justify-normal border-g-950 hover:bg-t-300/75 transition-colors h-20"
@@ -64,7 +64,7 @@ export default function Page() {
 				</div>
 			</Button>
 		</Fade>,
-		<Fade>
+		<Fade key={0}>
 			<FormInput type="text" title="Name"></FormInput>
 		</Fade>,
 	]);
