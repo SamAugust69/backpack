@@ -58,7 +58,7 @@ const TextInput: FC<InputProps> = ({
 				onClick={(e: any) => e.stopPropagation()}
 				{...props}
 			/>
-			<span className="text-t-400 disabled:pointer-events-none outline-none text-sm absolute top-0 left-2 peer-focus:text-xs peer-focus:bg-g-200 peer-focus:-top-2 peer-valid:text-xs peer-valid:bg-g-200 peer-valid:-top-2 transition-all peer-placeholder-shown:text-xs  peer-placeholder-shown:-top-2 peer-placeholder-shown:bg-g-200 px-1">
+			<span className="text-t-950 disabled:pointer-events-none outline-none text-sm absolute top-0 left-2 peer-focus:text-xs peer-focus:bg-t-400 peer-focus:-top-2 peer-valid:text-xs peer-valid:bg-t-400 peer-valid:-top-2 transition-all peer-placeholder-shown:text-xs  peer-placeholder-shown:-top-2 peer-placeholder-shown:bg-t-400 px-1">
 				{title}
 			</span>
 		</div>

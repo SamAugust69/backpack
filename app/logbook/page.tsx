@@ -54,7 +54,7 @@ export default function Page() {
 				className="bg-t-300 rounded-md flex justify-normal hover:bg-t-300/75 transition-colors h-16"
 			>
 				<LuImport className="p-3 w-10 h-10 font-bold rounded-md bg-t-400 text-t-950" />
-				<div>
+				<div className="flex flex-col ">
 					<Paragraph className="m-0 text-g-950 flex px-4" size={'sm'}>
 						Import Event
 					</Paragraph>
@@ -65,7 +65,7 @@ export default function Page() {
 			</Button>
 		</Fade>,
 		<Fade>
-			<FormInput type="string" title="Name"></FormInput>
+			<FormInput type="text" title="Name"></FormInput>
 		</Fade>,
 	]);
 
