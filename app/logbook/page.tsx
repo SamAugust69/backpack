@@ -6,13 +6,55 @@ import '../globals.css';
 import { Button } from '../components/ui/Button';
 import { LuImport } from 'react-icons/lu';
 import useMultiForm from '../lib/useMultiForm';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import Fade from '../components/ui/Fade';
 import { MotionConfig } from 'framer-motion';
 import FormInput from '../components/ui/FormInput';
+import AnimatedPage from '../components/ui/AnimatedPage';
+import Error from '../components/ui/Error';
+
+const testData: Array<eventType> = [];
+
+type eventType = {
+	city: string;
+	country: string;
+	district: {
+		abbreviation: string;
+		display_name: string;
+		key: string;
+		year: number;
+	};
+	end_date: string;
+	event_code: string;
+	event_type: number;
+	key: string;
+	name: string;
+	start_date: string;
+	state_prov: string;
+	year: number;
+};
 
 export default function Page() {
-	const input = useRef<null | HTMLInputElement>(null);
+	const fileInput = useRef<null | HTMLInputElement>(null);
+	const [searchEvents, setSearchEvents] = useState<Array<eventType>>(testData);
+	const [showError, setShowError] = useState(false);
+
+	const [errorState, setErrorState] = useState({
+		title: 'Delete Log',
+		desc: "yos' sure you wants to do dat boss?",
+		showError: showError,
+		setShowError: () => setShowError(false),
+		timeout: 5,
+	});
+
+	const setError = (title: string, desc: string) => {
+		setShowError(true);
+		console.log(showError);
+		setErrorState({ ...errorState, title, desc, showError });
+		// timeout 5
+	};
+
+	console.log(searchEvents.length);
 
 	const handleFileChange = (event: any) => {
 		const fileObj = event.target.files && event.target.files[0];
@@ -47,10 +89,10 @@ export default function Page() {
 					</Paragraph>
 				</div>
 			</Button>
-			<input type="file" className="hidden" accept=".json" onChange={handleFileChange} ref={input} />
+			<input type="file" className="hidden" accept=".json" onChange={handleFileChange} ref={fileInput} />
 			<Button
 				size={'xl'}
-				onClick={() => input.current?.click()}
+				onClick={() => fileInput.current?.click()}
 				className="bg-t-300 rounded-md flex justify-normal hover:bg-t-300/75 transition-colors h-16"
 			>
 				<LuImport className="p-3 w-10 h-10 font-bold rounded-md bg-t-400 text-t-950" />
@@ -64,13 +106,53 @@ export default function Page() {
 				</div>
 			</Button>
 		</Fade>,
-		<Fade key={0}>
-			<FormInput type="text" title="Name"></FormInput>
+		<Fade key={0} className={'h-full flex flex-col justify-between '}>
+			<div className="flex gap-2"></div>
+
+			<div className="">
+				<Paragraph
+					size={'sm'}
+					className="px-4 text-g-950 bg-t-500 py-1 rounded-t-md flex items-center justify-between font-bold"
+				>
+					Event Searcher <span className="text-r-900 text-xs underline">Requires Internet</span>
+				</Paragraph>
+				<AnimatedPage className={'bg-t-300 rounded-b-md p-2'}>
+					<div className="flex gap-2 p-2 bg-t-400 rounded-md">
+						<Button size={'md'} className="text-t-400" onClick={() => setError('', '')}>
+							Search
+						</Button>
+						<FormInput type="number" title="Team Number" value={155}></FormInput>
+						<FormInput type="number" title="Year" value={2024}></FormInput>
+					</div>
+					{searchEvents.length > 0 ? (
+						<div className="flex flex-col gap-1 mt-2">
+							{testData.map((event) => {
+								let startDate = `${new Date(event.start_date).getMonth() + 1}-${new Date(event.start_date).getDay()}`;
+								let endDate = `${new Date(event.end_date).getMonth() + 1}-${new Date(event.end_date).getDay()}`;
+								return (
+									<div className="bg-t-300 p-2 mx-2 border-2 border-t-950 rounded-md flex flex-col items-center">
+										<Paragraph size={'xs'}>
+											{event.name} <span>{event.year}</span>
+										</Paragraph>
+										<Paragraph size={'xs'}>
+											{startDate} {endDate}
+										</Paragraph>
+									</div>
+								);
+							})}
+						</div>
+					) : null}
+				</AnimatedPage>
+			</div>
+			<Button className="justify-end" variant={'link'} onClick={() => goToStep(0)}>
+				Back
+			</Button>
 		</Fade>,
 	]);
 
 	return (
 		<div className="gap-4 overflow-scroll max-w-6xl w-full flex flex-col sm:flex-row justify-center h-[calc(100vh-48px)] p-4">
+			<Error {...errorState}></Error>
 			<section className="bg-t-400 rounded-md py-4 px-8 flex flex-col w-full sm:min-w-[18rem] sm:w-[26rem]">
 				<div className="py-2">
 					<Heading size={'sm'} className="text-r-600 text-left">

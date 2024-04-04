@@ -155,7 +155,7 @@ export default function Home() {
 	return (
 		<div className="max-h-screen overflow-scroll p-12">
 			<Form {...formStuff} />
-			{/* <Dialog {...modalState}>Test</Dialog> */}
+			<Dialog {...modalState}>Test</Dialog>
 			{/* <AnimatedPage>
 				<div className='bg-g-100 border-2 border-t-100 rounded flex flex-col h-32 overflow-scroll snap-y'>
 					{schedule.Schedule.slice(curMatch - 2 > 0 ? curMatch - 2 : 0, curMatch + 1 < schedule.Schedule.length ? curMatch + 1 : schedule.Schedule.length).map((val) => {

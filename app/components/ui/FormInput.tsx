@@ -12,7 +12,7 @@ const InputVariants = cva(
 	{
 		variants: {
 			variant: {
-				default: 'bg-transparent text-t-950 placeholder-t-700',
+				default: 'bg-transparent text-t-950 placeholder-t-700 bg-t-300',
 				purple_ish: '',
 				purpler: '',
 			},
@@ -43,6 +43,7 @@ const TextInput: FC<InputProps> = ({
 	variant,
 	visible,
 	className,
+	value,
 	title,
 	children,
 	disabled,
@@ -89,7 +90,7 @@ const NumberInput: FC<InputProps> = ({
 	const textbox = useRef<any>(<div></div>);
 
 	return (
-		<div className={cn(`${visible === false ? 'hidden' : 'block'} relative pb-0.5 flex`, className)}>
+		<div className={cn(`${visible === false ? 'hidden' : 'block'} relative pb-0.5 flex `, className)}>
 			{incrementButtons ? (
 				<Button onClick={() => (thing > 0 ? decrease?.(setThing) : 0)} className="px-8 h-full rounded-none rounded-l">
 					-
@@ -104,13 +105,22 @@ const NumberInput: FC<InputProps> = ({
 				{...props}
 				ref={textbox}
 			/>
-			<span
-				className={`text-t-100 disabled:pointer-events-none outline-none text-sm absolute top-0 ${
+			{/* <span
+				className={`text-t-950 disabled:pointer-events-none outline-none text-sm absolute top-0 ${
 					incrementButtons ? 'left-20' : 'left-2'
-				} peer-focus:text-xs peer-focus:bg-g-200 peer-focus:-top-2 peer-valid:text-xs peer-valid:bg-g-200 peer-valid:-top-2 transition-all peer-placeholder-shown:text-xs  peer-placeholder-shown:-top-2 peer-placeholder-shown:bg-g-200 px-1`}
+				} peer-focus:text-xs peer-focus:bg-t-400 peer-focus:-top-2 peer-valid:text-xs peer-valid:bg-t-400 peer-valid:-top-2 transition-all peer-placeholder-shown:text-xs  peer-placeholder-shown:-top-2 peer-placeholder-shown:bg-t-400 px-1`}
+			>
+				{title}
+			</span> */}
+			<span
+				before={title}
+				className={`text-t-950 disabled:pointer-events-none outline-none text-sm absolute top-0 ${
+					incrementButtons ? 'left-20' : 'left-2'
+				} peer-focus:text-xs peer-valid:text-xs placeholder-shown:text-xs peer-focus:-top-2 z-10 peer-valid:-top-[8px] transition-all px-1 before:content-[attr(before)] before:top-[8px] before:bg-t-300 before:-z-10 before:px-1 before:left-[1px] before:absolute before:text-transparent before:h-[2px]`}
 			>
 				{title}
 			</span>
+
 			{incrementButtons ? (
 				<Button onClick={() => increment?.(setThing)} className="px-8 h-full rounded-none rounded-r">
 					+
@@ -171,7 +181,7 @@ const Toggle: FC<ToggleProps> = ({
 			</div>
 
 			{children !== undefined && toggled && (
-				<div className="px-3 py-4 bg-g-200 flex gap-3 flex-col border-t-2 border-t-200">
+				<div className="px-3 py-4 bg-t-400 flex gap-3 flex-col border-t-2 border-t-200">
 					{children.map((input, i) => {
 						return (
 							<FormInput key={i} className="mx-1 mb-0" {...input}>
@@ -227,6 +237,7 @@ const formInputSwitch = (type: string, children: any, title: any, props: any) =>
 
 interface FormInputProps extends HTMLAttributes<HTMLAllCollection> {
 	disabled?: boolean;
+	value?: string | number;
 	type: string;
 }
 
