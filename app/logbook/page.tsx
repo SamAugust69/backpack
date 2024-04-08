@@ -8,10 +8,11 @@ import { LuImport } from 'react-icons/lu';
 import useMultiForm from '../lib/useMultiForm';
 import { useRef, useState } from 'react';
 import Fade from '../components/ui/Fade';
-import { MotionConfig } from 'framer-motion';
+import { AnimatePresence, MotionConfig } from 'framer-motion';
 import FormInput from '../components/ui/FormInput';
 import AnimatedPage from '../components/ui/AnimatedPage';
 import Error from '../components/ui/Error';
+import fetchData from '../lib/apiCall';
 
 const testData: Array<eventType> = [];
 
@@ -36,25 +37,21 @@ type eventType = {
 
 export default function Page() {
 	const fileInput = useRef<null | HTMLInputElement>(null);
-	const [searchEvents, setSearchEvents] = useState<Array<eventType>>(testData);
-	const [showError, setShowError] = useState(false);
 
-	const [errorState, setErrorState] = useState({
-		title: 'Delete Log',
-		desc: "yos' sure you wants to do dat boss?",
-		showError: showError,
-		setShowError: () => setShowError(false),
-		timeout: 5,
-	});
+	//showErr('No Internet', 'You need internet to use this feature', 10)
 
-	const setError = (title: string, desc: string) => {
-		setShowError(true);
-		console.log(showError);
-		setErrorState({ ...errorState, title, desc, showError });
-		// timeout 5
+	const searchEvents = async () => {
+		// const data = fetchData({
+		// 	url: 'https://www.thebluealliance.com/api/v3/team/frc155/events/2024/keys',
+		// 	onErr: () => showErr('Search Failed', 'Check your internet connection', 5),
+		// });
+		console.log(
+			fetchData({
+				url: 'https://www.thebluealliance.com/api/v3/team/frc155/events/2024/keys',
+				onErr: () => showErr('Search Failed', 'Check your internet connection', 5),
+			})
+		);
 	};
-
-	console.log(searchEvents.length);
 
 	const handleFileChange = (event: any) => {
 		const fileObj = event.target.files && event.target.files[0];
@@ -71,6 +68,8 @@ export default function Page() {
 		console.log(fileObj);
 		console.log(fileObj.name);
 	};
+
+	const { errContainer, showErr } = Error();
 
 	const { currentStep, forwards, goToStep } = useMultiForm([
 		<Fade key={0} className="py-2 flex flex-col gap-4">
@@ -118,7 +117,7 @@ export default function Page() {
 				</Paragraph>
 				<AnimatedPage className={'bg-t-300 rounded-b-md p-2'}>
 					<div className="flex gap-2 p-2 bg-t-400 rounded-md">
-						<Button size={'md'} className="text-t-400" onClick={() => setError('', '')}>
+						<Button size={'md'} className="text-t-400" onClick={() => searchEvents()}>
 							Search
 						</Button>
 						<FormInput type="number" title="Team Number" value={155}></FormInput>
@@ -152,7 +151,7 @@ export default function Page() {
 
 	return (
 		<div className="gap-4 overflow-scroll max-w-6xl w-full flex flex-col sm:flex-row justify-center h-[calc(100vh-48px)] p-4">
-			<Error {...errorState}></Error>
+			<AnimatePresence> {errContainer}</AnimatePresence>
 			<section className="bg-t-400 rounded-md py-4 px-8 flex flex-col w-full sm:min-w-[18rem] sm:w-[26rem]">
 				<div className="py-2">
 					<Heading size={'sm'} className="text-r-600 text-left">
