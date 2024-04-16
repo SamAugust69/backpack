@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+
 import { HTMLAttributes, Ref, forwardRef, useEffect, useRef, useState } from 'react';
 import { Check } from 'lucide-react';
 import { VariantProps, cva } from 'class-variance-authority';
@@ -141,59 +142,54 @@ interface ToggleProps extends HTMLAttributes<HTMLDivElement> {
 	checkbox?: boolean;
 }
 
-const Toggle: FC<ToggleProps> = ({
-	showChildren,
-	description,
-	title,
-	children,
-	toggled,
-	disabled,
-	className,
-	checkbox,
-	hoverColor,
-	...props
-}) => {
-	return (
-		<div
-			className={cn(
-				`border-2 ${
-					toggled ? `border-t-100 bg-t-100/20` : 'border-slate-400'
-				} rounded transition-all cursor-pointer ${className}`
-			)}
-		>
-			<div className="flex items-center justify-between p-2 " {...props}>
-				{checkbox && (
-					<div className="rounded border-2 p-1 border-t-100 bg-t-100/5">
-						<Check className={`w-5 h-5 text-t-100 ${toggled ? 'scale-100' : 'scale-0'}`} />
+const Toggle = forwardRef<Ref<HTMLDivElement>, ToggleProps>(
+	(
+		{ showChildren, description, title, children, toggled, disabled, className, checkbox, hoverColor, ...props },
+		ref
+	) => {
+		return (
+			<div
+				ref={ref}
+				className={cn(
+					`border-2 ${
+						toggled ? `border-t-100 bg-t-100/20` : 'border-slate-400'
+					} rounded transition-all cursor-pointer ${className}`
+				)}
+			>
+				<div className="flex items-center justify-between p-2 " {...props}>
+					{checkbox && (
+						<div className="rounded border-2 p-1 border-t-100 bg-t-100/5">
+							<Check className={`w-5 h-5 text-t-100 ${toggled ? 'scale-100' : 'scale-0'}`} />
+						</div>
+					)}
+					<div className="p-1">
+						<Paragraph className={`px-0 select-none text-t-100 font-bold ${checkbox ? 'text-right' : 'text-left'} mb-0`}>
+							{title}
+						</Paragraph>
+						<Paragraph
+							size={'sm'}
+							className={`px-0 select-none text-t-200 leading-normal ${checkbox ? 'text-right' : 'text-left'} mb-0`}
+						>
+							{description}
+						</Paragraph>
+					</div>
+				</div>
+
+				{children !== undefined && toggled && (
+					<div className="px-3 py-4 bg-t-400 flex gap-3 flex-col border-t-2 border-t-200">
+						{children.map((input, i) => {
+							return (
+								<FormInput key={i} className="mx-1 mb-0" {...input}>
+									{input.children}
+								</FormInput>
+							);
+						})}
 					</div>
 				)}
-				<div className="p-1">
-					<Paragraph className={`px-0 select-none text-t-100 font-bold ${checkbox ? 'text-right' : 'text-left'} mb-0`}>
-						{title}
-					</Paragraph>
-					<Paragraph
-						size={'sm'}
-						className={`px-0 select-none text-t-200 leading-normal ${checkbox ? 'text-right' : 'text-left'} mb-0`}
-					>
-						{description}
-					</Paragraph>
-				</div>
 			</div>
-
-			{children !== undefined && toggled && (
-				<div className="px-3 py-4 bg-t-400 flex gap-3 flex-col border-t-2 border-t-200">
-					{children.map((input, i) => {
-						return (
-							<FormInput key={i} className="mx-1 mb-0" {...input}>
-								{input.children}
-							</FormInput>
-						);
-					})}
-				</div>
-			)}
-		</div>
-	);
-};
+		);
+	}
+);
 
 interface CarouselProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -202,23 +198,23 @@ const CarouselSelector: FC<CarouselProps> = ({ className }) => {
 };
 
 // lets make a selector, left and right thingy.
-const formInputSwitch = (type: string, children: any, title: any, props: any) => {
+const formInputSwitch = (type: string, children: any, title: any, ref: any, props: any) => {
 	switch (type.toLowerCase()) {
 		case 'text':
 			return (
-				<TextInput title={title} {...props}>
+				<TextInput ref={ref} title={title} {...props}>
 					{children}
 				</TextInput>
 			);
 		case 'toggle':
 			return (
-				<Toggle title={title} {...props}>
+				<Toggle ref={ref} title={title} {...props}>
 					{children}
 				</Toggle>
 			);
 		case 'number':
 			return (
-				<NumberInput title={title} {...props}>
+				<NumberInput ref={ref} title={title} {...props}>
 					{children}
 				</NumberInput>
 			);
@@ -239,10 +235,11 @@ interface FormInputProps extends HTMLAttributes<HTMLAllCollection> {
 	disabled?: boolean;
 	value?: string | number;
 	type: string;
+	ref?: Ref<any>;
 }
 
-const FormInput: FC<FormInputProps> = ({ children, type, title, ...props }) => {
-	return formInputSwitch(type, children, title, props);
-};
+const FormInput = forwardRef<Ref<HTMLInputElement>, FormInputProps>(({ children, type, title, ...props }, ref) => {
+	return formInputSwitch(type, children, title, ref, props);
+});
 
 export default FormInput;

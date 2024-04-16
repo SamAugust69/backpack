@@ -37,20 +37,32 @@ type eventType = {
 
 export default function Page() {
 	const fileInput = useRef<null | HTMLInputElement>(null);
+	const teamInput = useRef<null | HTMLInputElement>(null);
+	const yearInput = useRef<null | HTMLInputElement>(null);
+	const [events, setEvents] = useState<Array<any>>([]);
 
 	//showErr('No Internet', 'You need internet to use this feature', 10)
 
-	const searchEvents = async () => {
-		// const data = fetchData({
-		// 	url: 'https://www.thebluealliance.com/api/v3/team/frc155/events/2024/keys',
-		// 	onErr: () => showErr('Search Failed', 'Check your internet connection', 5),
-		// });
-		console.log(
-			fetchData({
-				url: 'https://www.thebluealliance.com/api/v3/team/frc155/events/2024/keys',
-				onErr: () => showErr('Search Failed', 'Check your internet connection', 5),
+	const searchEvents = async (team: number, year: number) => {
+		if (team == -1 || year == -1) {
+			showErr('Invalid Input', 'Check your uhh things...', 5);
+			return;
+		}
+		let eventKeys = await fetchData({
+			url: `https://www.thebluealliance.com/api/v3/team/frc${team}/events/${year}/keys`,
+			onErr: () => showErr('Search Failed', 'Check your internet connection', 5),
+		}).then((res: Array<string>) => {
+			return res;
+		});
+
+		let test: Array<any> = [];
+		await Promise.all(
+			eventKeys.map(async (key) => {
+				let event = await fetchData({ url: `https://www.thebluealliance.com/api/v3/event/${key}` });
+				test = [...test, event];
 			})
 		);
+		setEvents(test);
 	};
 
 	const handleFileChange = (event: any) => {
@@ -59,14 +71,9 @@ export default function Page() {
 			return;
 		}
 
-		console.log('fileObj is', fileObj);
+		//console.log('fileObj is', fileObj);
 
 		event.target.value = null;
-
-		console.log(event.target.files);
-
-		console.log(fileObj);
-		console.log(fileObj.name);
 	};
 
 	const { errContainer, showErr } = Error();
@@ -117,19 +124,28 @@ export default function Page() {
 				</Paragraph>
 				<AnimatedPage className={'bg-t-300 rounded-b-md p-2'}>
 					<div className="flex gap-2 p-2 bg-t-400 rounded-md">
-						<Button size={'md'} className="text-t-400" onClick={() => searchEvents()}>
+						<Button
+							size={'md'}
+							className="text-t-400"
+							onClick={() =>
+								searchEvents(
+									teamInput.current?.value ? parseInt(teamInput.current?.value) : -1,
+									yearInput.current?.value ? parseInt(yearInput.current?.value) : -1
+								)
+							}
+						>
 							Search
 						</Button>
-						<FormInput type="number" title="Team Number" value={155}></FormInput>
-						<FormInput type="number" title="Year" value={2024}></FormInput>
+						<FormInput ref={teamInput} type="number" title="Team Number" value={155}></FormInput>
+						<FormInput ref={yearInput} type="number" title="Year" value={2024}></FormInput>
 					</div>
-					{searchEvents.length > 0 ? (
+					{events.length > 0 ? (
 						<div className="flex flex-col gap-1 mt-2">
-							{testData.map((event) => {
+							{events.map((event, i) => {
 								let startDate = `${new Date(event.start_date).getMonth() + 1}-${new Date(event.start_date).getDay()}`;
 								let endDate = `${new Date(event.end_date).getMonth() + 1}-${new Date(event.end_date).getDay()}`;
 								return (
-									<div className="bg-t-300 p-2 mx-2 border-2 border-t-950 rounded-md flex flex-col items-center">
+									<div key={i} className="bg-t-300 p-2 mx-2 border-2 border-t-950 rounded-md flex flex-col items-center">
 										<Paragraph size={'xs'}>
 											{event.name} <span>{event.year}</span>
 										</Paragraph>
