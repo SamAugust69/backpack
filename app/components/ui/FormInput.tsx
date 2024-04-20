@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 
-import { HTMLAttributes, Ref, forwardRef, useEffect, useRef, useState } from 'react';
+import { HTMLAttributes, Ref, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Check } from 'lucide-react';
 import { VariantProps, cva } from 'class-variance-authority';
 import { FC } from 'react';
@@ -67,69 +67,76 @@ const TextInput: FC<InputProps> = ({
 	);
 };
 
-const NumberInput: FC<InputProps> = ({
-	size,
-	variant,
-	visible,
-	className,
-	title,
-	children,
-	disabled,
-	incrementButtons,
-	increment,
-	decrease,
-	type,
-	value,
-	...props
-}) => {
-	const [thing, setThing] = useState<number>(parseInt(value!.toString()) ?? 0);
+const NumberInput = forwardRef<HTMLInputElement, InputProps>(
+	(
+		{
+			size,
+			variant,
+			visible,
+			className,
+			title,
+			children,
+			disabled,
+			incrementButtons,
+			increment,
+			decrease,
+			type,
+			value,
+			...props
+		},
+		ref
+	) => {
+		const [thing, setThing] = useState<number>(parseInt(value!.toString()) ?? 0);
 
-	useEffect(() => {
-		textbox.current.value = value;
-	}, [value]);
+		useEffect(() => {
+			textbox.current.value = value;
+		}, [value]);
 
-	const textbox = useRef<any>(<div></div>);
+		const textbox = useRef<any>(<input />);
 
-	return (
-		<div className={cn(`${visible === false ? 'hidden' : 'block'} relative pb-0.5 flex `, className)}>
-			{incrementButtons ? (
-				<Button onClick={() => (thing > 0 ? decrease?.(setThing) : 0)} className="px-8 h-full rounded-none rounded-l">
-					-
-				</Button>
-			) : null}
-			<input
-				required
-				disabled={disabled}
-				pattern="[0-9]*"
-				className={cn(InputVariants({ size, variant }), `${incrementButtons ? 'rounded-none' : ''}`)}
-				placeholder={thing.toString()}
-				{...props}
-				ref={textbox}
-			/>
-			{/* <span
+		useImperativeHandle(ref, () => textbox.current);
+
+		return (
+			<div className={cn(`${visible === false ? 'hidden' : 'block'} relative pb-0.5 flex `, className)}>
+				{incrementButtons ? (
+					<Button onClick={() => (thing > 0 ? decrease?.(setThing) : 0)} className="px-8 h-full rounded-none rounded-l">
+						-
+					</Button>
+				) : null}
+				<input
+					required
+					disabled={disabled}
+					pattern="[0-9]*"
+					className={cn(InputVariants({ size, variant }), `${incrementButtons ? 'rounded-none' : ''}`)}
+					placeholder={thing.toString()}
+					{...props}
+					ref={textbox}
+				/>
+				{/* <span
 				className={`text-t-950 disabled:pointer-events-none outline-none text-sm absolute top-0 ${
 					incrementButtons ? 'left-20' : 'left-2'
 				} peer-focus:text-xs peer-focus:bg-t-400 peer-focus:-top-2 peer-valid:text-xs peer-valid:bg-t-400 peer-valid:-top-2 transition-all peer-placeholder-shown:text-xs  peer-placeholder-shown:-top-2 peer-placeholder-shown:bg-t-400 px-1`}
 			>
 				{title}
 			</span> */}
-			<span
-				before={title}
-				className={`text-t-950 disabled:pointer-events-none outline-none text-sm absolute top-0 ${
-					incrementButtons ? 'left-20' : 'left-2'
-				} peer-focus:text-xs peer-valid:text-xs placeholder-shown:text-xs peer-focus:-top-2 z-10 peer-valid:-top-[8px] transition-all px-1 before:content-[attr(before)] before:top-[8px] before:bg-t-300 before:-z-10 before:px-1 before:left-[1px] before:absolute before:text-transparent before:h-[2px]`}
-			>
-				{title}
-			</span>
+				<span
+					before={title}
+					className={`text-t-950 disabled:pointer-events-none outline-none text-sm absolute top-0 ${
+						incrementButtons ? 'left-20' : 'left-2'
+					} peer-focus:text-xs peer-valid:text-xs placeholder-shown:text-xs peer-focus:-top-2 z-10 peer-valid:-top-[8px] transition-all px-1 before:content-[attr(before)] before:top-[8px] before:bg-t-300 before:-z-10 before:px-1 before:left-[1px] before:absolute before:text-transparent before:h-[2px]`}
+				>
+					{title}
+				</span>
 
-			{incrementButtons ? (
-				<Button onClick={() => increment?.(setThing)} className="px-8 h-full rounded-none rounded-r">
-					+
-				</Button>
-			) : null}
-		</div>
-	);
-};
+				{incrementButtons ? (
+					<Button onClick={() => increment?.(setThing)} className="px-8 h-full rounded-none rounded-r">
+						+
+					</Button>
+				) : null}
+			</div>
+		);
+	}
+);
 
 interface ToggleProps extends HTMLAttributes<HTMLDivElement> {
 	toggled: boolean;
@@ -142,7 +149,7 @@ interface ToggleProps extends HTMLAttributes<HTMLDivElement> {
 	checkbox?: boolean;
 }
 
-const Toggle = forwardRef<Ref<HTMLDivElement>, ToggleProps>(
+const Toggle = forwardRef<HTMLDivElement, ToggleProps>(
 	(
 		{ showChildren, description, title, children, toggled, disabled, className, checkbox, hoverColor, ...props },
 		ref

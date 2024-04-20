@@ -8,11 +8,13 @@ import { LuImport } from 'react-icons/lu';
 import useMultiForm from '../lib/useMultiForm';
 import { useRef, useState } from 'react';
 import Fade from '../components/ui/Fade';
-import { AnimatePresence, MotionConfig } from 'framer-motion';
+import { motion, AnimatePresence, MotionConfig, AnimateSharedLayout } from 'framer-motion';
 import FormInput from '../components/ui/FormInput';
 import AnimatedPage from '../components/ui/AnimatedPage';
 import Error from '../components/ui/Error';
 import fetchData from '../lib/apiCall';
+import InOut from '../components/ui/InOut';
+import useMeasure from 'react-use-measure';
 
 const testData: Array<eventType> = [];
 
@@ -36,8 +38,8 @@ type eventType = {
 };
 
 export default function Page() {
-	const fileInput = useRef<null | HTMLInputElement>(null);
-	const teamInput = useRef<null | HTMLInputElement>(null);
+	const fileInput = useRef<HTMLInputElement>(null);
+	const teamInput = useRef<HTMLInputElement>(null);
 	const yearInput = useRef<null | HTMLInputElement>(null);
 	const [events, setEvents] = useState<Array<any>>([]);
 
@@ -78,7 +80,7 @@ export default function Page() {
 
 	const { errContainer, showErr } = Error();
 
-	const { currentStep, forwards, goToStep } = useMultiForm([
+	let { currentStep, forwards, goToStep } = useMultiForm([
 		<Fade key={0} className="py-2 flex flex-col gap-4">
 			<Button
 				size={'xl'}
@@ -165,31 +167,44 @@ export default function Page() {
 		</Fade>,
 	]);
 
+	const [createEvent, setCreateEvent] = useState(false);
+	const createNewEvent = () => {
+		setCreateEvent(!createEvent);
+	};
+
 	return (
-		<div className="gap-4 overflow-scroll max-w-6xl w-full flex flex-col sm:flex-row justify-center h-[calc(100vh-48px)] p-4">
-			<AnimatePresence> {errContainer}</AnimatePresence>
-			<section className="bg-t-400 rounded-md py-4 px-8 flex flex-col w-full sm:min-w-[18rem] sm:w-[26rem]">
-				<div className="py-2">
-					<Heading size={'sm'} className="text-r-600 text-left">
-						Welcome
-					</Heading>
-					<Paragraph className="text-g-700">Get Started- Select an Event</Paragraph>
-				</div>
-				<div className="py-2 flex flex-col ">
-					<Button
-						size={'xl'}
-						className="bg-t-300 rounded-md flex items-center justify-center border-2 border-g-700 hover:bg-t-300/75 transition-colors"
+		<div className="gap-4 overflow-scroll max-w-6xl w-full flex flex-col sm:flex-row justify-center h-[calc(100vh-48px)] p-4 rounded-t-md bg-t-300">
+			<AnimatePresence>
+				{errContainer}
+				<InOut className="bg-t-400 rounded-md py-4 px-8 flex flex-col w-full sm:min-w-[18rem] sm:w-[26rem]">
+					<div className="py-2">
+						<Heading size={'sm'} className="text-r-600 text-left">
+							Welcome
+						</Heading>
+						<Paragraph className="text-g-700">Get Started- Select an Event</Paragraph>
+					</div>
+					<div className="py-2 flex flex-col ">
+						<Button
+							size={'xl'}
+							onClick={() => createNewEvent()}
+							className="bg-t-300 rounded-md flex items-center justify-center border-2 border-g-700 hover:bg-t-300/75 transition-colors"
+						>
+							<Paragraph className="m-0 text-g-700 flex px-8 items-center" size={'xs'}>
+								Create New Event
+								<Plus className="ml-2 w-4 h-4 font-bold" />
+							</Paragraph>
+						</Button>
+					</div>
+				</InOut>
+				{createEvent ? (
+					<InOut
+						width={600}
+						className="bg-t-400 rounded-md px-8 py-4 flex flex-col justify-center sm:max-w-[30rem] md:max-w-[34rem] h-full w-full"
 					>
-						<Paragraph className="m-0 text-g-700 flex px-8 items-center" size={'xs'}>
-							Create New Event
-							<Plus className="ml-2 w-4 h-4 font-bold" />
-						</Paragraph>
-					</Button>
-				</div>
-			</section>
-			<section className="bg-t-400 rounded-md px-8 py-4 flex flex-col justify-center sm:max-w-[30rem] md:max-w-[34rem] h-full w-full">
-				<MotionConfig transition={{ duration: 0.25 }}>{currentStep}</MotionConfig>
-			</section>
+						<MotionConfig transition={{ duration: 0.25 }}>{currentStep}</MotionConfig>
+					</InOut>
+				) : null}
+			</AnimatePresence>
 		</div>
 	);
 }
