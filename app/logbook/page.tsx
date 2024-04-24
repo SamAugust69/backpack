@@ -81,7 +81,7 @@ export default function Page() {
 	const { errContainer, showErr } = Error();
 
 	let { currentStep, forwards, goToStep } = useMultiForm([
-		<Fade key={0} className="py-2 flex flex-col gap-4">
+		<Fade key={0} className="py-2 flex flex-col gap-4 h-full justify-center">
 			<Button
 				size={'xl'}
 				className="bg-t-300 rounded-md flex border-2 justify-normal border-g-950 hover:bg-t-300/75 transition-colors h-20"
@@ -114,7 +114,7 @@ export default function Page() {
 				</div>
 			</Button>
 		</Fade>,
-		<Fade key={0} className={'h-full flex flex-col justify-between '}>
+		<Fade key={1} className={'py-2 flex flex-col gap-4 h-full justify-between'}>
 			<div className="flex gap-2"></div>
 
 			<div className="">
@@ -176,7 +176,7 @@ export default function Page() {
 		<div className="gap-4 overflow-scroll max-w-6xl w-full flex flex-col sm:flex-row justify-center h-[calc(100vh-48px)] p-4 rounded-t-md bg-t-300">
 			<AnimatePresence>
 				{errContainer}
-				<InOut className="bg-t-400 rounded-md py-4 px-8 flex flex-col w-full sm:min-w-[18rem] sm:w-[26rem]">
+				<InOut className="bg-t-400 rounded-md py-4 px-8 flex flex-col w-full sm:min-w-[18rem] sm:w-full">
 					<div className="py-2">
 						<Heading size={'sm'} className="text-r-600 text-left">
 							Welcome
@@ -195,15 +195,19 @@ export default function Page() {
 							</Paragraph>
 						</Button>
 					</div>
+					<MotionConfig transition={{ duration: 0.15 }}>
+						<AnimatePresence>{createEvent ? currentStep : null}</AnimatePresence>
+					</MotionConfig>
 				</InOut>
-				{createEvent ? (
+
+				{/* {createEvent ? (
 					<InOut
 						width={600}
 						className="bg-t-400 rounded-md px-8 py-4 flex flex-col justify-center sm:max-w-[30rem] md:max-w-[34rem] h-full w-full"
 					>
 						<MotionConfig transition={{ duration: 0.25 }}>{currentStep}</MotionConfig>
 					</InOut>
-				) : null}
+				) : null} */}
 			</AnimatePresence>
 		</div>
 	);
