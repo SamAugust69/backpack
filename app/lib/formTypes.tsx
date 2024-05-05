@@ -3,7 +3,6 @@ import { v4 } from 'uuid';
 // objective data, take data and
 export type FormItems = {
 	id: string;
-	completed: boolean;
 	match: number;
 	team: number;
 	scout: string;
@@ -36,7 +35,6 @@ export type FormItems = {
 
 export const initialValues: FormItems = {
 	id: v4(),
-	completed: false,
 	match: 0,
 	team: 0,
 	dateSubmitted: new Date(),
@@ -69,8 +67,8 @@ export type DisplayedLogsType = {
 	score: number;
 	autoScore: number;
 	teleopScore: number;
-	team: number,
-	match: number,
+	team: number;
+	match: number;
 	rankingPoints: number;
 	dateSubmitted: Date;
 	id: string;
@@ -78,10 +76,10 @@ export type DisplayedLogsType = {
 export type ScoringTypes = {
 	autoScore: number;
 	teleopScore: number;
-	averageAuto: number; 
-	averageTeleop: number; 
+	averageAuto: number;
+	averageTeleop: number;
 	averageTotal: number;
-}
+};
 
 export type FormInputType = {
 	type: string;
