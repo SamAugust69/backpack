@@ -57,5 +57,5 @@ const Err = () => {
 
 	return { errContainer, showErr };
 };
-
+Err.displayName = 'Error';
 export default Err;
