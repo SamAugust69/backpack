@@ -11,7 +11,7 @@ import Fade from '../components/ui/Fade';
 import { AnimatePresence, MotionConfig } from 'framer-motion';
 import FormInput from '../components/ui/FormInput';
 import AnimatedPage from '../components/ui/AnimatedPage';
-import Err from '../components/ui/Error';
+import Err from '../components/ui/Err';
 import fetchData from '../lib/apiCall';
 import InOut from '../components/ui/InOut';
 
