@@ -3,10 +3,6 @@ import { useEffect } from 'react';
 import useMeasure from 'react-use-measure';
 
 const InOut = ({ children, width, ...props }: any) => {
-	useEffect(() => {
-		console.log(children);
-	}, [children]);
-
 	return (
 		<AnimatePresence mode="wait">
 			<motion.div

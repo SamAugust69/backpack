@@ -39,37 +39,38 @@ interface InputProps extends HTMLAttributes<HTMLInputElement>, VariantProps<type
 	value?: string | number;
 }
 
-const TextInput: FC<InputProps> = ({
-	size,
-	variant,
-	visible,
-	className,
-	value,
-	title,
-	children,
-	disabled,
-	type,
-	...props
-}) => {
-	let tit = title;
-	return (
-		<div className={cn(`${visible === false ? 'hidden' : 'block'} relative bg-gradient-to-r 500 pb-0.5 `, className)}>
-			<input
-				required
-				disabled={disabled}
-				className={cn(InputVariants({ size, variant }))}
-				onClick={(e: any) => e.stopPropagation()}
-				{...props}
-			/>
-			<span
-				data-before={title}
-				className={`pointer-events-none text-t-950 peer-placeholder-shown:-top-2 peer-placeholder-shown:text-xs disabled:pointer-events-none outline-none text-sm absolute top-1/4 left-2 peer-focus:text-xs peer-valid:text-xs placeholder-shown:text-xs peer-focus:-top-2 z-10 peer-valid:-top-[8px] transition-all px-1 before:content-[attr(data-before)] before:top-[8px] before:bg-t-300 before:-z-10 before:px-1 before:left-[1px] before:absolute before:text-transparent before:h-[2px]`}
-			>
-				{title}
-			</span>
-		</div>
-	);
-};
+const TextInput = forwardRef<HTMLInputElement, InputProps>(
+	({ size, variant, visible, className, value, title, children, disabled, type, ...props }, ref) => {
+		const [thing, setThing] = useState<number>(parseInt(value!.toString()) ?? 0);
+
+		useEffect(() => {
+			textbox.current.value = value;
+		}, [value]);
+
+		const textbox = useRef<any>(<input />);
+
+		useImperativeHandle(ref, () => textbox.current);
+
+		return (
+			<div className={cn(`${visible === false ? 'hidden' : 'block'} relative bg-gradient-to-r 500 pb-0.5 `, className)}>
+				<input
+					required
+					disabled={disabled}
+					className={cn(InputVariants({ size, variant }))}
+					onClick={(e: any) => e.stopPropagation()}
+					ref={textbox}
+					{...props}
+				/>
+				<span
+					data-before={title}
+					className={`pointer-events-none text-t-950 peer-placeholder-shown:-top-2 peer-placeholder-shown:text-xs disabled:pointer-events-none outline-none text-sm absolute top-1/4 left-2 peer-focus:text-xs peer-valid:text-xs placeholder-shown:text-xs peer-focus:-top-2 z-10 peer-valid:-top-[8px] transition-all px-1 before:content-[attr(data-before)] before:top-[8px] before:bg-t-300 before:-z-10 before:px-1 before:left-[1px] before:absolute before:text-transparent before:h-[2px]`}
+				>
+					{title}
+				</span>
+			</div>
+		);
+	}
+);
 
 const NumberInput = forwardRef<HTMLInputElement, InputProps>(
 	(
@@ -127,7 +128,7 @@ const NumberInput = forwardRef<HTMLInputElement, InputProps>(
 					data-before={title}
 					className={`text-t-950 disabled:pointer-events-none outline-none text-sm absolute top-1/4 ${
 						incrementButtons ? 'left-20' : 'left-2'
-					} peer-focus:text-xs peer-valid:text-xs placeholder-shown:text-xs peer-placeholder-shown:-top-2 peer-placeholder-shown:text-xs peer-focus:-top-2 z-10 peer-valid:-top-2 transition-all px-1 before:content-[attr(data-before)] before:top-[8px] before:bg-t-300 before:-z-10 before:px-1 before:left-[1px] before:absolute before:text-transparent before:h-[2px]`}
+					} point peer-focus:text-xs peer-valid:text-xs placeholder-shown:text-xs peer-placeholder-shown:-top-2 peer-placeholder-shown:text-xs peer-focus:-top-2 z-10 peer-valid:-top-2 transition-all px-1 before:content-[attr(data-before)] before:top-[8px] before:bg-t-300 before:-z-10 before:px-1 before:left-[1px] before:absolute before:text-transparent before:h-[2px]`}
 				>
 					{title}
 				</span>
@@ -248,7 +249,7 @@ interface FormInputProps extends HTMLAttributes<HTMLAllCollection> {
 	type: string;
 }
 
-const FormInput = forwardRef<Ref<HTMLInputElement>, FormInputProps>(({ children, type, title, ...props }, ref) => {
+const FormInput = forwardRef<HTMLInputElement, FormInputProps>(({ children, type, title, ...props }, ref) => {
 	return formInputSwitch(type, children, title, ref, props);
 });
 

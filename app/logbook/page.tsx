@@ -6,7 +6,7 @@ import '../globals.css';
 import { Button } from '../components/ui/Button';
 import { LuImport } from 'react-icons/lu';
 import useMultiForm from '../lib/useMultiForm';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Fade from '../components/ui/Fade';
 import { AnimatePresence, MotionConfig } from 'framer-motion';
 import FormInput from '../components/ui/FormInput';
@@ -33,23 +33,24 @@ type eventType = {
 	year: number;
 };
 
-const Test = (throwErr: Function) => {
+const Test = () => {
 	const teamInput = useRef<HTMLInputElement>(null);
 	const yearInput = useRef<null | HTMLInputElement>(null);
 	const [events, setEvents] = useState<Array<any>>([]);
 	const [searching, setSearching] = useState(false);
+	const [eventData, setEventData] = useState<eventType>();
+
+	const { errContainer, showErr } = Err();
 
 	const searchEvents = async (team: number, year: number) => {
 		if (team == -1 || year == -1) {
-			//throwErr('Invalid Input', 'Check your uhh things...', 5);
-			console.log('invalid input');
-			throwErr;
+			showErr('Invalid Input', 'Check your uhh things...', 5);
 			return;
 		}
 		setSearching(true);
 		let eventKeys = await fetchData({
 			url: `https://www.thebluealliance.com/api/v3/team/frc${team}/events/${year}/keys`,
-			onErr: () => throwErr('Search Failed', 'Check your internet connection', 5),
+			onErr: () => showErr('Search Failed', 'Check your internet connection', 5),
 		}).then((res: Array<string>) => {
 			setSearching(false);
 			return res;
@@ -59,7 +60,6 @@ const Test = (throwErr: Function) => {
 		await Promise.all(
 			eventKeys.map(async (key) => {
 				let event = await fetchData({ url: `https://www.thebluealliance.com/api/v3/event/${key}` });
-				console.log(event);
 				events = [...events, event];
 			})
 		);
@@ -68,6 +68,7 @@ const Test = (throwErr: Function) => {
 
 	return (
 		<Fade key={1} className={'py-2 flex flex-col gap-4 h-full justify-between items-center'}>
+			{errContainer}
 			<div className="max-w-xl">
 				<Paragraph
 					size={'sm'}
@@ -95,13 +96,18 @@ const Test = (throwErr: Function) => {
 					</div>
 					{events.length > 0 ? (
 						<div className="flex flex-col gap-1 mt-2">
-							{events.map((event, i) => {
+							{events.map((event: any, i) => {
 								let startDate = `${new Date(event.start_date).getMonth() + 1}-${new Date(event.start_date).getDay()}`;
 								let endDate = `${new Date(event.end_date).getMonth() + 1}-${new Date(event.end_date).getDay()}`;
+
 								return (
 									<Button
 										size={'lg'}
 										key={i}
+										onClick={() => {
+											setEventData(event);
+											console.log();
+										}}
 										className="bg-t-300 p-2 mx-2 border-2 border-t-950 rounded-md flex flex-col items-center"
 									>
 										<Paragraph size={'xs'}>
@@ -118,9 +124,9 @@ const Test = (throwErr: Function) => {
 				</AnimatedPage>
 			</div>
 			<div className="flex gap-2 flex-wrap justify-center my-8">
-				<FormInput type="text" title="Event Name" />
+				<FormInput type="text" title="Event Name" value={eventData?.name ?? ''} />
 				<FormInput type="number" title="Year" value={new Date().getFullYear()} />
-				<FormInput type="text" title="Event Code" />
+				<FormInput type="text" title="Event Code" value={eventData?.event_code ?? ''} />
 			</div>
 		</Fade>
 	);
@@ -184,7 +190,7 @@ export default function Page() {
 			</Button>
 		</div>,
 		<div key={1} className={'py-2 flex flex-col gap-4 h-full justify-between items-center'}>
-			<Test throwErr={() => showErr('', '', 1)} />
+			<Test />
 			<Button className="justify-end" variant={'link'} onClick={() => goToStep(0)}>
 				Back
 			</Button>
@@ -220,8 +226,8 @@ export default function Page() {
 						</Button>
 					</div>
 					<MotionConfig transition={{ duration: 0.1 }}>
-						<div className="h-full">
-							<span className="bg-t-500 border-2 border-t-500 rounded-md w-full inline-block self-center" />
+						<span className="bg-t-500 border-2 border-t-500 rounded-md w-full inline-block self-center my-2" />
+						<div className="h-full overflow-scroll">
 							<Fade className="flex w-full h-full justify-center">
 								{createEvent ? <InOut width={20}>{currentStep}</InOut> : null}
 							</Fade>
