@@ -71,6 +71,7 @@ const TextInput = forwardRef<HTMLInputElement, InputProps>(
 		);
 	}
 );
+TextInput.displayName = 'Text Input';
 
 const NumberInput = forwardRef<HTMLInputElement, InputProps>(
 	(
@@ -142,6 +143,7 @@ const NumberInput = forwardRef<HTMLInputElement, InputProps>(
 		);
 	}
 );
+NumberInput.displayName = 'Text Input';
 
 interface ToggleProps extends HTMLAttributes<HTMLDivElement> {
 	toggled: boolean;
@@ -202,12 +204,14 @@ const Toggle = forwardRef<HTMLDivElement, ToggleProps>(
 		);
 	}
 );
+Toggle.displayName = 'Toggle';
 
 interface CarouselProps extends HTMLAttributes<HTMLDivElement> {}
 
 const CarouselSelector: FC<CarouselProps> = ({ className }) => {
 	return <div className={`bg-indigo-100 ${className}`}>s</div>;
 };
+CarouselSelector.displayName = 'Carousel';
 
 // lets make a selector, left and right thingy.
 const formInputSwitch = (type: string, children: any, title: any, ref: any, props: any) => {
