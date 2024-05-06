@@ -9,7 +9,7 @@ import useMultiForm from '@/lib/useMultiForm';
 import { Button } from './Button';
 
 const InputVariants = cva(
-	'peer flex disabled:pointer-events-none outline-none rounded-none border-2 border-t-950 rounded relative',
+	'peer flex disabled:pointer-events-none outline-none rounded-none border-2 border-t-950 rounded relative invalid:border-r-600',
 	{
 		variants: {
 			variant: {
@@ -51,6 +51,7 @@ const TextInput: FC<InputProps> = ({
 	type,
 	...props
 }) => {
+	let tit = title;
 	return (
 		<div className={cn(`${visible === false ? 'hidden' : 'block'} relative bg-gradient-to-r 500 pb-0.5 `, className)}>
 			<input
@@ -60,7 +61,10 @@ const TextInput: FC<InputProps> = ({
 				onClick={(e: any) => e.stopPropagation()}
 				{...props}
 			/>
-			<span className="text-t-950 disabled:pointer-events-none outline-none text-sm absolute top-0 left-2 peer-focus:text-xs peer-focus:bg-t-400 peer-focus:-top-2 peer-valid:text-xs peer-valid:bg-t-400 peer-valid:-top-2 transition-all peer-placeholder-shown:text-xs  peer-placeholder-shown:-top-2 peer-placeholder-shown:bg-t-400 px-1">
+			<span
+				data-before={title}
+				className={`pointer-events-none text-t-950 peer-placeholder-shown:-top-2 peer-placeholder-shown:text-xs disabled:pointer-events-none outline-none text-sm absolute top-1/4 left-2 peer-focus:text-xs peer-valid:text-xs placeholder-shown:text-xs peer-focus:-top-2 z-10 peer-valid:-top-[8px] transition-all px-1 before:content-[attr(data-before)] before:top-[8px] before:bg-t-300 before:-z-10 before:px-1 before:left-[1px] before:absolute before:text-transparent before:h-[2px]`}
+			>
 				{title}
 			</span>
 		</div>
@@ -120,10 +124,10 @@ const NumberInput = forwardRef<HTMLInputElement, InputProps>(
 				{title}
 			</span> */}
 				<span
-					before={title}
-					className={`text-t-950 disabled:pointer-events-none outline-none text-sm absolute top-0 ${
+					data-before={title}
+					className={`text-t-950 disabled:pointer-events-none outline-none text-sm absolute top-1/4 ${
 						incrementButtons ? 'left-20' : 'left-2'
-					} peer-focus:text-xs peer-valid:text-xs placeholder-shown:text-xs peer-focus:-top-2 z-10 peer-valid:-top-[8px] transition-all px-1 before:content-[attr(before)] before:top-[8px] before:bg-t-300 before:-z-10 before:px-1 before:left-[1px] before:absolute before:text-transparent before:h-[2px]`}
+					} peer-focus:text-xs peer-valid:text-xs placeholder-shown:text-xs peer-placeholder-shown:-top-2 peer-placeholder-shown:text-xs peer-focus:-top-2 z-10 peer-valid:-top-2 transition-all px-1 before:content-[attr(data-before)] before:top-[8px] before:bg-t-300 before:-z-10 before:px-1 before:left-[1px] before:absolute before:text-transparent before:h-[2px]`}
 				>
 					{title}
 				</span>
@@ -242,7 +246,6 @@ interface FormInputProps extends HTMLAttributes<HTMLAllCollection> {
 	disabled?: boolean;
 	value?: string | number;
 	type: string;
-	ref?: Ref<any>;
 }
 
 const FormInput = forwardRef<Ref<HTMLInputElement>, FormInputProps>(({ children, type, title, ...props }, ref) => {

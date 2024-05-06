@@ -1,18 +1,25 @@
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect } from 'react';
 import useMeasure from 'react-use-measure';
 
 const InOut = ({ children, width, ...props }: any) => {
+	useEffect(() => {
+		console.log(children);
+	}, [children]);
+
 	return (
-		<motion.div
-			key={children}
-			transition={{ ease: 'easeInOut', duration: 0.25 }}
-			initial={{ x: -width }}
-			animate={{ x: 0 }}
-			exit={{ x: width }}
-			{...props}
-		>
-			{children}
-		</motion.div>
+		<AnimatePresence mode="wait">
+			<motion.div
+				key={children.key}
+				transition={{ ease: 'easeInOut', x: { duration: 0.25 }, duration: 0.35 }}
+				initial={{ x: -width, opacity: 0.5 }}
+				animate={{ x: 0, opacity: 1 }}
+				exit={{ x: -width, opacity: 0.5 }}
+				{...props}
+			>
+				{children}
+			</motion.div>
+		</AnimatePresence>
 	);
 };
 

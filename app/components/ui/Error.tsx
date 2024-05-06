@@ -1,12 +1,11 @@
 'use client';
 import { motion } from 'framer-motion';
-import { FC, useEffect, useState } from 'react';
-import { Button } from './Button';
+import { useState } from 'react';
 import Paragraph from './Paragraph';
 import { FaFaceDizzy } from 'react-icons/fa6';
 import useMeasure from 'react-use-measure';
 
-const Error = () => {
+const Err = () => {
 	const [ref, { width }] = useMeasure();
 
 	const [message, setMessage] = useState<string>();
@@ -19,6 +18,7 @@ const Error = () => {
 		setMessage(message);
 		setDescription(desc);
 		setHasError(true);
+		console.log(new Error(message));
 		setTimeout(() => {
 			setHasError(false);
 		}, timeout * 1000);
@@ -82,4 +82,4 @@ const Error = () => {
 	return { errContainer, showErr };
 };
 
-export default Error;
+export default Err;
