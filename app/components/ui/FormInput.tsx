@@ -256,5 +256,6 @@ interface FormInputProps extends HTMLAttributes<HTMLAllCollection> {
 const FormInput = forwardRef<HTMLInputElement, FormInputProps>(({ children, type, title, ...props }, ref) => {
 	return formInputSwitch(type, children, title, ref, props);
 });
+FormInput.displayName = 'Input';
 
 export default FormInput;
