@@ -99,3 +99,12 @@ export type FormInputType = {
 	onChange?: (e: any) => void;
 	placeholder?: string;
 };
+
+export type DataType = {
+	name: String;
+	event_code: String;
+	event_type: String;
+	week: Number;
+	year: Number;
+	logs: Array<FormItems>;
+};

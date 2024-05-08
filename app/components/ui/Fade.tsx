@@ -1,11 +1,17 @@
 import { AnimatePresence, motion } from 'framer-motion';
 
-const Fade = ({ children, ...props }: any) => {
+const Fade = ({ children, className, ...props }: any) => {
 	return (
 		<AnimatePresence>
-			<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} {...props}>
+			<motion.section
+				initial={{ opacity: 0 }}
+				animate={{ opacity: 1 }}
+				exit={{ opacity: 0 }}
+				className={className}
+				{...props}
+			>
 				{children}
-			</motion.div>
+			</motion.section>
 		</AnimatePresence>
 	);
 };

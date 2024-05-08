@@ -67,8 +67,14 @@ const Test = () => {
 	};
 
 	return (
-		<Fade key={1} className={'py-2 flex flex-col gap-4 h-full justify-between items-center'}>
+		<Fade key={1} className={'py-2 flex flex-col gap-4 h-full items-center overflow-scroll'}>
 			{errContainer}
+			<div className="w-full">
+				<Heading size={'sm'} className="text-r-600">
+					Welcome
+				</Heading>
+				<Paragraph className="text-g-700">Get Started- Select an Event</Paragraph>
+			</div>
 			<div className="max-w-xl">
 				<Paragraph
 					size={'sm'}
@@ -76,6 +82,7 @@ const Test = () => {
 				>
 					Event Searcher <span className="text-r-900 text-xs underline">Requires Internet</span>
 				</Paragraph>
+
 				<AnimatedPage className={'bg-t-300 rounded-b-md p-2'}>
 					<div className="flex gap-2 p-2 bg-t-400 rounded-md">
 						<Button
@@ -152,48 +159,81 @@ export default function Page() {
 	const { errContainer, showErr } = Err();
 
 	let { currentStep, forwards, goToStep } = useMultiForm([
-		<div key={0} className="py-2 flex flex-col gap-4 h-full justify-center">
-			<Button
-				size={'xl'}
-				className="bg-t-300 rounded-md flex border-2 justify-normal border-g-950 hover:bg-t-300/75 transition-colors h-20"
-				onClick={() => goToStep(1)}
-			>
-				<Plus className="p-3 w-10 h-10 font-bold rounded-md bg-t-400 text-g-950" />
-				<div className="flex flex-col justify-center">
-					<Paragraph className="m-0 text-g-950 flex px-4" size={'sm'}>
-						Create Manually
+		<Fade key={0}>
+			<div className="py-2">
+				<Heading size={'sm'} className="text-r-600 text-left">
+					Welcome
+				</Heading>
+				<Paragraph className="text-g-700">Get Started- Select an Event</Paragraph>
+			</div>
+			<div className="py-2 flex flex-col ">
+				<Button
+					size={'xl'}
+					onClick={() => createNewEvent()}
+					className="bg-t-300 rounded-md flex items-center justify-center border-2 border-g-700 hover:bg-t-300/75 transition-colors"
+				>
+					<Paragraph className="m-0 text-g-700 flex px-8 items-center" size={'xs'}>
+						Create New Event
+						<Plus className="ml-2 w-4 h-4 font-bold" />
 					</Paragraph>
-					<Paragraph className="m-0 text-g-700 flex px-4" size={'xs'}>
-						Start Fresh
-					</Paragraph>
-				</div>
-			</Button>
-			<input type="file" className="hidden" accept=".json" onChange={handleFileChange} ref={fileInput} />
-			<Button
-				size={'xl'}
-				onClick={() => fileInput.current?.click()}
-				className="bg-t-300 rounded-md flex justify-normal hover:bg-t-300/75 transition-colors h-16"
-			>
-				<LuImport className="p-3 w-10 h-10 font-bold rounded-md bg-t-400 text-t-950" />
-				<div className="flex flex-col ">
-					<Paragraph className="m-0 text-g-950 flex px-4" size={'sm'}>
-						Import Event
-					</Paragraph>
-					<Paragraph
-						className={`m-0 text-g-700 flex px-4 ${draggingOver ?? ''}`}
-						size={'xs'}
-						onDragOver={() => setDraggingOver(true)}
-					>
-						Import event from JSON
-					</Paragraph>
-				</div>
-			</Button>
-		</div>,
-		<div key={1} className={'py-2 flex flex-col gap-4 h-full justify-between items-center'}>
+				</Button>
+			</div>
+		</Fade>,
+
+		<Fade key={1} className="flex flex-col justify-between h-full">
+			<div className="flex flex-col gap-4 py-4 overflow-scroll">
+				<Button
+					size={'xl'}
+					className="bg-t-300 rounded-md flex border-2 justify-normal border-g-950 hover:bg-t-300/75 transition-colors h-20"
+					onClick={() => goToStep(1)}
+				>
+					<Plus className="p-3 w-10 h-10 font-bold rounded-md bg-t-400 text-g-950" />
+					<div className="flex flex-col justify-center">
+						<Paragraph className="m-0 text-g-950 flex px-4" size={'sm'}>
+							Create Manually
+						</Paragraph>
+						<Paragraph className="m-0 text-g-700 flex px-4" size={'xs'}>
+							Start Fresh
+						</Paragraph>
+					</div>
+				</Button>
+				<input type="file" className="hidden" accept=".json" onChange={handleFileChange} ref={fileInput} />
+				<Button
+					size={'xl'}
+					onClick={() => fileInput.current?.click()}
+					className="bg-t-300 rounded-md flex justify-normal hover:bg-t-300/75 transition-colors h-16"
+				>
+					<LuImport className="p-3 w-10 h-10 font-bold rounded-md bg-t-400 text-t-950" />
+					<div className="flex flex-col ">
+						<Paragraph className="m-0 text-g-950 flex px-4" size={'sm'}>
+							Import Event
+						</Paragraph>
+						<Paragraph
+							className={`m-0 text-g-700 flex px-4 ${draggingOver ?? ''}`}
+							size={'xs'}
+							onDragOver={() => setDraggingOver(true)}
+						>
+							Import event from JSON
+						</Paragraph>
+					</div>
+				</Button>
+			</div>
+			<div className="border-t-2 border-t-900 flex w-full justify-between py-2 items-center">
+				<Button className=" border-t-900" variant={'link'} onClick={() => goToStep(0)}>
+					Back
+				</Button>
+			</div>
+		</Fade>,
+		<div key={2} className={'py-2 flex flex-col gap-4 h-full justify-between items-center'}>
 			<Test />
-			<Button className="justify-end" variant={'link'} onClick={() => goToStep(0)}>
-				Back
-			</Button>
+			<div className="border-t-2 border-t-900 flex w-full justify-between py-2 items-center">
+				<Button className=" border-t-900" variant={'link'} onClick={() => goToStep(0)}>
+					Back
+				</Button>
+				<Button className=" border-t-900" variant={'default'} onClick={() => goToStep(0)}>
+					Submit
+				</Button>
+			</div>
 		</div>,
 	]);
 
@@ -207,30 +247,12 @@ export default function Page() {
 			<AnimatePresence>
 				{errContainer}
 				<InOut className="bg-t-400 rounded-md py-4 px-8 flex flex-col w-full sm:min-w-[18rem] sm:w-full max-w-6xl sm:border-2 border-t-900 overflow-hidden">
-					<div className="py-2">
-						<Heading size={'sm'} className="text-r-600 text-left">
-							Welcome
-						</Heading>
-						<Paragraph className="text-g-700">Get Started- Select an Event</Paragraph>
-					</div>
-					<div className="py-2 flex flex-col ">
-						<Button
-							size={'xl'}
-							onClick={() => createNewEvent()}
-							className="bg-t-300 rounded-md flex items-center justify-center border-2 border-g-700 hover:bg-t-300/75 transition-colors"
-						>
-							<Paragraph className="m-0 text-g-700 flex px-8 items-center" size={'xs'}>
-								Create New Event
-								<Plus className="ml-2 w-4 h-4 font-bold" />
-							</Paragraph>
-						</Button>
-					</div>
 					<MotionConfig transition={{ duration: 0.1 }}>
-						<span className="bg-t-500 border-2 border-t-500 rounded-md w-full inline-block self-center my-2" />
+						<span className="bg-t-500 border-t-2 border-t-900 rounded-md w-full inline-block self-center my-2" />
 						<div className="h-full overflow-scroll">
-							<Fade className="flex w-full h-full justify-center">
-								{createEvent ? <InOut width={20}>{currentStep}</InOut> : null}
-							</Fade>
+							<InOut width={20} className={'h-full'}>
+								{currentStep}
+							</InOut>
 						</div>
 					</MotionConfig>
 				</InOut>
