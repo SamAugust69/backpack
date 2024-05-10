@@ -12,23 +12,24 @@ const enum REDUCER_ACTION_TYPE {
 
 type ReducerAction = {
 	type: REDUCER_ACTION_TYPE | string;
-	payload: Partial<FormItems>;
+	payload: Partial<FormItems> | any;
 };
 
-const unsavedReducer = (state: typeof initState, action: ReducerAction): typeof initState => {
+const dataReducer = (state: typeof initState, action: ReducerAction): typeof initState => {
 	switch (action.type) {
-		case 'added':
+		case 'ADDED_LOG':
 		case REDUCER_ACTION_TYPE.ADDED_LOG:
 			console.log('ADDED_LOG', action.payload, state);
 			return [...state, action.payload];
-		case 'event':
+		case 'ADDED_EVENT':
 		case REDUCER_ACTION_TYPE.ADDED_EVENT:
 			console.log('THINKING', action.payload);
-		case 'removed':
+			break;
+		case 'REMOVED_LOG':
 		case REDUCER_ACTION_TYPE.REMOVED_LOG:
 			console.log('REMOVED_LOG');
 			return state.filter((log: any) => log.id !== action.payload.id);
-		case 'updated':
+		case 'UPDATED_LOG':
 		case REDUCER_ACTION_TYPE.UPDATED_LOG:
 			console.log('UPDATED_LOG');
 			return state.map((log: any) => {
@@ -48,4 +49,4 @@ const unsavedReducer = (state: typeof initState, action: ReducerAction): typeof 
 	}
 };
 
-export { unsavedReducer, REDUCER_ACTION_TYPE };
+export { dataReducer, REDUCER_ACTION_TYPE };

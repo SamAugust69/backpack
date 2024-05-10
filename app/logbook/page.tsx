@@ -6,7 +6,7 @@ import '../globals.css';
 import { Button } from '../components/ui/Button';
 import { LuImport } from 'react-icons/lu';
 import useMultiForm from '../lib/useMultiForm';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 import Fade from '../components/ui/Fade';
 import { AnimatePresence, MotionConfig } from 'framer-motion';
 import FormInput from '../components/ui/FormInput';
@@ -14,6 +14,7 @@ import AnimatedPage from '../components/ui/AnimatedPage';
 import Err from '../components/ui/Err';
 import fetchData from '../lib/apiCall';
 import InOut from '../components/ui/InOut';
+import { dataReducer } from '../lib/saveLogReducer';
 
 type eventType = {
 	city: string;
@@ -28,17 +29,17 @@ type eventType = {
 	event_code: string;
 	event_type: number;
 	key: string;
+	week: number;
 	name: string;
 	start_date: string;
 	year: number;
 };
 
-const Test = () => {
+const Test = ({ eventData, setEventData }: any) => {
 	const teamInput = useRef<HTMLInputElement>(null);
 	const yearInput = useRef<null | HTMLInputElement>(null);
 	const [events, setEvents] = useState<Array<any>>([]);
 	const [searching, setSearching] = useState(false);
-	const [eventData, setEventData] = useState<eventType>();
 
 	const { errContainer, showErr } = Err();
 
@@ -67,7 +68,7 @@ const Test = () => {
 	};
 
 	return (
-		<Fade key={1} className={'py-2 flex flex-col gap-4 h-full items-center overflow-scroll'}>
+		<Fade className={'py-2 flex flex-col gap-4 h-full items-center overflow-scroll'}>
 			{errContainer}
 			<div className="w-full">
 				<Heading size={'sm'} className="text-r-600">
@@ -142,6 +143,7 @@ const Test = () => {
 export default function Page() {
 	const fileInput = useRef<HTMLInputElement>(null);
 	const [draggingOver, setDraggingOver] = useState(false);
+	const [eventData, setEventData] = useState<eventType | any>();
 
 	//showErr('No Internet', 'You need internet to use this feature', 10)
 
@@ -158,7 +160,7 @@ export default function Page() {
 
 	const { errContainer, showErr } = Err();
 
-	let { currentStep, forwards, goToStep } = useMultiForm([
+	let { currentStep, currentStepNumber, forwards, goToStep, isLastStep } = useMultiForm([
 		<Fade key={0}>
 			<div className="py-2">
 				<Heading size={'sm'} className="text-r-600 text-left">
@@ -181,14 +183,14 @@ export default function Page() {
 		</Fade>,
 
 		<Fade key={1} className="flex flex-col justify-between h-full">
-			<div className="flex flex-col gap-4 py-4 overflow-scroll">
+			<div className="flex flex-col h-full justify-center gap-4 py-4 overflow-scroll">
 				<Button
 					size={'xl'}
 					className="bg-t-300 rounded-md flex border-2 justify-normal border-g-950 hover:bg-t-300/75 transition-colors h-20"
-					onClick={() => goToStep(1)}
+					onClick={() => goToStep(2)}
 				>
 					<Plus className="p-3 w-10 h-10 font-bold rounded-md bg-t-400 text-g-950" />
-					<div className="flex flex-col justify-center">
+					<div className="flex flex-col  justify-center">
 						<Paragraph className="m-0 text-g-950 flex px-4" size={'sm'}>
 							Create Manually
 						</Paragraph>
@@ -218,44 +220,62 @@ export default function Page() {
 					</div>
 				</Button>
 			</div>
-			<div className="border-t-2 border-t-900 flex w-full justify-between py-2 items-center">
-				<Button className=" border-t-900" variant={'link'} onClick={() => goToStep(0)}>
-					Back
-				</Button>
-			</div>
 		</Fade>,
 		<div key={2} className={'py-2 flex flex-col gap-4 h-full justify-between items-center'}>
-			<Test />
-			<div className="border-t-2 border-t-900 flex w-full justify-between py-2 items-center">
-				<Button className=" border-t-900" variant={'link'} onClick={() => goToStep(0)}>
-					Back
-				</Button>
-				<Button className=" border-t-900" variant={'default'} onClick={() => goToStep(0)}>
-					Submit
-				</Button>
-			</div>
+			<Test eventData={eventData} setEventData={setEventData} />
 		</div>,
 	]);
-
 	const [createEvent, setCreateEvent] = useState(false);
 	const createNewEvent = () => {
-		setCreateEvent(!createEvent);
+		goToStep(1);
+	};
+
+	const [dataReducerState, reducer] = useReducer(dataReducer, []);
+
+	const handleSumbit = () => {
+		const { event_code, name, event_type, week, year } = eventData;
+		const newEvent = {
+			name,
+			event_code,
+			event_type,
+			week,
+			year,
+		};
+
+		reducer({ type: 'ADDED_EVENT', payload: newEvent });
+		console.log(eventData);
 	};
 
 	return (
 		<div className="gap-4 w-full flex justify-center h-[calc(100vh-48px)] sm:p-4 sm:border-none border-t-2 border-t-900">
 			<AnimatePresence>
 				{errContainer}
-				<InOut className="bg-t-400 rounded-md py-4 px-8 flex flex-col w-full sm:min-w-[18rem] sm:w-full max-w-6xl sm:border-2 border-t-900 overflow-hidden">
+				<Fade className="bg-t-400 rounded-md py-4 px-8 flex flex-col w-full sm:min-w-[18rem] sm:w-full max-w-6xl sm:border-2 border-t-900 overflow-hidden">
 					<MotionConfig transition={{ duration: 0.1 }}>
-						<span className="bg-t-500 border-t-2 border-t-900 rounded-md w-full inline-block self-center my-2" />
-						<div className="h-full overflow-scroll">
+						{/* <span className="bg-t-500 border-t-2 border-t-900 rounded-md w-full inline-block self-center my-2" /> */}
+						<div className="h-full overflow-scroll flex flex-col">
 							<InOut width={20} className={'h-full'}>
 								{currentStep}
 							</InOut>
+							<div className="border-t-2 border-t-900 flex w-full justify-between py-2 items-center">
+								<Button
+									className={` border-t-900 ${currentStepNumber - 1 < 0 ? 'invisible' : ''}`}
+									variant={'link'}
+									onClick={() => goToStep(currentStepNumber - 1)}
+								>
+									Back
+								</Button>
+								<Button
+									className={` border-t-900 transition-all ${isLastStep ? '' : ''}`}
+									variant={'default'}
+									onClick={() => handleSumbit()}
+								>
+									Submit
+								</Button>
+							</div>
 						</div>
 					</MotionConfig>
-				</InOut>
+				</Fade>
 
 				{/* {createEvent ? (
 					<InOut
