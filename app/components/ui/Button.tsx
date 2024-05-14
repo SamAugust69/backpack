@@ -1,28 +1,29 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/app/lib/utils';
 import { VariantProps, cva } from 'class-variance-authority';
-import { ButtonHTMLAttributes, FC, Ref, forwardRef } from 'react';
-import { Loader2 } from 'lucide-react';
+import { LoaderCircle, LoaderIcon } from 'lucide-react';
+import { HTMLAttributes, forwardRef } from 'react';
 
-export const buttonVariants = cva(
-	'rounded  disabled:pointer-events-none inline-flex items-center justify-center text-sm font-medium',
+const buttonVariants = cva(
+	'rounded-md inline-flex items-center justify-center font-medium text-neutral-400 hover:text-neutral-300 transition-colors duration-100',
 	{
 		variants: {
 			variant: {
-				default: 'bg-b-100 text-t-100',
-				link: 'bg-transparent underline-offset-4 hover:underline hover:bg-transparent',
-				hidden: 'bg-transparent',
-				options: 'border-2 border-b-100 bg-t-200',
-				unstyled: '',
+				default: 'bg-neutral-700 hover:bg-neutral-600',
+				secondary: 'bg-neutral-900/50 hover:bg-neutral-900 w-full',
+				border: 'bg-neutral-700 hover:bg-neutral-600 border border-neutral-600 border',
+				silly: 'bg-r-700 hover:bg-r-800',
+				link: 'underline',
+				hidden: 'hover:underline',
 			},
 			size: {
-				default: 'h-9 py-2.5 px-4',
-				xl: 'h-14 px-4 md:px-6',
-				lg: 'h-12 mx-2 px-2 md:px-3',
-				md: 'h-10 px-4',
-				sm: 'h-8 p-2',
-				xs: 'h-6 p-2',
+				xl: 'p-4',
+				lg: 'text-lg px-4 py-1',
+				md: 'text-md px-4 h-10',
+				default: 'text-md px-4 py-1',
+				sm: 'text-sm px-3 py-1',
 			},
 		},
+
 		defaultVariants: {
 			variant: 'default',
 			size: 'default',
@@ -30,19 +31,35 @@ export const buttonVariants = cva(
 	}
 );
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
-	isLoading?: boolean;
+interface ButtonProps extends HTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
+	loading?: boolean;
+	tooltip?: String;
 }
 
-const Button: FC<ButtonProps> = ({ className, children, variant, isLoading, size, ...props }) => {
-	return (
-		<button className={cn(buttonVariants({ variant, size }), className)} disabled={isLoading} type={'button'} {...props}>
-			{isLoading ? <Loader2 className="animate-spin p-1" /> : null}
-			{children}
-		</button>
-	);
-};
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+	({ className, variant, size, children, loading, onClick, tooltip, ...props }) => {
+		const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+			e.stopPropagation();
+			if (onClick) onClick(e);
+		};
+
+		return (
+			<button
+				className={`${cn(buttonVariants({ variant, size }), className, tooltip ? 'group' : '')}`}
+				onClick={handleClick}
+				{...props}
+			>
+				{loading ? <LoaderCircle className="w-4 mx-1 animate-spin" /> : null}
+				{tooltip ? (
+					<span className="bg-neutral-950/75 px-2 hidden rounded-l-md relative -left-3 text-sm group-hover:block leading-6 font-semibold text-neutral-300 after:absolute after:border-y-[12px] after:border-r-8 after:border-y-transparent after:-right-2 after:rotate-180 after:border-neutral-950/75">
+						{tooltip}
+					</span>
+				) : null}
+				{children}
+			</button>
+		);
+	}
+);
 
 Button.displayName = 'Button';
-
 export { Button };

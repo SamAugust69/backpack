@@ -9,13 +9,11 @@ import useMultiForm from '@/lib/useMultiForm';
 import { Button } from './Button';
 
 const InputVariants = cva(
-	'peer flex disabled:pointer-events-none outline-none rounded-none border-2 border-t-950 rounded relative invalid:border-r-600',
+	'peer flex disabled:pointer-events-none outline-none rounded-none border border-neutral-600 rounded relative invalid:border-r-600',
 	{
 		variants: {
 			variant: {
-				default: 'bg-transparent text-t-950 placeholder-t-700 bg-t-300',
-				purple_ish: '',
-				purpler: '',
+				default: 'bg-transparent text-neutral-300 placeholder-neutral-400 bg-neutral-700',
 			},
 			size: {
 				default: 'h-10 px-2 w-full',
@@ -41,8 +39,6 @@ interface InputProps extends HTMLAttributes<HTMLInputElement>, VariantProps<type
 
 const TextInput = forwardRef<HTMLInputElement, InputProps>(
 	({ size, variant, visible, className, value, title, children, disabled, type, ...props }, ref) => {
-		const [thing, setThing] = useState<number>(parseInt(value!.toString()) ?? 0);
-
 		useEffect(() => {
 			textbox.current.value = value;
 		}, [value]);
@@ -63,7 +59,7 @@ const TextInput = forwardRef<HTMLInputElement, InputProps>(
 				/>
 				<span
 					data-before={title}
-					className={`pointer-events-none text-t-950 peer-placeholder-shown:-top-2 peer-placeholder-shown:text-xs disabled:pointer-events-none outline-none text-sm absolute top-1/4 left-2 peer-focus:text-xs peer-valid:text-xs placeholder-shown:text-xs peer-focus:-top-2 z-10 peer-valid:-top-[8px] transition-all px-1 before:content-[attr(data-before)] before:top-[8px] before:bg-t-300 before:-z-10 before:px-1 before:left-[1px] before:absolute before:text-transparent before:h-[2px]`}
+					className={`pointer-events-none text-neutral-400 peer-placeholder-shown:-top-2 disabled:pointer-events-none outline-none text-sm absolute top-1/4 left-2 point peer-focus:text-xs peer-valid:text-xs placeholder-shown:text-xs  peer-placeholder-shown:text-xs peer-focus:-top-2 z-10 peer-valid:-top-2 transition-all px-1 before:content-[attr(data-before)] before:top-[8px] before:bg-neutral-700 before:-z-10 before:px-1 before:left-[1px] before:absolute before:text-transparent before:h-[2px]`}
 				>
 					{title}
 				</span>
@@ -127,9 +123,9 @@ const NumberInput = forwardRef<HTMLInputElement, InputProps>(
 			</span> */}
 				<span
 					data-before={title}
-					className={`text-t-950 disabled:pointer-events-none outline-none text-sm absolute top-1/4 ${
+					className={`text-neutral-400 disabled:pointer-events-none outline-none text-sm absolute top-1/4 ${
 						incrementButtons ? 'left-20' : 'left-2'
-					} point peer-focus:text-xs peer-valid:text-xs placeholder-shown:text-xs peer-placeholder-shown:-top-2 peer-placeholder-shown:text-xs peer-focus:-top-2 z-10 peer-valid:-top-2 transition-all px-1 before:content-[attr(data-before)] before:top-[8px] before:bg-t-300 before:-z-10 before:px-1 before:left-[1px] before:absolute before:text-transparent before:h-[2px]`}
+					} point peer-focus:text-xs peer-valid:text-xs placeholder-shown:text-xs peer-placeholder-shown:-top-2 peer-placeholder-shown:text-xs peer-focus:-top-2 z-10 peer-valid:-top-2 transition-all px-1 before:content-[attr(data-before)] before:top-[8px] before:bg-neutral-700 before:-z-10 before:px-1 before:left-[1px] before:absolute before:text-transparent before:h-[2px]`}
 				>
 					{title}
 				</span>

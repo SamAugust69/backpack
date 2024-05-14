@@ -3,14 +3,14 @@ import { VariantProps, cva } from 'class-variance-authority';
 import { HTMLAttributes, FC, forwardRef } from 'react';
 import { Loader2 } from 'lucide-react';
 
-export const headingVariants = cva('text-slate-900 dark:text-slate-200 font-extrabold', {
+export const headingVariants = cva('text-neutral-400', {
 	variants: {
 		size: {
-			default: 'text-4xl md:text-5xl leading-lose',
-			uberSmall: 'px-3 leading-tight text-xl',
-			xs: 'text-2xl md:text-3xl xl:text-4xl leading-snug',
-			sm: 'text-3xl md:text-4xl leading-tight',
-			lg: 'text-5xl md:text-6xl leading-tight',
+			lg: 'text-5xl md:text-6xl leading-tight font-extrabold',
+			default: 'text-4xl md:text-5xl leading-lose font-extrabold',
+			sm: 'text-3xl md:text-4xl leading-tight font-bold',
+			xs: 'text-2xl md:text-3xl xl:text-4xl leading-snug font-bold',
+			uberSmall: 'text-xl leading-tight font-medium',
 		},
 	},
 	defaultVariants: {

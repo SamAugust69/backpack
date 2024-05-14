@@ -23,6 +23,7 @@ const useMultiForm = (formSteps: Array<React.ReactElement>) => {
 		formSteps,
 		currentStep: formSteps[formStep],
 		currentStepNumber: formStep,
+		length: formSteps.length,
 		forwards,
 		backwards,
 		goToStep,

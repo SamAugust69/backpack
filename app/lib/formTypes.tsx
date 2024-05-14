@@ -1,7 +1,7 @@
 import { v4 } from 'uuid';
 
 // objective data, take data and
-export type FormItems = {
+export type LogType = {
 	id: string;
 	match: number;
 	team: number;
@@ -33,7 +33,16 @@ export type FormItems = {
 	};
 };
 
-export const initialValues: FormItems = {
+export type EventDataType = {
+	name: string;
+	week: string;
+	year: number;
+	event_code: string;
+	event_type: number;
+	logs: Array<LogType>;
+};
+
+export const initialValues: LogType = {
 	id: v4(),
 	match: 0,
 	team: 0,
@@ -98,13 +107,4 @@ export type FormInputType = {
 	variant?: string;
 	onChange?: (e: any) => void;
 	placeholder?: string;
-};
-
-export type DataType = {
-	name: String;
-	event_code: String;
-	event_type: String;
-	week: Number;
-	year: Number;
-	logs: Array<FormItems>;
 };
