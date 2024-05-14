@@ -36,7 +36,7 @@ const Backpack = ({ event, setSelectedEvent }: BackpackProps) => {
 				<Container className=" bg-neutral-900/50">
 					<div className="flex items-center justify-between p-4 bg-neutral-900/75 rounded-t-md">
 						<Paragraph size={'sm'} className="inline-flex items-center text-neutral-400">
-							{eventInfo.logs.length} Logs
+							{'search bar here'}
 						</Paragraph>
 						<div className="flex gap-2">
 							<Button size={'default'}>Team</Button>
@@ -53,10 +53,9 @@ const Backpack = ({ event, setSelectedEvent }: BackpackProps) => {
 									Import / Export Logs
 								</Button>
 							</div>
-							{eventInfo.logs.map(() => {
-								return <div></div>;
+							{eventInfo.logs.map((log, i) => {
+								return <Log key={i} eventLogs={log} />;
 							})}
-							<Log />
 						</div>
 					</div>
 				</Container>

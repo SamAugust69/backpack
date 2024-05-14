@@ -152,9 +152,30 @@ const NewEvent = ({ reducer, setCreatingLog }: any) => {
 				</div>
 			</Container>
 			<Container variant={'none'} className="flex gap-4 m-8 justify-center">
-				<FormInput title="Event Name" type="text" value={selectedEvent?.name ? selectedEvent?.name : ''} />
-				<FormInput title="Event Code" type="text" value={selectedEvent?.event_code ? selectedEvent?.event_code : ''} />
-				<FormInput title="Year" type="number" value={selectedEvent?.year ? selectedEvent?.year : 0} />
+				<FormInput
+					title="Event Name"
+					type="text"
+					value={selectedEvent?.name ? selectedEvent?.name : ''}
+					onChange={(e: any) => setSelectedEvent({ ...selectedEvent, name: e.target.value })}
+				/>
+				<FormInput
+					title="Event Code"
+					type="text"
+					value={selectedEvent?.event_code ? selectedEvent.event_code : ''}
+					onChange={(e: any) => setSelectedEvent({ ...selectedEvent, event_code: e.target.value })}
+				/>
+				<FormInput
+					title="Year"
+					type="number"
+					value={selectedEvent?.year ? selectedEvent.year : 0}
+					onChange={(e: any) => setSelectedEvent({ ...selectedEvent, year: e.target.value })}
+				/>
+				<FormInput
+					title="Week"
+					type="number"
+					value={selectedEvent?.week ? selectedEvent.week : 0}
+					onChange={(e: any) => setSelectedEvent({ ...selectedEvent, week: e.target.value })}
+				/>
 			</Container>
 			<Container variant={'none'} className="flex justify-between">
 				<Button variant={'link'} onClick={() => backwards()}>

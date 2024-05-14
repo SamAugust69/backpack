@@ -20,9 +20,9 @@ interface ContainerProps extends HTMLAttributes<HTMLDivElement>, VariantProps<ty
 	title?: string;
 }
 
-const Container = forwardRef<HTMLDivElement, ContainerProps>(({ children, className, variant, title }) => {
+const Container = forwardRef<HTMLDivElement, ContainerProps>(({ children, className, variant, title }, ref) => {
 	return (
-		<div className={cn(containerVariants({ variant }), className)}>
+		<div className={cn(containerVariants({ variant }), className)} ref={ref}>
 			{title ? (
 				<span className="font-medium text-sm text-neutral-700 absolute -top-3 left-2 backdrop-blur-3xl px-1">{title}</span>
 			) : null}
