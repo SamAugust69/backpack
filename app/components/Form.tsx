@@ -42,7 +42,7 @@ const Form = ({ modalState, closeModal, formValues }: FormProps) => {
 		<Modal
 			open={modalState}
 			setOpen={closeModal}
-			className="h-full w-full p-4 flex md:flex-row flex-col gap-4 max-w-4xl md:h-5/6  bg-neutral-900/75"
+			className="h-full w-full p-4 flex md:flex-row flex-col gap-4 max-w-4xl md:h-5/6  bg-neutral-900/75 overflow-hidden"
 		>
 			<Container className="p-10 flex md:flex-col items-center md:justify-normal justify-center gap-4 ">
 				{MultiFormSteps.map((step, i) => {
