@@ -13,6 +13,7 @@ const buttonVariants = cva(
 				border: 'bg-neutral-700 hover:bg-neutral-600 border border-neutral-600 border',
 				silly: 'bg-r-700 hover:bg-r-800',
 				link: 'underline',
+				none: '',
 				hidden: 'hover:underline',
 			},
 			size: {

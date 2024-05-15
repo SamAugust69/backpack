@@ -4,7 +4,7 @@ import Heading from '@/ui/Heading';
 import Paragraph from '@/ui/Paragraph';
 import AnimatedPage from '@/ui/AnimatedPage';
 import { useState } from 'react';
-import { EventDataType } from '@/lib/formTypes';
+import { EventDataType, initialValues } from '@/lib/formTypes';
 import { Dot } from 'lucide-react';
 import { Button } from '@/ui/Button';
 import { Log } from '@/components/Log';
@@ -17,11 +17,13 @@ interface BackpackProps {
 
 const Backpack = ({ event, setSelectedEvent }: BackpackProps) => {
 	const [eventInfo, setEventInfo] = useState<EventDataType>(event);
+
+	const [currentLog, setCurrentLog] = useState(initialValues);
 	const [formOpen, setFormOpen] = useState(true);
 
 	return (
 		<>
-			<Form modalState={formOpen} closeModal={setFormOpen} />
+			<Form modalState={formOpen} closeModal={setFormOpen} formValues={currentLog} />
 			<Container key={1} className="w-full max-w-4xl my-16 mx-2 ">
 				<Container className="bg-neutral-900/75 p-4 rounded-t-md px-6 flex justify-between items-center" variant={'none'}>
 					<div>

@@ -101,7 +101,7 @@ const NumberInput = forwardRef<HTMLInputElement, InputProps>(
 		return (
 			<div className={cn(`${visible === false ? 'hidden' : 'block'} relative pb-0.5 flex `, className)}>
 				{incrementButtons ? (
-					<Button onClick={() => (thing > 0 ? decrease?.(setThing) : 0)} className="px-8 h-full rounded-none rounded-l">
+					<Button onClick={() => (thing > 0 ? decrease?.(setThing) : 0)} className="px-8  rounded-none rounded-l h-10">
 						-
 					</Button>
 				) : null}
@@ -131,7 +131,7 @@ const NumberInput = forwardRef<HTMLInputElement, InputProps>(
 				</span>
 
 				{incrementButtons ? (
-					<Button onClick={() => increment?.(setThing)} className="px-8 h-full rounded-none rounded-r">
+					<Button onClick={() => increment?.(setThing)} className="h-10 px-8 rounded-none rounded-r">
 						+
 					</Button>
 				) : null}
@@ -161,8 +161,8 @@ const Toggle = forwardRef<HTMLDivElement, ToggleProps>(
 			<div
 				ref={ref}
 				className={cn(
-					`border-2 ${
-						toggled ? `border-t-100 bg-t-100/20` : 'border-slate-400'
+					`border ${
+						toggled ? `border-green-300 bg-green-300/15` : 'border-slate-400'
 					} rounded transition-all cursor-pointer ${className}`
 				)}
 			>
@@ -186,7 +186,7 @@ const Toggle = forwardRef<HTMLDivElement, ToggleProps>(
 				</div>
 
 				{children !== undefined && toggled && (
-					<div className="px-3 py-4 bg-t-400 flex gap-3 flex-col border-t-2 border-t-200">
+					<div className="px-3 py-4 bg-neutral-800 flex gap-3 flex-col rounded-b-md">
 						{children.map((input, i) => {
 							return (
 								<FormInput key={i} className="mx-1 mb-0" {...input}>
