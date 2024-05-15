@@ -5,6 +5,7 @@ import { Button } from '@/ui/Button';
 import { useState } from 'react';
 import AnimatedPage from '@/ui/AnimatedPage';
 import { LogType } from '@/lib/formTypes';
+import { Form } from './Form';
 
 interface LogProps {
 	eventLogs: LogType;

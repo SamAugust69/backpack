@@ -44,7 +44,6 @@ export default function Home() {
 
 	return pageLoaded ? (
 		<>
-			<Form />
 			<InOut width={1000} className={'flex items-center justify-center'}>
 				{selectedEvent ? (
 					<Backpack event={eventData} setSelectedEvent={setSelectedEvent} />
