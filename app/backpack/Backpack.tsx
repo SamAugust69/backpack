@@ -24,7 +24,7 @@ const Backpack = ({ event, setSelectedEvent }: BackpackProps) => {
 	return (
 		<>
 			<Form modalState={formOpen} closeModal={setFormOpen} formValues={currentLog} />
-			<Container key={1} className={`w-full max-w-4xl my-16 mx-2 ${formOpen ? 'overflow-hidden' : ''} `}>
+			<Container key={1} className={`w-full max-w-4xl my-16 mx-2 ${formOpen ? 'overflow-hidden select-none' : ''} `}>
 				<Container className="bg-neutral-900/75 p-4 rounded-t-md px-6 flex justify-between items-center" variant={'none'}>
 					<div>
 						<Heading size={'uberSmall'} className="text-r-500">
