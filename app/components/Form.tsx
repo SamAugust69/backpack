@@ -19,8 +19,8 @@ interface FormProps {
 }
 
 const Form = ({ modalState, closeModal, formValues }: FormProps) => {
-	const [formData, setFormData] = useState(structuredClone(formValues));
-	const MultiFormSteps = ['Beginning', 'Auto', 'Teleop', 'Notes'];
+	const [formData, setFormData] = useState<LogType>(structuredClone(formValues));
+	const MultiFormSteps = ['Team Info', 'Auto', 'Teleop', 'Notes'];
 
 	const updateForm = async (fieldsToUpdate: Partial<LogType>) => {
 		new Promise((resolve) => {
@@ -44,7 +44,7 @@ const Form = ({ modalState, closeModal, formValues }: FormProps) => {
 			setOpen={closeModal}
 			className="h-full w-full p-4 flex md:flex-row flex-col gap-4 max-w-4xl md:h-5/6  bg-neutral-900/75"
 		>
-			<Container className="p-10 flex md:flex-col items-center md:justify-normal justify-center gap-4">
+			<Container className="p-10 flex md:flex-col items-center md:justify-normal justify-center gap-4 ">
 				{MultiFormSteps.map((step, i) => {
 					return (
 						<div key={i} className="group flex md:gap-3 items-center cursor-pointer " onClick={() => goToStep(i)}>
@@ -70,13 +70,16 @@ const Form = ({ modalState, closeModal, formValues }: FormProps) => {
 					Close
 				</Button>
 			</Container>
-			<div className="flex flex-col w-full h-full gap-4">
+			<div className="flex flex-col w-full h-full gap-4 overflow-scroll ">
 				<Container className="p-4 h-full flex flex-col justify-between overflow-scroll">
-					<div className="">
-						<Paragraph className="font-bold flex m-0">Team Info</Paragraph>
+					<div>
+						<Paragraph className="font-bold flex m-0 justify-between">
+							{MultiFormSteps[currentStepNumber]} <span className="self-end">{formData.scout}</span>
+						</Paragraph>
 						<Paragraph size={'sm'} className="font-bold flex m-0">
 							Match {formData.match} <Dot /> Team {formData.team}
 						</Paragraph>
+
 						<div className="py-4 flex flex-col gap-4">{currentStep}</div>
 					</div>
 					<div className="flex justify-between md:hidden">

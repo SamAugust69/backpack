@@ -111,7 +111,7 @@ const Teleop = ({ updateForm, teleop }: stepItems) => {
 		},
 	];
 	return (
-		<div className="py-2 flex flex-col gap-2">
+		<div className="py-2 flex flex-col gap-4">
 			{formInputs.map((input: any, i) => {
 				return (
 					<FormInput key={i} {...input}>

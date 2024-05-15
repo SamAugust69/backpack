@@ -162,7 +162,7 @@ const Toggle = forwardRef<HTMLDivElement, ToggleProps>(
 				ref={ref}
 				className={cn(
 					`border ${
-						toggled ? `border-green-300 bg-green-300/15` : 'border-slate-400'
+						toggled ? `border-neutral-600 bg-neutral-600/50` : 'border-slate-400'
 					} rounded transition-all cursor-pointer ${className}`
 				)}
 			>
