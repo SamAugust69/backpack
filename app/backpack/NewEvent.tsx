@@ -83,7 +83,7 @@ const NewEvent = ({ reducer, setCreatingLog }: any) => {
 	};
 
 	let { currentStep, currentStepNumber, backwards, forwards, goToStep, isLastStep, length } = useMultiForm([
-		<div className="flex flex-col gap-2">
+		<div key={0} className="flex flex-col gap-2">
 			<Button className="flex flex-col" size={'xl'} variant={'secondary'} onClick={() => forwards()}>
 				<Paragraph className="m-0 text-g-950 flex px-4" size={'sm'}>
 					Create Manually
@@ -114,7 +114,7 @@ const NewEvent = ({ reducer, setCreatingLog }: any) => {
 				Go Back
 			</Button>
 		</div>,
-		<>
+		<div key={1}>
 			<Container>
 				<div className="flex justify-between p-4 bg-neutral-900/75 rounded-t-md">
 					<Paragraph size={'sm'}>Event Searcher</Paragraph>
@@ -185,7 +185,7 @@ const NewEvent = ({ reducer, setCreatingLog }: any) => {
 					Create Event
 				</Button>
 			</Container>
-		</>,
+		</div>,
 	]);
 
 	return (

@@ -12,8 +12,9 @@ import { EventDataType } from '@/lib/formTypes';
 import { Backpack } from './Backpack';
 import useLocalStorage from '@rehooks/local-storage';
 import InOut from '@/ui/InOut';
-import Modal from '@/ui/Modal';
 import { Form } from '../components/Form';
+
+const scoutingTips = ['Scouting...', 'Data Monkey Labor ™', ''];
 
 export default function Home() {
 	const [creatingLog, setCreatingLog] = useState<boolean>(false);
@@ -50,12 +51,12 @@ export default function Home() {
 				) : (
 					<Container key={0} className="w-full max-w-4xl my-16 mx-2">
 						<Container className="bg-neutral-900/75 p-4 rounded-t-md px-6 flex justify-between items-center" variant={'none'}>
-							<div>
+							<div className="">
 								<Heading size={'xs'} className="text-r-500">
 									Backpack
 								</Heading>
 								{/* This should be one of those changing text things, funny words go here */}
-								<Paragraph className="m-0">Scouting...</Paragraph>
+								<Paragraph className="m-0">{scoutingTips[Math.floor(Math.random() * scoutingTips.length)]}</Paragraph>
 							</div>
 							<div>
 								<Heading size={'xs'} className="m-0 text-right text-r-500">
