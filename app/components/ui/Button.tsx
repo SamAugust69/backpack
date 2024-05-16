@@ -1,6 +1,6 @@
 import { cn } from '@/app/lib/utils';
 import { VariantProps, cva } from 'class-variance-authority';
-import { LoaderCircle, LoaderIcon } from 'lucide-react';
+import { LoaderCircle } from 'lucide-react';
 import { HTMLAttributes, forwardRef } from 'react';
 
 const buttonVariants = cva(

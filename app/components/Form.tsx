@@ -9,18 +9,26 @@ import Beginning from '@/components/Beginning';
 import Auto from '@/components/Auto';
 import Teleop from '@/components/Teleop';
 import Notes from '@/components/Notes';
-import { LogType } from '@/lib/formTypes';
+import { uuid } from 'uuidv4';
+import { EventDataType, LogType, initialValues } from '@/lib/formTypes';
 import useMultiForm from '@/lib/useMultiForm';
+import { useEffect } from 'react';
 
 interface FormProps {
+	onSubmit?: Function;
 	formValues: LogType;
 	modalState: boolean;
 	closeModal: Function;
+	eventInfo: EventDataType;
+	dispatch: Function;
 }
 
-const Form = ({ modalState, closeModal, formValues }: FormProps) => {
+type data = LogType & EventDataType;
+
+const Form = ({ modalState, closeModal, formValues, onSubmit, dispatch, eventInfo }: FormProps) => {
 	const [formData, setFormData] = useState<LogType>(structuredClone(formValues));
-	const MultiFormSteps = ['Team Info', 'Auto', 'Teleop', 'Notes'];
+	const [submitted, setSubmitted] = useState(false);
+	const MultiFormSteps = ['Match Info', 'Auto', 'Teleop', 'Final Notes'];
 
 	const updateForm = async (fieldsToUpdate: Partial<LogType>) => {
 		new Promise((resolve) => {
@@ -29,6 +37,27 @@ const Form = ({ modalState, closeModal, formValues }: FormProps) => {
 			setFormData(updatedForm);
 			resolve({ ...formData, ...fieldsToUpdate });
 		});
+	};
+
+	useEffect(() => {
+		if (submitted == true) {
+			console.log('Submitted');
+			updateForm({ id: uuid() });
+			setSubmitted(false);
+		}
+	}, [submitted]);
+
+	const handleSubmit = (e: any) => {
+		e.preventDefault();
+		goToStep(0);
+
+		console.log('submitted log', formData);
+		dispatch({ type: 'ADDED_LOG', payload: [eventInfo, structuredClone(formData)] });
+		setSubmitted(true);
+
+		//closeModal();
+		setFormData(structuredClone(initialValues));
+		onSubmit != null ? onSubmit() : null;
 	};
 
 	const { currentStep, forwards, backwards, goToStep, currentStepNumber, isFirstStep, isLastStep } = useMultiForm([
@@ -87,7 +116,7 @@ const Form = ({ modalState, closeModal, formValues }: FormProps) => {
 							Go Back
 						</Button>
 						{isLastStep ? (
-							<Button onClick={() => console.log('submit')}>Submit</Button>
+							<Button onClick={(e) => handleSubmit(e)}>Submit</Button>
 						) : (
 							<Button onClick={() => forwards()}>Next</Button>
 						)}
@@ -98,7 +127,7 @@ const Form = ({ modalState, closeModal, formValues }: FormProps) => {
 						Go Back
 					</Button>
 					{isLastStep ? (
-						<Button onClick={() => console.log('submit')}>Submit</Button>
+						<Button onClick={(e) => handleSubmit(e)}>Submit</Button>
 					) : (
 						<Button onClick={() => forwards()}>Next</Button>
 					)}

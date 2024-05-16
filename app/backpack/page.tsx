@@ -12,14 +12,13 @@ import { EventDataType } from '@/lib/formTypes';
 import { Backpack } from './Backpack';
 import useLocalStorage from '@rehooks/local-storage';
 import InOut from '@/ui/InOut';
-import { Form } from '../components/Form';
 
 const scoutingTips = ['Scouting...', 'Data Monkey Labor ™', ''];
 
 export default function Home() {
 	const [creatingLog, setCreatingLog] = useState<boolean>(false);
 	const [selectedEvent, setSelectedEvent] = useState<boolean>(false);
-	const [eventData, setEventData] = useState<EventDataType | any>();
+	const [eventData, setEventData] = useState<number>(0);
 
 	const [pageLoaded, setPageLoaded] = useState(false);
 
@@ -28,16 +27,17 @@ export default function Home() {
 	const [dataReducerState, reducer] = useReducer(dataReducer, localData);
 
 	useEffect(() => {
-		console.log(dataReducerState);
+		console.log('HELLO', dataReducerState);
 		setLocalData(dataReducerState);
 		setCreatingLog(false);
 	}, [dataReducerState]);
 
 	useEffect(() => {
+		localData == undefined ?? setLocalData([]);
 		setPageLoaded(true);
 	}, []);
 
-	const openEvent = (event: EventDataType) => {
+	const openEvent = (event: number) => {
 		setEventData(event);
 		setSelectedEvent(true);
 	};
@@ -46,7 +46,7 @@ export default function Home() {
 		<>
 			<InOut width={1000} className={'flex items-center justify-center'}>
 				{selectedEvent ? (
-					<Backpack event={eventData} setSelectedEvent={setSelectedEvent} />
+					<Backpack dispatch={reducer} event={dataReducerState[eventData]} setSelectedEvent={setSelectedEvent} />
 				) : (
 					<Container key={0} className="w-full max-w-4xl my-16 mx-2">
 						<Container className="bg-neutral-900/75 p-4 rounded-t-md px-6 flex justify-between items-center" variant={'none'}>
@@ -69,18 +69,17 @@ export default function Home() {
 								<NewEvent reducer={reducer} setCreatingLog={setCreatingLog} />
 							) : (
 								<Container className="flex flex-col gap-2 p-2">
-									<Container
-										variant={'none'}
-										className={`flex flex-col gap-4 ${dataReducerState.length > 0 ? 'p4' : ''}  rounded-md `}
-									>
-										{dataReducerState.map((event: EventDataType, i: number) => {
-											return (
-												<Button key={i} size={'xl'} variant={'secondary'} onClick={() => openEvent(event)}>
-													{event.name}
-												</Button>
-											);
-										})}
-									</Container>
+									{dataReducerState.length > 0 ? (
+										<Container variant={'none'} className={`flex flex-col gap-4 rounded-md `}>
+											{dataReducerState.map((event: EventDataType, i: number) => {
+												return (
+													<Button key={i} size={'xl'} variant={'secondary'} onClick={() => openEvent(i)}>
+														{event.name}
+													</Button>
+												);
+											})}
+										</Container>
+									) : null}
 									<Button className="" size={'xl'} variant={'secondary'} onClick={() => setCreatingLog(!creatingLog)}>
 										<Plus className="h-5 mx-1" /> Create an Event
 									</Button>

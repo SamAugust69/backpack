@@ -2,6 +2,7 @@ import { FormInputType, LogType } from '@/lib/formTypes';
 import FormInput from '@/ui/Input';
 import Heading from '@/ui/Heading';
 import { useEffect, useRef } from 'react';
+import Paragraph from './ui/Paragraph';
 
 type stepItems = LogType & {
 	updateForm: (item: Partial<LogType>) => void;
@@ -56,11 +57,14 @@ const Notes = ({ updateForm, bot_preformed, notes }: stepItems) => {
 					</FormInput>
 				);
 			})}
-			<textarea
-				ref={textbox}
-				onChange={(e: any) => updateForm({ notes: e.target.value })}
-				className="p-2 bg-transparent border-2 border-t-100 focus:ring-0 rounded text-t-100"
-			/>
+			<div className="flex flex-col">
+				<textarea
+					ref={textbox}
+					onChange={(e: any) => updateForm({ notes: e.target.value })}
+					className="p-2 bg-transparent border border-neutral-600 focus:ring-0 rounded text-t-100"
+				/>
+				<Paragraph size={'xs'}>Optional, but encouraged notes</Paragraph>
+			</div>
 		</div>
 	);
 };

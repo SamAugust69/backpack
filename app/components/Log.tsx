@@ -8,10 +8,10 @@ import { LogType } from '@/lib/formTypes';
 import { Form } from './Form';
 
 interface LogProps {
-	eventLogs: LogType;
+	eventData: LogType;
 }
 
-const Log = ({ eventLogs }: LogProps) => {
+const Log = ({ eventData }: LogProps) => {
 	const [open, setOpen] = useState<boolean>(false);
 
 	const toDisplay: Array<any> = [
@@ -19,11 +19,11 @@ const Log = ({ eventLogs }: LogProps) => {
 			title: 'Auto Summary',
 			display: [
 				{
-					'Left Starting Zone': ['number', eventLogs.auto.leftStartingZone, 2],
+					'Left Starting Zone': ['number', eventData.auto.leftStartingZone, 2],
 				},
 				{
-					"Speaker Note's Scored": ['number', eventLogs.auto.speakerScore, 5],
-					"Amp Note's Scored": ['number', eventLogs.auto.ampScore, 2],
+					"Speaker Note's Scored": ['number', eventData.auto.speakerScore, 5],
+					"Amp Note's Scored": ['number', eventData.auto.ampScore, 2],
 				},
 			],
 		},
@@ -31,16 +31,16 @@ const Log = ({ eventLogs }: LogProps) => {
 			title: 'Teleop Summary',
 			display: [
 				{
-					"Amp Note's Scored": ['number', eventLogs.teleop.ampScore, 1],
+					"Amp Note's Scored": ['number', eventData.teleop.ampScore, 1],
 				},
 				{
-					'Speaker Score': ['number', eventLogs.teleop.speakerScore, 2],
-					'Amplified Speaker Score': ['number', eventLogs.teleop.amplifiedSpeakerScore, 5],
+					'Speaker Score': ['number', eventData.teleop.speakerScore, 2],
+					'Amplified Speaker Score': ['number', eventData.teleop.amplifiedSpeakerScore, 5],
 				},
 				{
-					Hung: ['boolean', eventLogs.teleop.hangOnChain, 'Did Not Hang', 3],
-					Harmonize: ['boolean', eventLogs.teleop.hangInHarmony, 'No Harmony', 2],
-					'Scored Trap': ['number', eventLogs.teleop.trapScore, 5],
+					Hung: ['boolean', eventData.teleop.hangOnChain, 'Did Not Hang', 3],
+					Harmonize: ['boolean', eventData.teleop.hangInHarmony, 'No Harmony', 2],
+					'Scored Trap': ['number', eventData.teleop.trapScore, 5],
 				},
 			],
 		},
@@ -51,10 +51,10 @@ const Log = ({ eventLogs }: LogProps) => {
 			<div className="flex gap-4 justify-between items-center p-3">
 				<div className="flex gap-4">
 					<Paragraph size={'sm'} className="text-neutral-400 font-medium">
-						Match <span className="text-r-500 mx-1">0</span>
+						Match <span className="text-r-500 mx-1">{eventData.match}</span>
 					</Paragraph>
 					<Paragraph size={'sm'} className="text-neutral-400 font-medium">
-						Team <span className="text-r-500 mx-1">0</span>
+						Team <span className="text-r-500 mx-1">{eventData.team}</span>
 					</Paragraph>
 				</div>
 				<Button onClick={() => setOpen(!open)}>
@@ -63,12 +63,17 @@ const Log = ({ eventLogs }: LogProps) => {
 			</div>
 			{open ? (
 				<Container variant={'none'} className="p-2 border-t border-neutral-700 rounded-b-md flex gap-2">
-					<Container className="bg-neutral-800">
-						<div className="p-3">Auto</div>
-						{toDisplay.map((val, i) => {
-							return JSON.stringify(val);
-						})}
-					</Container>
+					{toDisplay.map((val, i) => {
+						console.log(val);
+						return (
+							<Container className="">
+								<div className="py-3 px-4 bg-neutral-900/30 rounded-t-md border-b border-neutral-600 min-w-[16rem] font-semibold">
+									{val.title}
+								</div>
+								<div className="p-4"></div>
+							</Container>
+						);
+					})}
 				</Container>
 			) : null}
 		</Container>

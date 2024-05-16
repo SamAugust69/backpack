@@ -1,4 +1,4 @@
-import { v4 } from 'uuid';
+import { uuid } from 'uuidv4';
 
 // objective data, take data and
 export type LogType = {
@@ -9,6 +9,7 @@ export type LogType = {
 	dateSubmitted: Date;
 	notes: string;
 	bot_preformed: string;
+
 	// offensive vs defensive
 	auto: {
 		leftStartingZone: boolean;
@@ -43,7 +44,7 @@ export type EventDataType = {
 };
 
 export const initialValues: LogType = {
-	id: v4(),
+	id: uuid(),
 	match: 0,
 	team: 0,
 	dateSubmitted: new Date(),
