@@ -80,6 +80,7 @@ const Backpack = ({ event, setSelectedEvent, dispatch }: BackpackProps) => {
 								{Array.from(Array(numButtons), (element, i) => {
 									return (
 										<Button
+											key={i}
 											onClick={() => goToStep(i)}
 											size={'sm'}
 											variant={'none'}
