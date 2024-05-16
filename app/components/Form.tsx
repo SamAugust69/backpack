@@ -55,7 +55,7 @@ const Form = ({ modalState, closeModal, formValues, onSubmit, dispatch, eventInf
 		dispatch({ type: 'ADDED_LOG', payload: [eventInfo, structuredClone(formData)] });
 		setSubmitted(true);
 
-		//closeModal();
+		closeModal();
 		setFormData(structuredClone(initialValues));
 		onSubmit != null ? onSubmit() : null;
 	};

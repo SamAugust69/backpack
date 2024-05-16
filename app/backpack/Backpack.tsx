@@ -20,7 +20,7 @@ const Backpack = ({ event, setSelectedEvent, dispatch }: BackpackProps) => {
 	const [eventInfo, setEventInfo] = useState<EventDataType>(event);
 
 	const [currentLog, setCurrentLog] = useState(initialValues);
-	const [formOpen, setFormOpen] = useState(true);
+	const [formOpen, setFormOpen] = useState(false);
 
 	useEffect(() => {
 		setEventInfo(event);
@@ -43,11 +43,11 @@ const Backpack = ({ event, setSelectedEvent, dispatch }: BackpackProps) => {
 						Back
 					</Button>
 				</Container>
-				<AnimatedPage variant={'none'} className="rounded-b-md p-4 flex flex-col gap-2">
+				<AnimatedPage variant={'none'} className="rounded-b-md p-4 flex flex-col gap-4">
 					<Container className=" bg-neutral-900/50">
 						<div className="flex items-center justify-between p-4 bg-neutral-900/75 rounded-t-md">
-							<Paragraph size={'sm'} className="inline-flex items-center text-neutral-400">
-								{'search bar here'}
+							<Paragraph size={'sm'} className="inline-flex items-center text-neutral-300">
+								Your Logs
 							</Paragraph>
 							<div className="flex gap-2">
 								<Button size={'default'}>Team</Button>
@@ -55,7 +55,7 @@ const Backpack = ({ event, setSelectedEvent, dispatch }: BackpackProps) => {
 							</div>
 						</div>
 						<div className="p-4">
-							<div className="flex flex-col gap-4">
+							<div className="flex flex-col gap-5">
 								<div className="flex gap-4 justify-between">
 									<Button size={'md'} variant={'silly'} onClick={() => setFormOpen(true)}>
 										New Log
@@ -69,6 +69,14 @@ const Backpack = ({ event, setSelectedEvent, dispatch }: BackpackProps) => {
 								})}
 							</div>
 						</div>
+					</Container>
+					<Container className=" bg-neutral-900/50">
+						<div className="flex items-center justify-between p-4 bg-neutral-900/75 rounded-t-md">
+							<Paragraph size={'sm'} className="inline-flex items-center text-neutral-300">
+								Match Selecter
+							</Paragraph>
+						</div>
+						<div className="p-2"></div>
 					</Container>
 				</AnimatedPage>
 			</Container>

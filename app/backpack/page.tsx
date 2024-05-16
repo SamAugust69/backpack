@@ -4,7 +4,7 @@ import { Container } from '@/components/ui/Container';
 import Heading from '@/ui/Heading';
 import Paragraph from '@/ui/Paragraph';
 import AnimatedPage from '@/ui/AnimatedPage';
-import { Plus } from 'lucide-react';
+import { Dot, Plus } from 'lucide-react';
 import { useEffect, useReducer, useState } from 'react';
 import { NewEvent } from './NewEvent';
 import { dataReducer } from '@/lib/saveLogReducer';
@@ -17,7 +17,7 @@ const scoutingTips = ['Scouting...', 'Data Monkey Labor ™', ''];
 
 export default function Home() {
 	const [creatingLog, setCreatingLog] = useState<boolean>(false);
-	const [selectedEvent, setSelectedEvent] = useState<boolean>(false);
+	const [selectedEvent, setSelectedEvent] = useLocalStorage<boolean>('selected-event', false);
 	const [eventData, setEventData] = useState<number>(0);
 
 	const [pageLoaded, setPageLoaded] = useState(false);
@@ -55,7 +55,8 @@ export default function Home() {
 									Backpack
 								</Heading>
 								{/* This should be one of those changing text things, funny words go here */}
-								<Paragraph className="m-0">{scoutingTips[Math.floor(Math.random() * scoutingTips.length)]}</Paragraph>
+								{/* <Paragraph className="m-0">{scoutingTips[Math.floor(Math.random() * scoutingTips.length)]}</Paragraph> */}
+								<Paragraph className="m-0">To Get Started, Select a Competition</Paragraph>
 							</div>
 							<div>
 								<Heading size={'xs'} className="m-0 text-right text-r-500">
@@ -73,8 +74,14 @@ export default function Home() {
 										<Container variant={'none'} className={`flex flex-col gap-4 rounded-md `}>
 											{dataReducerState.map((event: EventDataType, i: number) => {
 												return (
-													<Button key={i} size={'xl'} variant={'secondary'} onClick={() => openEvent(i)}>
-														{event.name}
+													<Button key={i} size={'xl'} variant={'secondary'} className="flex-col " onClick={() => openEvent(i)}>
+														<Paragraph size={'sm'} className="m-0 text-g-700 flex px-4">
+															{event.name}
+														</Paragraph>
+														<Paragraph size={'xs'} className="m-0 text-g-700 flex px-4">
+															Week {event.week} <Dot />
+															{event.year}
+														</Paragraph>
 													</Button>
 												);
 											})}
