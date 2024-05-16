@@ -64,9 +64,8 @@ const Log = ({ eventData }: LogProps) => {
 			{open ? (
 				<Container variant={'none'} className="p-2 border-t border-neutral-700 rounded-b-md flex gap-2">
 					{toDisplay.map((val, i) => {
-						console.log(val);
 						return (
-							<Container className="">
+							<Container key={i} className="">
 								<div className="py-3 px-4 bg-neutral-900/30 rounded-t-md border-b border-neutral-600 min-w-[16rem] font-semibold">
 									{val.title}
 								</div>
