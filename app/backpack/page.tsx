@@ -18,7 +18,7 @@ const scoutingTips = ['Scouting...', 'Data Monkey Labor ™', ''];
 export default function Home() {
 	const [creatingLog, setCreatingLog] = useState<boolean>(false);
 	const [selectedEvent, setSelectedEvent] = useLocalStorage<boolean>('selected-event', false);
-	const [eventData, setEventData] = useState<number>(0);
+	const [eventNumber, setEventNumber] = useLocalStorage<number>('event-number', 0);
 
 	const [pageLoaded, setPageLoaded] = useState(false);
 
@@ -38,7 +38,7 @@ export default function Home() {
 	}, []);
 
 	const openEvent = (event: number) => {
-		setEventData(event);
+		setEventNumber(event);
 		setSelectedEvent(true);
 	};
 
@@ -46,9 +46,9 @@ export default function Home() {
 		<>
 			<InOut width={1000} className={'flex items-center justify-center'}>
 				{selectedEvent ? (
-					<Backpack dispatch={reducer} event={dataReducerState[eventData]} setSelectedEvent={setSelectedEvent} />
+					<Backpack dispatch={reducer} event={dataReducerState[eventNumber]} setSelectedEvent={setSelectedEvent} />
 				) : (
-					<Container key={0} className="w-full max-w-4xl my-16 mx-2">
+					<Container key={0} className="w-full max-w-4xl my-4 mx-2">
 						<Container className="bg-neutral-900/75 p-4 rounded-t-md px-6 flex justify-between items-center" variant={'none'}>
 							<div className="">
 								<Heading size={'xs'} className="text-r-500">

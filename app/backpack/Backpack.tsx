@@ -8,7 +8,8 @@ import { EventDataType, initialValues } from '@/lib/formTypes';
 import { Dot } from 'lucide-react';
 import { Button } from '@/ui/Button';
 import { Log } from '@/components/Log';
-import { Form } from '../components/Form';
+import { Form } from '@/components/Form';
+import { usePagination } from '@/lib/usePagination';
 
 interface BackpackProps {
 	event: EventDataType;
@@ -26,10 +27,12 @@ const Backpack = ({ event, setSelectedEvent, dispatch }: BackpackProps) => {
 		setEventInfo(event);
 	}, [event]);
 
+	const { currentPage, goToStep, numButtons, currentStep, forwards, backwards } = usePagination(10, eventInfo.logs);
+
 	return (
 		<>
 			<Form eventInfo={event} dispatch={dispatch} modalState={formOpen} closeModal={setFormOpen} formValues={currentLog} />
-			<Container key={1} className={`w-full max-w-4xl my-16 mx-2 ${formOpen ? 'overflow-hidden select-none' : ''} `}>
+			<Container key={1} className={`w-full max-w-4xl my-4 mx-2 ${formOpen ? 'overflow-hidden select-none' : ''} `}>
 				<Container className="bg-neutral-900/75 p-4 rounded-t-md px-6 flex justify-between items-center" variant={'none'}>
 					<div>
 						<Heading size={'uberSmall'} className="text-r-500">
@@ -64,9 +67,31 @@ const Backpack = ({ event, setSelectedEvent, dispatch }: BackpackProps) => {
 										Import / Export Logs
 									</Button>
 								</div>
-								{eventInfo.logs.map((log, i) => {
-									return <Log key={i} eventData={log} />;
+								{currentPage != undefined
+									? currentPage.map((log, i) => {
+											return <Log key={i} eventData={log} />;
+									  })
+									: null}
+							</div>
+							<div className="flex gap-2 justify-center pt-4">
+								<Button variant={'none'} size={'sm'} onClick={() => backwards()}>
+									-
+								</Button>
+								{Array.from(Array(numButtons), (element, i) => {
+									return (
+										<Button
+											onClick={() => goToStep(i)}
+											size={'sm'}
+											variant={'none'}
+											className={`${i == currentStep ? 'underline' : null}`}
+										>
+											{i}
+										</Button>
+									);
 								})}
+								<Button variant={'none'} size={'sm'} onClick={() => forwards()}>
+									+
+								</Button>
 							</div>
 						</div>
 					</Container>
