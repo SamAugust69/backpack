@@ -4,12 +4,13 @@ import Heading from '@/ui/Heading';
 import Paragraph from '@/ui/Paragraph';
 import AnimatedPage from '@/ui/AnimatedPage';
 import { useEffect, useState } from 'react';
-import { EventDataType, initialValues } from '@/lib/formTypes';
+import { EventDataType, initialValues, AveragesType, LogType, DisplayedLogsType } from '@/lib/formTypes';
 import { Dot } from 'lucide-react';
 import { Button } from '@/ui/Button';
 import { Log } from '@/components/Log';
 import { Form } from '@/components/Form';
 import { usePagination } from '@/lib/usePagination';
+import { calculateScore } from './calcScore';
 
 interface BackpackProps {
 	event: EventDataType;
@@ -23,11 +24,73 @@ const Backpack = ({ event, setSelectedEvent, dispatch }: BackpackProps) => {
 	const [currentLog, setCurrentLog] = useState(initialValues);
 	const [formOpen, setFormOpen] = useState(false);
 
+	const [displayedLogs, setDisplayedLogs] = useState<Array<DisplayedLogsType>>([]);
+
+	// self explainatory, find log from ID.
+	const findLogFromId = (id: string): LogType => {
+		var locatedLog = initialValues;
+		event.logs.map((log) => {
+			if (log.id == id) {
+				locatedLog = log;
+			}
+		});
+		return locatedLog;
+	};
+
+	// this generates the logs to be displayed. Adds data like score and shit.
+	const generateDisplayedLogs = () => {
+		var toSet: Array<DisplayedLogsType> = [];
+
+		event.logs.map((log: LogType, i: number) => {
+			const { autoScore, teleopScore, total } = calculateScore(log);
+			console.log(calculateScore(log));
+			toSet = [
+				...toSet,
+				{
+					score: total,
+					autoScore: autoScore,
+					teleopScore: teleopScore,
+					team: log.team,
+					match: log.match,
+					rankingPoints: 0,
+					dateSubmitted: log.dateSubmitted,
+					id: log.id,
+				},
+			];
+		});
+
+		setDisplayedLogs(toSet);
+	};
+
+	const calcAverageScores = (): AveragesType => {
+		var totalScore: number = 0;
+		var totalAutoScore: number = 0;
+		var totalTeleopScore: number = 0;
+
+		displayedLogs.map((logInfo: DisplayedLogsType) => {
+			totalScore += logInfo.score;
+			totalAutoScore += logInfo.autoScore;
+			totalTeleopScore += logInfo.teleopScore;
+		});
+
+		const averageTotal = totalScore / event.logs.length;
+		const averageAuto = totalAutoScore / event.logs.length;
+		const averageTeleop = totalTeleopScore / event.logs.length;
+
+		return { averageAuto, averageTeleop, averageTotal };
+	};
+
+	useEffect(() => {
+		generateDisplayedLogs();
+	}, [event]);
+
+	const [averageScore, setAverageScore] = useState(calcAverageScores());
+
 	useEffect(() => {
 		setEventInfo(event);
 	}, [event]);
 
-	const { currentPage, goToStep, numButtons, currentStep, forwards, backwards } = usePagination(10, eventInfo.logs);
+	const { currentPage, goToStep, numButtons, currentStep, forwards, backwards } = usePagination(5, displayedLogs);
 
 	return (
 		<>
@@ -68,8 +131,16 @@ const Backpack = ({ event, setSelectedEvent, dispatch }: BackpackProps) => {
 									</Button>
 								</div>
 								{currentPage != undefined
-									? currentPage.map((log, i) => {
-											return <Log key={i} eventData={log} />;
+									? currentPage.map((log: DisplayedLogsType, i: number) => {
+											return (
+												<Log
+													key={i}
+													eventData={findLogFromId(log.id)}
+													autoScore={log.autoScore}
+													teleopScore={log.teleopScore}
+													averageScore={averageScore}
+												/>
+											);
 									  })
 									: null}
 							</div>

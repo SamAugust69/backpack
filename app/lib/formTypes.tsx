@@ -83,6 +83,7 @@ export type DisplayedLogsType = {
 	dateSubmitted: Date;
 	id: string;
 };
+
 export type ScoringTypes = {
 	autoScore: number;
 	teleopScore: number;
@@ -90,6 +91,7 @@ export type ScoringTypes = {
 	averageTeleop: number;
 	averageTotal: number;
 };
+export type AveragesType = { averageAuto: number; averageTeleop: number; averageTotal: number };
 
 export type FormInputType = {
 	type: string;

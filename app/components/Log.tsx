@@ -4,14 +4,60 @@ import Paragraph from '@/ui/Paragraph';
 import { Button } from '@/ui/Button';
 import { useState } from 'react';
 import AnimatedPage from '@/ui/AnimatedPage';
-import { LogType } from '@/lib/formTypes';
+import { AveragesType, LogType } from '@/lib/formTypes';
 import { Form } from './Form';
+import useMeasure from 'react-use-measure';
 
 interface LogProps {
 	eventData: LogType;
+	autoScore: number;
+	teleopScore: number;
+	averageScore: AveragesType;
 }
 
-const Log = ({ eventData }: LogProps) => {
+const toDisplaySwitcher = (toDisplay: any, i: number) => {
+	const type = toDisplay[1][0];
+
+	switch (type) {
+		case 'number':
+			var prop1 = toDisplay[1][1];
+			var prop2 = prop1 * toDisplay[1][2];
+
+			return (
+				<div key={i} className="flex justify-between font-medium text-b-100 items-center gap-2">
+					<Paragraph size={'sm'} className="flex gap-2">
+						<span className={` text-r-100`}>{prop1}</span>
+						{toDisplay[0]}
+					</Paragraph>
+					<Paragraph size={'sm'}>{prop2 > 0 ? '+ ' + prop2 + 'pt' : null}</Paragraph>
+				</div>
+			);
+		case 'boolean':
+			return (
+				<div key={i} className="flex justify-between font-medium text-b-100 items-center">
+					<Paragraph size={'sm'} className="">
+						{prop1 ? toDisplay[0] : toDisplay[1][2]}
+					</Paragraph>
+					<Paragraph size={'sm'}>{prop1 == true ? '+ ' + toDisplay[1][3] + 'pt' : null}</Paragraph>
+				</div>
+			);
+		default:
+			var prop1 = toDisplay[1][1];
+			var prop2 = prop1 * toDisplay[1][2];
+
+			return (
+				<div key={i} className="flex justify-between font-medium text-b-100 items-center gap-2">
+					<Paragraph size={'sm'} className="flex gap-2">
+						<span className={` text-r-100`}>{prop1}</span>
+						{toDisplay[0]}
+					</Paragraph>
+					<Paragraph size={'sm'}>{prop2 > 0 ? '+ ' + prop2 + 'pt' : null}</Paragraph>
+				</div>
+			);
+	}
+};
+
+const Log = ({ eventData, autoScore, teleopScore, averageScore }: LogProps) => {
 	const [open, setOpen] = useState<boolean>(false);
 
 	const toDisplay: Array<any> = [
@@ -19,7 +65,7 @@ const Log = ({ eventData }: LogProps) => {
 			title: 'Auto Summary',
 			display: [
 				{
-					'Left Starting Zone': ['number', eventData.auto.leftStartingZone, 2],
+					'Left Starting Zone': ['boolean', eventData.auto.leftStartingZone, 'Stayed In Zone', 2],
 				},
 				{
 					"Speaker Note's Scored": ['number', eventData.auto.speakerScore, 5],
@@ -40,11 +86,12 @@ const Log = ({ eventData }: LogProps) => {
 				{
 					Hung: ['boolean', eventData.teleop.hangOnChain, 'Did Not Hang', 3],
 					Harmonize: ['boolean', eventData.teleop.hangInHarmony, 'No Harmony', 2],
-					'Scored Trap': ['number', eventData.teleop.trapScore, 5],
+					'Scored In Trap': ['number', eventData.teleop.trapScore, 5],
 				},
 			],
 		},
 	];
+	const [ref, { width }] = useMeasure();
 
 	return (
 		<Container className="flex flex-col">
@@ -62,17 +109,40 @@ const Log = ({ eventData }: LogProps) => {
 				</Button>
 			</div>
 			{open ? (
-				<Container variant={'none'} className="p-2 border-t border-neutral-700 rounded-b-md flex gap-2">
+				<Container
+					variant={'none'}
+					className="p-2 border-t border-neutral-700 rounded-b-md flex gap-2 flex-wrap justify-center"
+				>
 					{toDisplay.map((val, i) => {
 						return (
 							<Container key={i} className="">
 								<div className="py-3 px-4 bg-neutral-900/30 rounded-t-md border-b border-neutral-600 min-w-[16rem] font-semibold">
 									{val.title}
 								</div>
-								<div className="p-4"></div>
+								<div className="p-4 flex flex-col gap-2">
+									{val.display.map((display: any, i: number) => {
+										return (
+											<div key={i} className="">
+												{Object.entries(display).map((toDisplay: any, i: number) => {
+													return toDisplaySwitcher(toDisplay, i);
+												})}
+											</div>
+										);
+									})}
+								</div>
 							</Container>
 						);
 					})}
+					<Container>
+						<div className="py-3 px-4 bg-neutral-900/30 rounded-t-md border-b border-neutral-600 min-w-[16rem] font-semibold">
+							test
+						</div>
+						<div className="p-4 flex flex-col gap-2">
+							<Paragraph size={'sm'}>Auto Score: {autoScore}</Paragraph>
+							<Paragraph size={'sm'}>Teleop Score: {teleopScore}</Paragraph>
+							<Paragraph size={'sm'}>Total Score: {autoScore + teleopScore}</Paragraph>
+						</div>
+					</Container>
 				</Container>
 			) : null}
 		</Container>

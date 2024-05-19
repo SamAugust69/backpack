@@ -79,6 +79,20 @@ const Teleop = ({ updateForm, teleop }: stepItems) => {
 		},
 
 		{
+			type: 'number',
+			title: 'Trap Notes Scored',
+			value: teleop.trapScore.toString(),
+			onChange: (e: any) => updateForm({ teleop: { ...teleop, trapScore: parseInt(e.target.value) } }),
+			incrementButtons: true,
+			increment: (setThing: Function) => {
+				updateForm({ teleop: { ...teleop, trapScore: teleop.trapScore + 1 } }).then(setThing(teleop.trapScore + 1));
+			},
+			decrease: (setThing: Function) => {
+				updateForm({ teleop: { ...teleop, trapScore: teleop.trapScore - 1 } }).then(setThing(teleop.trapScore - 1));
+			},
+		},
+
+		{
 			type: 'toggle',
 			onClick: () => updateForm({ teleop: { ...teleop, parkOnStage: !teleop.parkOnStage, hangOnChain: false } }),
 			toggled: teleop.parkOnStage,
