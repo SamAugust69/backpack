@@ -11,6 +11,7 @@ import { Log } from '@/components/Log';
 import { Form } from '@/components/Form';
 import { usePagination } from '@/lib/usePagination';
 import { calculateScore } from './calcScore';
+import QRCodes from './qrCodes';
 
 interface BackpackProps {
 	event: EventDataType;
@@ -91,9 +92,11 @@ const Backpack = ({ event, setSelectedEvent, dispatch }: BackpackProps) => {
 	}, [event]);
 
 	const { currentPage, goToStep, numButtons, currentStep, forwards, backwards } = usePagination(5, displayedLogs);
+	const [qrOpen, setQROpen] = useState(false);
 
 	return (
 		<>
+			{qrOpen ? <QRCodes data={event.logs} dispatch={dispatch} /> : null}
 			<Form eventInfo={event} dispatch={dispatch} modalState={formOpen} closeModal={setFormOpen} formValues={currentLog} />
 			<Container key={1} className={`w-full max-w-4xl my-4 mx-2 ${formOpen ? 'overflow-hidden select-none' : ''} `}>
 				<Container className="bg-neutral-900/75 p-4 rounded-t-md px-6 flex justify-between items-center" variant={'none'}>
@@ -126,7 +129,7 @@ const Backpack = ({ event, setSelectedEvent, dispatch }: BackpackProps) => {
 									<Button size={'md'} variant={'silly'} onClick={() => setFormOpen(true)}>
 										New Log
 									</Button>
-									<Button size={'md'} variant={'default'}>
+									<Button size={'md'} variant={'default'} onClick={() => setQROpen(!qrOpen)}>
 										Import / Export Logs
 									</Button>
 								</div>
