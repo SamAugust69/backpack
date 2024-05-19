@@ -47,7 +47,7 @@ const QRCodes: FC<QRCodesProps> = ({ data, dispatch }) => {
 	};
 
 	return (
-		<div className="flex flex-col items-center w-96">
+		<div className="flex flex-col items-center w-96 absolute z-20 ">
 			<div className="relative bg-slate-100">
 				<Button
 					className="absolute w-48 h-full bg-transparent focus:ring-0"
@@ -64,7 +64,7 @@ const QRCodes: FC<QRCodesProps> = ({ data, dispatch }) => {
 				)}
 			</div>
 			{rendered ? (
-				<Paragraph className="text-center text-b-100">
+				<Paragraph size={'sm'} className="text-center text-neutral-300">
 					{currentQR + 1} of {qrStuff.length}
 				</Paragraph>
 			) : null}
