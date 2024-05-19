@@ -7,10 +7,12 @@ import { useEffect, useState } from 'react';
 import { EventDataType, initialValues, AveragesType, LogType, DisplayedLogsType } from '@/lib/formTypes';
 import { Dot } from 'lucide-react';
 import { Button } from '@/ui/Button';
+import { uuid } from 'uuidv4';
 import { Log } from '@/components/Log';
 import { Form } from '@/components/Form';
 import { usePagination } from '@/lib/usePagination';
 import { calculateScore } from './calcScore';
+import scheduel from './scheduel.json';
 import QRCodes from './qrCodes';
 
 interface BackpackProps {
@@ -36,6 +38,16 @@ const Backpack = ({ event, setSelectedEvent, dispatch }: BackpackProps) => {
 			}
 		});
 		return locatedLog;
+	};
+
+	const openLog = (match: number, team: number) => {
+		setCurrentLog({
+			...currentLog,
+			match: match,
+			team: team,
+			id: uuid(),
+		});
+		setFormOpen(!formOpen);
 	};
 
 	// this generates the logs to be displayed. Adds data like score and shit.
@@ -176,7 +188,47 @@ const Backpack = ({ event, setSelectedEvent, dispatch }: BackpackProps) => {
 								Match Selecter
 							</Paragraph>
 						</div>
-						<div className="p-2"></div>
+						<div className="p-2">
+							{/* {scheduel
+								.slice(
+									curMatch - 1 > 0 ? curMatch - 1 : 0,
+									curMatch + 2 < schedule.Schedule.length ? curMatch + 2 : schedule.Schedule.length
+								)
+								.map((val, i) => {
+									return (
+										<div
+											key={i}
+											onClick={() => {
+												curMatch == val.matchNumber ? openLog(val.matchNumber, val.teams[tabletNumber].teamNumber) : null;
+											}}
+											className={`group group-hover bg-g-200 m-2 rounded flex snap-center ${
+												curMatch == val.matchNumber ? ' hover:cursor-pointer' : ''
+											} transition-all`}
+										>
+											<div
+												className={` ${
+													curMatch == val.matchNumber ? 'bg-t-400' : 'bg-b-100'
+												} py-2 h-full px-4 rounded-l flex items-center justify-center `}
+											>
+												{curMatch == val.matchNumber ? (
+													<Paragraph size={'xs'} className="group invisible w-0 group-hover:visible group-hover:w-full">
+														Create Log
+													</Paragraph>
+												) : null}
+												<Paragraph size={'sm'}>{val.matchNumber}</Paragraph>
+											</div>
+											<div className="px-2 flex items-center justify-between w-full">
+												<Paragraph size={'sm'}>{val.description}</Paragraph>
+												<div>
+													<Paragraph size={'sm'} className={`${tabletNumber > 2 ? 'text-r-100' : 'text-blue-300'}`}>
+														{val.teams[tabletNumber].teamNumber}
+													</Paragraph>
+												</div>
+											</div>
+										</div>
+									);
+								})} */}
+						</div>
 					</Container>
 				</AnimatedPage>
 			</Container>

@@ -33,6 +33,8 @@ const toDisplaySwitcher = (toDisplay: any, i: number) => {
 				</div>
 			);
 		case 'boolean':
+			var prop1 = toDisplay[1][1];
+			console.log(toDisplay[0], prop1, toDisplay[1][3]);
 			return (
 				<div key={i} className="flex justify-between font-medium text-b-100 items-center">
 					<Paragraph size={'sm'} className="">
@@ -59,6 +61,8 @@ const toDisplaySwitcher = (toDisplay: any, i: number) => {
 
 const Log = ({ eventData, autoScore, teleopScore, averageScore }: LogProps) => {
 	const [open, setOpen] = useState<boolean>(false);
+
+	console.log(eventData);
 
 	const toDisplay: Array<any> = [
 		{
@@ -142,6 +146,7 @@ const Log = ({ eventData, autoScore, teleopScore, averageScore }: LogProps) => {
 							<Paragraph size={'sm'}>Teleop Score: {teleopScore}</Paragraph>
 							<Paragraph size={'sm'}>Total Score: {autoScore + teleopScore}</Paragraph>
 						</div>
+						<div className="p-4">{eventData.notes}</div>
 					</Container>
 				</Container>
 			) : null}

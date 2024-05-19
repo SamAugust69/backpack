@@ -23,7 +23,7 @@ const calculateScore = (log: LogType) => {
 	pointScoring[0].map((val) => {
 		switch (val.type) {
 			case 'boolean':
-				val.amount == true ?? (autoScore += val.points);
+				val.amount == true ? (autoScore += val.points) : null;
 				break;
 			case 'number':
 				autoScore += val.amount * val.points;
@@ -31,10 +31,11 @@ const calculateScore = (log: LogType) => {
 		}
 	});
 
-	pointScoring[1].map((val) => {
+	pointScoring[1].map((val: any) => {
 		switch (val.type) {
 			case 'boolean':
-				val.amount == true ?? (teleopScore += val.points);
+				console.log(val.amount);
+				val.amount == true ? (teleopScore += val.points) : null;
 				break;
 			case 'number':
 				teleopScore += val.amount * val.points;
