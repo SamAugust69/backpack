@@ -95,7 +95,7 @@ const Backpack = ({ event, setSelectedEvent, dispatch }: BackpackProps) => {
 	const [qrOpen, setQROpen] = useState(false);
 
 	return (
-		<div className="flex flex-col">
+		<div className="flex flex-col w-full items-center">
 			{qrOpen ? <QRCodes data={event.logs} dispatch={dispatch} /> : null}
 			<Form eventInfo={event} dispatch={dispatch} modalState={formOpen} closeModal={setFormOpen} formValues={currentLog} />
 			<Container key={1} className={`w-full max-w-4xl my-4 mx-2 ${formOpen ? 'overflow-hidden select-none' : ''} `}>
