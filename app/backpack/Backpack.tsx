@@ -14,6 +14,8 @@ import { usePagination } from '@/lib/usePagination';
 import { calculateScore } from './calcScore';
 import scheduel from './scheduel.json';
 import QRCodes from './qrCodes';
+import FormInput from '../components/ui/Input';
+import useLocalStorage from '@rehooks/local-storage';
 
 interface BackpackProps {
 	event: EventDataType;
@@ -106,6 +108,9 @@ const Backpack = ({ event, setSelectedEvent, dispatch }: BackpackProps) => {
 	const { currentPage, goToStep, numButtons, currentStep, forwards, backwards } = usePagination(5, displayedLogs);
 	const [qrOpen, setQROpen] = useState(false);
 
+	const [curMatch, setCurMatch] = useLocalStorage('curMatch', 1);
+	const [tabletNumber, setTabletNumber] = useLocalStorage('tabletNumber', 0);
+
 	return (
 		<div className="flex flex-col w-full items-center">
 			{qrOpen ? <QRCodes data={event.logs} dispatch={dispatch} /> : null}
@@ -192,14 +197,14 @@ const Backpack = ({ event, setSelectedEvent, dispatch }: BackpackProps) => {
 							{/* {scheduel
 								.slice(
 									curMatch - 1 > 0 ? curMatch - 1 : 0,
-									curMatch + 2 < schedule.Schedule.length ? curMatch + 2 : schedule.Schedule.length
+									curMatch + 2 < scheduel.length ? curMatch + 2 : scheduel.length
 								)
 								.map((val, i) => {
 									return (
 										<div
 											key={i}
 											onClick={() => {
-												curMatch == val.matchNumber ? openLog(val.matchNumber, val.teams[tabletNumber].teamNumber) : null;
+												curMatch == val.match_number ? openLog(val.match_number, val.teams[tabletNumber].teamNumber) : null;
 											}}
 											className={`group group-hover bg-g-200 m-2 rounded flex snap-center ${
 												curMatch == val.matchNumber ? ' hover:cursor-pointer' : ''
@@ -228,6 +233,32 @@ const Backpack = ({ event, setSelectedEvent, dispatch }: BackpackProps) => {
 										</div>
 									);
 								})} */}
+							<FormInput
+								type="number"
+								className={'m-2'}
+								title={'Tablet Number'}
+								onChange={(e: any) =>
+									Number.isNaN(parseInt(e.target.value)) == false ??
+									parseInt(e.target.value) < 5 ??
+									parseInt(e.target.value) >= 0
+										? setTabletNumber(parseInt(e.target.value))
+										: setTabletNumber(0)
+								}
+								value={tabletNumber.toString()}
+							></FormInput>
+							<FormInput
+								type="number"
+								className={'m-2'}
+								title={'Cur Match'}
+								onChange={(e: any) =>
+									Number.isNaN(parseInt(e.target.value)) == false ??
+									parseInt(e.target.value) < 5 ??
+									parseInt(e.target.value) >= 0
+										? setCurMatch(parseInt(e.target.value))
+										: setTabletNumber(0)
+								}
+								value={curMatch.toString()}
+							></FormInput>
 						</div>
 					</Container>
 				</AnimatedPage>
