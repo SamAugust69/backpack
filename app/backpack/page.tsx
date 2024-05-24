@@ -56,6 +56,7 @@ export default function Home() {
 								</Heading>
 								{/* This should be one of those changing text things, funny words go here */}
 								{/* <Paragraph className="m-0">{scoutingTips[Math.floor(Math.random() * scoutingTips.length)]}</Paragraph> */}
+								{/* never mind... */}
 								<Paragraph className="m-0">To Get Started, Select a Competition</Paragraph>
 							</div>
 							<div>
