@@ -4,7 +4,7 @@ import { Container } from './Container';
 
 interface ModalProps extends HtmlHTMLAttributes<HTMLDivElement> {
 	open: boolean;
-	setOpen: Function;
+	setOpen?: Function;
 	onClose?: Function;
 }
 
@@ -15,7 +15,7 @@ const Modal: FC<ModalProps> = ({ open, setOpen, onClose, children, className }) 
 		if (open && !modalRef.current?.contains(e.target) && !modalRef.current?.contains(e.target)) {
 			onClose != undefined && onClose();
 
-			setOpen(false);
+			setOpen != undefined && setOpen(false);
 		}
 	};
 

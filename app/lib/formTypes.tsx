@@ -34,13 +34,22 @@ export type LogType = {
 	};
 };
 
+type EventStatistics = {
+	autoAverage: number;
+	teleopAverage: number;
+	totalLogs: number;
+};
+
 export type EventDataType = {
+	id: string;
 	name: string;
 	week: string;
 	year: number;
 	event_code: string;
 	event_type: number;
+	schedule: Array<any>;
 	logs: Array<LogType>;
+	statistics: EventStatistics;
 };
 
 export const initialValues: LogType = {

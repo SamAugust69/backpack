@@ -6,10 +6,9 @@ import Paragraph from '@/ui/Paragraph';
 
 interface QRCodesProps {
 	data: Array<LogType>;
-	dispatch: Function;
 }
 
-const QRCodes: FC<QRCodesProps> = ({ data, dispatch }) => {
+const QRCodes: FC<QRCodesProps> = ({ data }) => {
 	const ARRAY_SIZE = 5;
 
 	const generateQRCodes = (data: Array<LogType>) => {
@@ -41,7 +40,7 @@ const QRCodes: FC<QRCodesProps> = ({ data, dispatch }) => {
 	const handleSubmit = (payload: string) => {
 		console.log(payload);
 		JSON.parse(payload).map((val: LogType) => {
-			dispatch({ type: 'added', payload: val });
+			//dispatch({ type: 'added', payload: val });
 		});
 		textArea.current.value = '';
 	};
@@ -81,7 +80,7 @@ const QRCodes: FC<QRCodesProps> = ({ data, dispatch }) => {
 			{deleteOpen && (
 				<Button
 					onClick={() => {
-						dispatch({ type: 'set', payload: [] });
+						// dispatch({ type: 'set', payload: [] });
 						setDeleteOpen(false);
 					}}
 				>

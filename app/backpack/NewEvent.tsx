@@ -7,6 +7,7 @@ import FormInput from '@/ui/Input';
 import Err from '@/ui/Err';
 import fetchData from '@/lib/apiCall';
 import { useRef, useState } from 'react';
+import { db } from '../lib/db';
 
 type eventType = {
 	city: string;
@@ -27,7 +28,38 @@ type eventType = {
 	year: number;
 };
 
-const NewEvent = ({ reducer, setCreatingLog }: any) => {
+const pullEventSchedule = async (year: number, event_code: string) => {
+	return await fetchData({
+		url: `https://www.thebluealliance.com/api/v3/event/${year}${event_code}/matches/simple`,
+		onErr: () => console.log('Attempted to pull schedule, failed'),
+	}).then((res: Array<string>) => {
+		console.log('Pulled schedule successfully!');
+		return res;
+	});
+};
+
+const createNewEvent = async (selectedEvent: eventType | any) => {
+	const { event_code, name, event_type, week, year } = selectedEvent;
+
+	try {
+		await db.events.add({
+			id: `${year}${event_code}`,
+			name,
+			event_code,
+			event_type,
+			week,
+			year,
+			schedule: [],
+			logs: [],
+		});
+
+		db.events.update(`${year}${event_code}`, { schedule: await pullEventSchedule(year, event_code) });
+	} catch (err) {
+		console.log('Failed to add event: ', err);
+	}
+};
+
+const NewEvent = ({ setCreatingLog }: any) => {
 	const { errContainer, showErr } = Err();
 	const [events, setEvents] = useState<Array<any>>([]);
 	const [selectedEvent, setSelectedEvent] = useState<eventType | any>();
@@ -43,19 +75,19 @@ const NewEvent = ({ reducer, setCreatingLog }: any) => {
 		}
 
 		setSearchingForEvents(true);
-		let eventKeys = await fetchData({
+		var eventKeys = await fetchData({
 			url: `https://www.thebluealliance.com/api/v3/team/frc${team}/events/${year}/keys`,
 			onErr: () => showErr('Search Failed', 'Check your internet connection', 5),
 		}).then((res: Array<string>) => {
 			return res;
 		});
 
-		let events: Array<any> = [];
+		var events: Array<any> = [];
 
 		eventKeys != undefined
 			? await Promise.all(
 					eventKeys.map(async (key) => {
-						let event = await fetchData({
+						var event = await fetchData({
 							url: `https://www.thebluealliance.com/api/v3/event/${key}`,
 						});
 						events = [...events, event];
@@ -65,21 +97,6 @@ const NewEvent = ({ reducer, setCreatingLog }: any) => {
 		setEvents(events);
 
 		setSearchingForEvents(false);
-	};
-
-	const createNewEvent = () => {
-		const { event_code, name, event_type, week, year } = selectedEvent;
-
-		const newEvent = {
-			name,
-			event_code,
-			event_type,
-			week,
-			year,
-			logs: [],
-		};
-
-		reducer({ type: 'ADDED_EVENT', payload: newEvent });
 	};
 
 	let { currentStep, currentStepNumber, backwards, forwards, goToStep, isLastStep, length } = useMultiForm([
@@ -177,11 +194,11 @@ const NewEvent = ({ reducer, setCreatingLog }: any) => {
 					onChange={(e: any) => setSelectedEvent({ ...selectedEvent, week: e.target.value })}
 				/>
 			</Container>
-			<Container variant={'none'} className="flex justify-between">
+			<Container variant={'none'} className="flex justify-between bg-neutral-900/50">
 				<Button variant={'link'} onClick={() => backwards()}>
 					Go Back
 				</Button>
-				<Button variant={'silly'} onClick={() => createNewEvent()}>
+				<Button variant={'silly'} onClick={() => createNewEvent(selectedEvent)}>
 					Create Event
 				</Button>
 			</Container>

@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
-import { LogType } from '@/lib/formTypes';
 
 export async function GET(req: NextRequest) {
-	return NextResponse.json({ message: 'Hello World' });
+	return NextResponse.json(JSON.parse(fs.readFileSync('./app/api/logs.json', 'utf8')));
 }
 
 export async function POST(req: NextRequest) {

@@ -3,21 +3,19 @@ import { useEffect, useState } from 'react';
 const usePagination = (elementsPerPage: number, data: Array<any>) => {
 	const [currentPage, setCurrentPage] = useState(0);
 	const [splitData, setSplitData] = useState<Array<Array<any>>>([]);
-	const [dataa, setData] = useState<Array<any>>(structuredClone(data));
 
-	useEffect(() => {
+	const updatePagination = () => {
 		var arr = [];
 
-		for (var i = 0; i < dataa.length; i += elementsPerPage) {
-			arr.push(dataa.slice(i, i + elementsPerPage));
+		for (var i = 0; i < data.length; i += elementsPerPage) {
+			arr.push(data.slice(i, i + elementsPerPage));
 		}
 
-		console.log(arr);
 		setSplitData(arr);
-	}, [dataa]);
+	};
 
 	useEffect(() => {
-		setData(data);
+		updatePagination();
 	}, [data]);
 
 	const goToStep = (step: number) => {
@@ -43,6 +41,7 @@ const usePagination = (elementsPerPage: number, data: Array<any>) => {
 		backwards,
 		isFirst: currentPage == 0,
 		isLast: currentPage == splitData.length,
+		updatePagination,
 	};
 };
 

@@ -13,6 +13,7 @@ import { uuid } from 'uuidv4';
 import { EventDataType, LogType, initialValues } from '@/lib/formTypes';
 import useMultiForm from '@/lib/useMultiForm';
 import { useEffect } from 'react';
+import { db } from '@/lib/db';
 
 interface FormProps {
 	onSubmit?: Function;
@@ -20,15 +21,31 @@ interface FormProps {
 	modalState: boolean;
 	closeModal: Function;
 	eventInfo: EventDataType;
-	dispatch: Function;
+	submittedLog: boolean; // keeps track of wether or not to update
+
+	setCurrentLog: Function;
+	initalFormState: LogType;
 }
 
-type data = LogType & EventDataType;
-
-const Form = ({ modalState, closeModal, formValues, onSubmit, dispatch, eventInfo }: FormProps) => {
+const Form = ({
+	modalState,
+	closeModal,
+	formValues,
+	onSubmit,
+	eventInfo,
+	submittedLog,
+	setCurrentLog,
+	initalFormState,
+}: FormProps) => {
 	const [formData, setFormData] = useState<LogType>(structuredClone(formValues));
 	const [submitted, setSubmitted] = useState(false);
 	const MultiFormSteps = ['Match Info', 'Auto', 'Teleop', 'Final Notes'];
+
+	useEffect(() => {
+		if (modalState && submittedLog) {
+			setFormData(structuredClone(formValues));
+		}
+	}, [modalState, formValues]);
 
 	const updateForm = async (fieldsToUpdate: Partial<LogType>) => {
 		new Promise((resolve) => {
@@ -52,12 +69,39 @@ const Form = ({ modalState, closeModal, formValues, onSubmit, dispatch, eventInf
 		goToStep(0);
 
 		console.log('submitted log', formData);
-		dispatch({ type: 'ADDED_LOG', payload: [eventInfo, structuredClone(formData)] });
+
+		db.events.update(eventInfo.id, {
+			...eventInfo,
+			// update date along with submission....
+			logs: [...eventInfo.logs, { ...formData, dateSubmitted: new Date() }],
+		});
+		//dispatch({ type: 'ADDED_LOG', payload: [eventInfo, structuredClone(formData)] });
+
 		setSubmitted(true);
 
 		closeModal();
 		setFormData(structuredClone(initialValues));
 		onSubmit != null ? onSubmit() : null;
+	};
+
+	const handleUpdate = async () => {
+		// as in "update", I mean to edit.
+
+		// so to update it, we remove the log, and then re-add it wit the updated data
+		const data = await db.events.get(eventInfo.id);
+
+		const otherLogs = data?.logs.filter((log) => log.id !== formData.id);
+
+		if (otherLogs == undefined) return;
+
+		// submit
+		db.events.update(eventInfo.id, {
+			...eventInfo,
+			// update date along with submission....
+			logs: [...otherLogs, formData],
+		});
+
+		setCurrentLog(initalFormState);
 	};
 
 	const { currentStep, forwards, backwards, goToStep, currentStepNumber, isFirstStep, isLastStep } = useMultiForm([
@@ -99,8 +143,8 @@ const Form = ({ modalState, closeModal, formValues, onSubmit, dispatch, eventInf
 					Close
 				</Button>
 			</Container>
-			<div className="flex flex-col w-full h-full gap-4 overflow-scroll ">
-				<Container className="p-4 h-full flex flex-col justify-between overflow-scroll">
+			<div className="flex flex-col w-full h-full gap-4 overflow-scroll no-scrollbar">
+				<Container className="p-4 h-full flex flex-col justify-between overflow-scroll no-scrollbar">
 					<div>
 						<Paragraph className="font-bold flex m-0 justify-between">
 							{MultiFormSteps[currentStepNumber]} <span className="self-end">{formData.scout}</span>
@@ -131,6 +175,7 @@ const Form = ({ modalState, closeModal, formValues, onSubmit, dispatch, eventInf
 					) : (
 						<Button onClick={() => forwards()}>Next</Button>
 					)}
+					<Button onClick={() => handleUpdate()}>Test</Button>
 				</Container>
 			</div>
 		</Modal>

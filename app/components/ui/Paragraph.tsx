@@ -2,10 +2,10 @@ import { forwardRef, HTMLAttributes } from 'react';
 import { VariantProps, cva } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
-const paragraphVarients = cva('max-w-prose text-neutral-400 font-medium', {
+const paragraphVarients = cva('text-neutral-400 font-medium', {
 	variants: {
 		size: {
-			default: 'text-base sm:text-lg font-normal mb-2',
+			default: 'text-base sm:text-lg font-normal',
 			sm: 'text-sm, sm:text-base',
 			xs: 'text-xs, sm:text-sm',
 		},

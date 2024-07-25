@@ -1,0 +1,8 @@
+
+
+/api
+    /logs (GET, POST)
+        stores logs on the server, these can then be accessed for later use.
+        to be used in the "vault" section.
+    /schedual (GET, POST)
+        stores big json file 

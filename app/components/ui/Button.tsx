@@ -13,8 +13,8 @@ const buttonVariants = cva(
 				border: 'bg-neutral-700 hover:bg-neutral-600 border border-neutral-600 border',
 				silly: 'bg-r-700 hover:bg-r-800',
 				link: 'underline',
-				none: '',
 				hidden: 'hover:underline',
+				none: '',
 			},
 			size: {
 				xl: 'p-4',
@@ -22,6 +22,8 @@ const buttonVariants = cva(
 				md: 'text-md px-4 h-10',
 				default: 'text-md px-4 py-1',
 				sm: 'text-sm px-3 py-1',
+				xs: 'text-xs px-2 py-1',
+				none: '',
 			},
 		},
 
@@ -38,7 +40,7 @@ interface ButtonProps extends HTMLAttributes<HTMLButtonElement>, VariantProps<ty
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-	({ className, variant, size, children, loading, onClick, tooltip, ...props }) => {
+	({ className, variant, size, children, loading, onClick, tooltip, ...props }, ref) => {
 		const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 			e.stopPropagation();
 			if (onClick) onClick(e);
@@ -48,6 +50,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 			<button
 				className={`${cn(buttonVariants({ variant, size }), className, tooltip ? 'group' : '')}`}
 				onClick={handleClick}
+				ref={ref}
 				{...props}
 			>
 				{loading ? <LoaderCircle className="w-4 mx-1 animate-spin" /> : null}
@@ -63,4 +66,4 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 );
 
 Button.displayName = 'Button';
-export { Button };
+export { Button, buttonVariants };

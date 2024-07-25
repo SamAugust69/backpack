@@ -16,15 +16,30 @@ import scheduel from './scheduel.json';
 import QRCodes from './qrCodes';
 import FormInput from '../components/ui/Input';
 import useLocalStorage from '@rehooks/local-storage';
+import { db } from '../lib/db';
 
 interface BackpackProps {
-	event: EventDataType;
+	selectedEventId: number;
 	setSelectedEvent: Function;
-	dispatch: Function;
 }
 
-const Backpack = ({ event, setSelectedEvent, dispatch }: BackpackProps) => {
-	const [eventInfo, setEventInfo] = useState<EventDataType>(event);
+const pullEvent = async (id: number, setSelectedEvent: Function) => {
+	const data = (await db.events.get(id + 1)) as EventDataType;
+	console.log(data);
+
+	if (data != undefined) return data;
+	console.log('Problem');
+	return null;
+};
+
+const Backpack = ({ selectedEventId, setSelectedEvent }: BackpackProps) => {
+	const [eventInfo, setEventInfo] = useState<EventDataType | null>(null);
+
+	useEffect(() => {
+		pullEvent(selectedEventId, setSelectedEvent).then((res) => setEventInfo(res));
+	}, []);
+
+	const logs = eventInfo?.logs ?? [];
 
 	const [currentLog, setCurrentLog] = useState(initialValues);
 	const [formOpen, setFormOpen] = useState(false);
@@ -32,9 +47,9 @@ const Backpack = ({ event, setSelectedEvent, dispatch }: BackpackProps) => {
 	const [displayedLogs, setDisplayedLogs] = useState<Array<DisplayedLogsType>>([]);
 
 	// self explainatory, find log from ID.
-	const findLogFromId = (id: string): LogType => {
+	const findLogFromId = (id: string, logs: Array<LogType>): LogType => {
 		var locatedLog = initialValues;
-		event.logs.map((log) => {
+		logs.map((log) => {
 			if (log.id == id) {
 				locatedLog = log;
 			}
@@ -53,10 +68,10 @@ const Backpack = ({ event, setSelectedEvent, dispatch }: BackpackProps) => {
 	};
 
 	// this generates the logs to be displayed. Adds data like score and shit.
-	const generateDisplayedLogs = () => {
+	const generateDisplayedLogs = (logs: Array<LogType>) => {
 		var toSet: Array<DisplayedLogsType> = [];
 
-		event.logs.map((log: LogType, i: number) => {
+		logs.map((log: LogType, i: number) => {
 			const { autoScore, teleopScore, total } = calculateScore(log);
 			console.log(calculateScore(log));
 			toSet = [
@@ -77,7 +92,7 @@ const Backpack = ({ event, setSelectedEvent, dispatch }: BackpackProps) => {
 		setDisplayedLogs(toSet);
 	};
 
-	const calcAverageScores = (): AveragesType => {
+	const calcAverageScores = (logs: Array<LogType>): AveragesType => {
 		var totalScore: number = 0;
 		var totalAutoScore: number = 0;
 		var totalTeleopScore: number = 0;
@@ -88,22 +103,18 @@ const Backpack = ({ event, setSelectedEvent, dispatch }: BackpackProps) => {
 			totalTeleopScore += logInfo.teleopScore;
 		});
 
-		const averageTotal = totalScore / event.logs.length;
-		const averageAuto = totalAutoScore / event.logs.length;
-		const averageTeleop = totalTeleopScore / event.logs.length;
+		const averageTotal = totalScore / logs.length;
+		const averageAuto = totalAutoScore / logs.length;
+		const averageTeleop = totalTeleopScore / logs.length;
 
 		return { averageAuto, averageTeleop, averageTotal };
 	};
 
 	useEffect(() => {
-		generateDisplayedLogs();
+		eventInfo?.logs != undefined ? generateDisplayedLogs(eventInfo?.logs) : null;
 	}, [event]);
 
-	const [averageScore, setAverageScore] = useState(calcAverageScores());
-
-	useEffect(() => {
-		setEventInfo(event);
-	}, [event]);
+	//const [averageScore, setAverageScore] = useState(calcAverageScores());
 
 	const { currentPage, goToStep, numButtons, currentStep, forwards, backwards } = usePagination(5, displayedLogs);
 	const [qrOpen, setQROpen] = useState(false);
@@ -111,10 +122,12 @@ const Backpack = ({ event, setSelectedEvent, dispatch }: BackpackProps) => {
 	const [curMatch, setCurMatch] = useLocalStorage('curMatch', 1);
 	const [tabletNumber, setTabletNumber] = useLocalStorage('tabletNumber', 0);
 
+	if (eventInfo == null) return <div>loading</div>;
+
 	return (
 		<div className="flex flex-col w-full items-center">
-			{qrOpen ? <QRCodes data={event.logs} dispatch={dispatch} /> : null}
-			<Form eventInfo={event} dispatch={dispatch} modalState={formOpen} closeModal={setFormOpen} formValues={currentLog} />
+			{qrOpen ? <QRCodes data={logs} /> : null}
+			<Form eventInfo={eventInfo} modalState={formOpen} closeModal={setFormOpen} formValues={currentLog} />
 			<Container key={1} className={`w-full max-w-4xl my-4 mx-2 ${formOpen ? 'overflow-hidden select-none' : ''} `}>
 				<Container className="bg-neutral-900/75 p-4 rounded-t-md px-6 flex justify-between items-center" variant={'none'}>
 					<div>
@@ -153,19 +166,21 @@ const Backpack = ({ event, setSelectedEvent, dispatch }: BackpackProps) => {
 								{currentPage != undefined
 									? currentPage.map((log: DisplayedLogsType, i: number) => {
 											return (
-												<Log
-													key={i}
-													eventData={findLogFromId(log.id)}
-													autoScore={log.autoScore}
-													teleopScore={log.teleopScore}
-													averageScore={averageScore}
-												/>
+												// <Log
+												// 	key={i}
+												// 	logData={findLogFromId(log.id, logs)}
+												// 	autoScore={log.autoScore}
+												// 	teleopScore={log.teleopScore}
+												// 	// averageScore={averageScore}
+												// 	averageScore={{ averageAuto: 0, averageTeleop: 0, averageTotal: 0 }}
+												// />
+												<div></div>
 											);
 									  })
 									: null}
 							</div>
 							<div className="flex gap-2 justify-center pt-4">
-								<Button variant={'none'} size={'sm'} onClick={() => backwards()}>
+								<Button variant={'hidden'} size={'sm'} onClick={() => backwards()}>
 									-
 								</Button>
 								{Array.from(Array(numButtons), (element, i) => {
@@ -174,14 +189,14 @@ const Backpack = ({ event, setSelectedEvent, dispatch }: BackpackProps) => {
 											key={i}
 											onClick={() => goToStep(i)}
 											size={'sm'}
-											variant={'none'}
+											variant={'hidden'}
 											className={`${i == currentStep ? 'underline' : null}`}
 										>
 											{i}
 										</Button>
 									);
 								})}
-								<Button variant={'none'} size={'sm'} onClick={() => forwards()}>
+								<Button variant={'hidden'} size={'sm'} onClick={() => forwards()}>
 									+
 								</Button>
 							</div>

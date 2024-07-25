@@ -1,4 +1,4 @@
-import { ChevronUp } from 'lucide-react';
+import { ChevronUp, Edit, Edit2 } from 'lucide-react';
 import { Container } from '@/ui/Container';
 import Paragraph from '@/ui/Paragraph';
 import { Button } from '@/ui/Button';
@@ -9,10 +9,11 @@ import { Form } from './Form';
 import useMeasure from 'react-use-measure';
 
 interface LogProps {
-	eventData: LogType;
+	logData: LogType | null;
 	autoScore: number;
 	teleopScore: number;
 	averageScore: AveragesType;
+	editLog: Function;
 }
 
 const toDisplaySwitcher = (toDisplay: any, i: number) => {
@@ -59,21 +60,21 @@ const toDisplaySwitcher = (toDisplay: any, i: number) => {
 	}
 };
 
-const Log = ({ eventData, autoScore, teleopScore, averageScore }: LogProps) => {
+const Log = ({ logData, autoScore, teleopScore, averageScore, editLog }: LogProps) => {
 	const [open, setOpen] = useState<boolean>(false);
 
-	console.log(eventData);
+	if (logData == null) return <div>Problem..</div>;
 
 	const toDisplay: Array<any> = [
 		{
 			title: 'Auto Summary',
 			display: [
 				{
-					'Left Starting Zone': ['boolean', eventData.auto.leftStartingZone, 'Stayed In Zone', 2],
+					'Left Starting Zone': ['boolean', logData.auto.leftStartingZone, 'Stayed In Zone', 2],
 				},
 				{
-					"Speaker Note's Scored": ['number', eventData.auto.speakerScore, 5],
-					"Amp Note's Scored": ['number', eventData.auto.ampScore, 2],
+					"Speaker Note's Scored": ['number', logData.auto.speakerScore, 5],
+					"Amp Note's Scored": ['number', logData.auto.ampScore, 2],
 				},
 			],
 		},
@@ -81,16 +82,16 @@ const Log = ({ eventData, autoScore, teleopScore, averageScore }: LogProps) => {
 			title: 'Teleop Summary',
 			display: [
 				{
-					"Amp Note's Scored": ['number', eventData.teleop.ampScore, 1],
+					"Amp Note's Scored": ['number', logData.teleop.ampScore, 1],
 				},
 				{
-					'Speaker Score': ['number', eventData.teleop.speakerScore, 2],
-					'Amplified Speaker Score': ['number', eventData.teleop.amplifiedSpeakerScore, 5],
+					'Speaker Score': ['number', logData.teleop.speakerScore, 2],
+					'Amplified Speaker Score': ['number', logData.teleop.amplifiedSpeakerScore, 5],
 				},
 				{
-					Hung: ['boolean', eventData.teleop.hangOnChain, 'Did Not Hang', 3],
-					Harmonize: ['boolean', eventData.teleop.hangInHarmony, 'No Harmony', 2],
-					'Scored In Trap': ['number', eventData.teleop.trapScore, 5],
+					Hung: ['boolean', logData.teleop.hangOnChain, 'Did Not Hang', 3],
+					Harmonize: ['boolean', logData.teleop.hangInHarmony, 'No Harmony', 2],
+					'Scored In Trap': ['number', logData.teleop.trapScore, 5],
 				},
 			],
 		},
@@ -102,15 +103,20 @@ const Log = ({ eventData, autoScore, teleopScore, averageScore }: LogProps) => {
 			<div className="flex gap-4 justify-between items-center p-3">
 				<div className="flex gap-4">
 					<Paragraph size={'sm'} className="text-neutral-400 font-medium">
-						Match <span className="text-r-500 mx-1">{eventData.match}</span>
+						Match <span className="text-r-500 mx-1">{logData.match}</span>
 					</Paragraph>
 					<Paragraph size={'sm'} className="text-neutral-400 font-medium">
-						Team <span className="text-r-500 mx-1">{eventData.team}</span>
+						Team <span className="text-r-500 mx-1">{logData.team}</span>
 					</Paragraph>
 				</div>
-				<Button onClick={() => setOpen(!open)}>
-					<ChevronUp className={`w-4 font-medium ${open ? 'rotate-180' : ''} transition-transform duration-100`} />
-				</Button>
+				<div className="flex gap-2">
+					<Button onClick={() => editLog(logData)}>
+						<Edit2 className="w-4" />
+					</Button>
+					<Button onClick={() => setOpen(!open)}>
+						<ChevronUp className={`w-4 font-medium ${open ? 'rotate-180' : ''} transition-transform duration-100`} />
+					</Button>
+				</div>
 			</div>
 			{open ? (
 				<Container
@@ -146,7 +152,7 @@ const Log = ({ eventData, autoScore, teleopScore, averageScore }: LogProps) => {
 							<Paragraph size={'sm'}>Teleop Score: {teleopScore}</Paragraph>
 							<Paragraph size={'sm'}>Total Score: {autoScore + teleopScore}</Paragraph>
 						</div>
-						<div className="p-4">{eventData.notes}</div>
+						<div className="p-4">{logData.notes}</div>
 					</Container>
 				</Container>
 			) : null}
